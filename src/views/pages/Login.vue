@@ -96,7 +96,8 @@
                 let self = this;
                 const formData = new FormData()
                 let url = "/api/admin/user/login";
-              axios.defaults.headers.common.Authorization = ""//remove('Authorization')
+              axios.defaults.headers.post['Authorization'] = "";
+
 // axios.defaults.headers= {
 //     'Content-Type': 'application/json',
 //     'Access-Control-Allow-Origin': '*',
@@ -118,7 +119,7 @@
                   }else{
 
                       localStorage.setItem('token',res.data.token);
-                    axios.defaults.headers.common['Authorization'] = 'Bearer '+res.data.token;
+                    axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
                     this.$router.push({ path: '/dashboard'});
 
@@ -141,8 +142,7 @@
                     //     // self.$router.push({ path: 'notes' });
                     // })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -203,8 +203,6 @@
             //         //     // self.$router.push({ path: 'notes' });
             //         // })
             //         .catch(function (error) {
-            //             self.message = 'Incorrect E-mail or password';
-            //             self.showMessage = true;
             //             console.log(error);
             //         });
             //

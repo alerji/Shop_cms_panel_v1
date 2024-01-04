@@ -33,7 +33,6 @@ export default [
                     {
                         name:"دسته بندی",
                         to: '/dashboard/news/categories/0',
-                        role: 'insert_category'
                     },
                     {
                         name: "افزودن نوشته",
@@ -119,35 +118,35 @@ export default [
                     {
                         name: "افزودن محصول",
                         to: '/dashboard/products/create',
-                        role_access: 'insert_product'
+                        role: 'insert_product'
                     }, {
                         name: "لیست محصولات",
                         to: '/dashboard/products/list',
-                        role_access: 'insert_product'
+                        role: 'insert_product'
                     }, {
                         name: "دسته بندی",
                         to: '/dashboard/products/category/0',
-                        role_access: 'insert_product_category'
+                        role: 'insert_product_category'
                     }, {
                         name: "الگو مشخصات",
                         to: '/dashboard/products/property-templates',
-                        role_access: 'product_property'
+                        role: 'product_property'
                     }, {
                         name: "برچسب محصولات",
                         to: '/dashboard/products/tags',
-                        role_access: 'edit_product_tags'
+                        role: 'edit_product_tags'
                     }, {
                         name: "دیدگاه محصولات",
                         to: '/dashboard/products/comments',
-                        role_access: 'verify_product_comments'
+                        role: 'verify_product_comments'
                     }, {
                         name: "خصوصیات دسته بندی",
                         to: '/dashboard/products/category-properties',
-                        role_access: 'product_property'
+                        role: 'product_property'
                     }, {
                         name: "برند ها",
                         to: '/dashboard/products/brands',
-                        role_access: 'product_property'
+                        role: 'product_property'
                     },
 
 

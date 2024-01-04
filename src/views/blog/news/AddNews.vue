@@ -205,8 +205,8 @@ export default {
       },
       normalizer_tags(node) {
         return {
-          id: node.tag_title,
-          label: node.tag_title,
+          id: node.title,
+          label: node.title,
         }
       },
       // editor: ClassicEditor,

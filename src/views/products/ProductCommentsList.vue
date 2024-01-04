@@ -339,8 +339,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -362,8 +361,7 @@
                 })
 
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 

@@ -190,8 +190,7 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -242,8 +241,7 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
 
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
             },

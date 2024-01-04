@@ -203,8 +203,7 @@ formData.append('cat_id', this.$route.params.cat_id)
         // self.$router.push({ path: 'notes' });
       })
           .catch(function (error) {
-            self.message = 'Incorrect E-mail or password';
-            self.showMessage = true;
+
             console.log(error);
           });
 
@@ -264,8 +263,7 @@ formData.append('cat_id', this.$route.params.cat_id)
           //     // self.$router.push({ path: 'notes' });
           // })
           .catch(function (error) {
-            self.message = 'Incorrect E-mail or password';
-            self.showMessage = true;
+
             console.log(error);
           });
 

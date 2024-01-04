@@ -6,16 +6,7 @@
                     <CCardHeader>
                         <strong v-if="status_form==0">ثبت محصول</strong>
                         <strong v-if="status_form!=0">ویرایش محصول</strong>
-                        <div class="card-header-actions">
-                            <a
-                                    href="https://coreui.io/vue/docs/components/form-components"
-                                    class="card-header-action"
-                                    rel="noreferrer noopener"
-                                    target="_blank"
-                            >
-                                <small class="text-muted"></small>
-                            </a>
-                        </div>
+
                     </CCardHeader>
                     <CCardBody>
                         <CRow>
@@ -44,18 +35,7 @@
                                 />
 
                             </CCol>
-                            <CCol col="4">
 
-                              <treeselect
-                                  v-model="selected_color"
-                                  :multiple="true"
-                                  :normalizer="normalizer_color"
-
-                                  :options="colors_items"
-                                  placeholder="رنگ محصول"
-                              />
-
-                            </CCol>
                             <CCol col="4">
                                 <CInput
                                         label="آدرس جایگزین"
@@ -66,7 +46,9 @@
 
                         </CRow>
                         <CRow>
-                            <CCol col="12">
+                          توضیحات کوتاه
+
+                          <CCol col="12">
                                 <ckeditor
                                         v-model="editorData"
                                         :editor-url="editorUrl"
@@ -109,7 +91,7 @@
                             </CCol>
                             <CCol col="6">
                                 <CSelect
-                                    :options="[{label:'محصول فیزیکی',value:1},{label:'محصول دانلودی',value:2},{label:'محصول ویدئویی',value:3}]"
+                                    :options="[{label:'محصول فیزیکی',value:1},{label:'محصول دانلودی',value:2}]"
                                         :value.sync="product_type"
 
                                         label="نوع محصول"
@@ -172,43 +154,9 @@
                             </CCol>
 
                         </CRow>
-<CRow>
-    <CCol col="6">
-
-        <treeselect
-                v-model="related_products"
-                :multiple="true"
-                :async="true"
-                :load-options="load_products"
-                placeholder="محصولات ست"
-                :normalizer="normalizer_products"
-        />
-
-
-    </CCol>
-</CRow>
 
                         <CRow>
-                            <CCol col="4" v-show="false">
-                                <label>تصویر محصول</label>
 
-
-                                <input type="file" id="file" ref="file" v-on:change="handleFileUpload()"/>
-
-
-                                <CImg height="150px"
-                                      width="150px"
-                                      v-model="previewImage"
-                                      v-if="previewImage" :src="previewImage"
-                                />
-                            </CCol>
-
-                            <CCol col="4" v-show="false">
-                                <label>ویدئو محصول</label>
-
-
-                                <input type="file" id="video" ref="video" v-on:change="handleVideoUpload()"/>
-                            </CCol>
                             <CCol col="4">
 
                                 <label>گالری تصویر</label>
@@ -233,13 +181,7 @@
                                         :value.sync="selected_property"/>
 
                             </CCol>
-                            <CCol col="4" v-show="false">
-                                <label>تصویر الگو</label>`
 
-
-                                <input type="file" id="pattern_image" ref="pattern_image"
-                                       v-on:change="handlePatternImageUpload()"/>
-                            </CCol>
                         </CRow>
                         <CRow>
                             <CCol col="12">
@@ -253,7 +195,7 @@
                                         pagination
                                 >
 
-                                    <template #گروه="{item}">
+                                    <template #group="{item}">
 
                                         <td>
                                             <p class="text-muted">{{item.name}}</p>
@@ -262,7 +204,7 @@
 
                                     </template>
 
-                                    <template #ویژگی="{item}">
+                                    <template #property="{item}">
                                         <CDataTable
                                                 :items="item.items"
                                                 :fields="fields_properties_items"
@@ -272,7 +214,7 @@
                                                 pagination
                                         >
 
-                                            <template #عنوان="{item}">
+                                            <template #title="{item}">
 
                                                 <td>
                                                     <p class="text-muted">{{item.name}}</p>
@@ -281,7 +223,7 @@
 
                                             </template>
 
-                                            <template #مقدار="{item}">
+                                            <template #value="{item}">
 
                                                 <td>
                                                     <CInput
@@ -379,7 +321,7 @@
             return {
                 editorUrl: "https://furnishium.com/ckeditor/ckeditor.js",
                 gallery: [],
-              product_type: 3,
+              product_type: 1,
                 value_category: [],
                 value_tags: [],
                 value_keywords: [],
@@ -393,12 +335,12 @@
                 property_group_items: [],
                 property_group_items_product: [],
                 fields_properties: [
-                    {key: 'گروه', _style: 'width:20%'},
-                    {key: 'ویژگی', _style: 'width:80%'},
+                    {key: 'group',label: 'گروه', _style: 'width:20%'},
+                    {key: 'property',label: 'ویژگی', _style: 'width:80%'},
                 ],
                 fields_properties_items: [
-                    {key: 'عنوان', _style: 'width:20%;display:none'},
-                    {key: 'مقدار', _style: 'width:80%;display:none'},
+                    {key: 'title',label: 'عنوان', _style: 'width:20%;display:none'},
+                    {key: 'value',label: 'مقدار', _style: 'width:80%;display:none'},
                 ],
                 image_upload: '',
                 options_category: [],
@@ -429,8 +371,6 @@
                                 // self.$router.push({ path: 'notes' });
                             })
                                 .catch(function (error) {
-                                    self.message = 'Incorrect E-mail or password';
-                                    self.showMessage = true;
                                     console.log(error);
                                 });
 
@@ -464,8 +404,6 @@
                                 // self.$router.push({ path: 'notes' });
                             })
                                 .catch(function (error) {
-                                    self.message = 'Incorrect E-mail or password';
-                                    self.showMessage = true;
                                     console.log(error);
                                 });
 
@@ -499,8 +437,6 @@
                                 // self.$router.push({ path: 'notes' });
                             })
                                 .catch(function (error) {
-                                    self.message = 'Incorrect E-mail or password';
-                                    self.showMessage = true;
                                     console.log(error);
                                 });
 
@@ -633,8 +569,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -670,8 +605,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -715,8 +649,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         self.property_group_items = [];
 
                         console.log(error);
@@ -735,8 +668,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -825,8 +757,7 @@
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 
@@ -939,8 +870,7 @@
                     }
 
                 }).catch(function (error) {
-                    self.message = 'Incorrect E-mail or password';
-                    self.showMessage = true;
+
                     console.log(error);
                 });
 

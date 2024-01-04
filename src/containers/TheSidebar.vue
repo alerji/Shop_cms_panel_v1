@@ -104,7 +104,7 @@ export default {
     generate_nav() {
       var out_pot = nav;
       let permissions = localStorage.getItem("permissions");
-      // console.log("sidebar generate nav called "+permissions);
+      console.log("sidebar generate nav called "+permissions);
       // console.log("sidebar generate nav called "+JSON.stringify(out_pot[0]._children));
       for(var oo =out_pot[0]._children.length - 1;oo>=0;oo--) {
         var val = out_pot[0]._children[oo]

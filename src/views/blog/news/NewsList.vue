@@ -1,301 +1,266 @@
 <template>
     <div>
+<CCard>
+  <CCardHeader>
 
-        <CButton
-            color="primary"
-            variant="outline"
-            square
-            size="sm"
-            @click="goAddNews()"
-        >افزودن خبر
-        </CButton>
-        <CCardBody>
-            <CTabs>
-                <CTab title="منتشر شده" active>
-                    <CDataTable
-                        :items="items_active"
-                        :fields="fields"
+    لیست نوشته ها
+    <CButton
+        color="primary"
+        variant="outline"
+        square
+        size="sm"
+        @click="goAddNews()"
+    >افزودن نوشته
+    </CButton>
+  </CCardHeader>
+  <CCardBody>
+    <CTabs>
+      <CTab title="منتشر شده" active>
+        <CDataTable
+            :items="items_active"
+            :fields="fields"
 
-                        :items-per-page="20"
-                        hover
-                        sorter
-                        pagination
-                    >
-                        <template #ردیف="{item}">
+            :items-per-page="20"
+            hover
+            sorter
+            pagination
+        >
+          <template #row="{item,index}">
 
-                            <td>
-                                <p class="text-muted">{{item.post_id}}</p>
+            <td>
+              <p class="text-muted">{{index+1}}</p>
 
-                            </td>
+            </td>
 
-                        </template>
-                        <template #عنوان="{item}">
+          </template>
 
-                            <td>
-                                <p class="text-muted">{{item.title}}</p>
 
-                            </td>
 
-                        </template>
+          <template #image="{item}">
 
-                        <template #توضیحات="{item}">
 
-                            <td>
-                                <p class="text-muted">{{item.summary.substring(0,20)+"..."}}</p>
+            <td>
+              <CImg width="50px" height="50px" v-bind:src="item.image"  />
+            </td>
 
-                            </td>
+          </template>
 
-                        </template>
-                        <template #کاربر="{item}">
+          <template #operation="{item,index}">
+            <td class="py-2">
+              <CButton
+                  color="primary"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="editDetails(item,index)"
+              >ویرایش
+              </CButton>
 
-                            <td>
-                                <p class="text-muted">{{item.user}}</p>
+              <CButton
+                  color="danger"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="delete_dialog(item,index)"
+              >حذف
+              </CButton>
+            </td>
+          </template>
 
-                            </td>
 
-                        </template>
-                        <template #تاریخ="{item}">
 
-                            <td>
-                                <p class="text-muted">{{item.date}}</p>
+        </CDataTable>
 
-                            </td>
+      </CTab>
 
-                        </template>
-                        <template #نمایش="{item}">
+      <CTab title="منتشر نشده" >
+        <CDataTable
+            :items="items_deactive"
+            :fields="fields"
 
-                            <td>
-                                <p class="text-muted">{{item.view_count}}</p>
+            :items-per-page="20"
+            hover
+            sorter
+            pagination
+        >
+          <template #ردیف="{item}">
 
-                            </td>
+            <td>
+              <p class="text-muted">{{item.post_id}}</p>
 
-                        </template>
+            </td>
 
+          </template>
+          <template #عنوان="{item}">
 
-                        <template #تصویر="{item}">
+            <td>
+              <p class="text-muted">{{item.title}}</p>
 
+            </td>
 
-                            <td>
-                                <CImg width="50px" height="50px" v-bind:src="item.image"  />
-                            </td>
+          </template>
 
-                        </template>
+          <template #توضیحات="{item}">
 
-                        <template #عملیات="{item,index}">
-                            <td class="py-2">
-                                <CButton
-                                    color="primary"
-                                    variant="outline"
-                                    square
-                                    size="sm"
-                                    @click="editDetails(item,index)"
-                                >ویرایش
-                                </CButton>
+            <td>
+              <p class="text-muted">{{item.summary.substring(0,20)+"..."}}</p>
 
-                                <CButton
-                                        color="danger"
-                                        variant="outline"
-                                        square
-                                        size="sm"
-                                        @click="delete_dialog(item,index)"
-                                >حذف
-                                </CButton>
-                            </td>
-                        </template>
+            </td>
 
+          </template>
+          <template #کاربر="{item}">
 
+            <td>
+              <p class="text-muted">{{item.user}}</p>
 
-                    </CDataTable>
+            </td>
 
-                </CTab>
+          </template>
+          <template #تاریخ="{item}">
 
-                <CTab title="منتشر نشده" >
-                    <CDataTable
-                        :items="items_deactive"
-                        :fields="fields"
+            <td>
+              <p class="text-muted">{{item.date}}</p>
 
-                        :items-per-page="20"
-                        hover
-                        sorter
-                        pagination
-                    >
-                        <template #ردیف="{item}">
+            </td>
 
-                            <td>
-                                <p class="text-muted">{{item.post_id}}</p>
+          </template>
+          <template #نمایش="{item}">
 
-                            </td>
+            <td>
+              <p class="text-muted">{{item.view_count}}</p>
 
-                        </template>
-                        <template #عنوان="{item}">
+            </td>
 
-                            <td>
-                                <p class="text-muted">{{item.title}}</p>
+          </template>
 
-                            </td>
 
-                        </template>
+          <template #تصویر="{item}">
 
-                        <template #توضیحات="{item}">
 
-                            <td>
-                                <p class="text-muted">{{item.summary.substring(0,20)+"..."}}</p>
+            <td>
+              <CImg width="50px" height="50px" v-bind:src="item.image"  />
+            </td>
 
-                            </td>
+          </template>
 
-                        </template>
-                        <template #کاربر="{item}">
+          <template #عملیات="{item,index}">
+            <td class="py-2">
+              <CButton
+                  color="primary"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="editDetails(item,index)"
+              >ویرایش
+              </CButton>
+              <CButton
+                  color="danger"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="delete_dialog(item,index)"
+              >حذف
+              </CButton>
+            </td>
+          </template>
 
-                            <td>
-                                <p class="text-muted">{{item.user}}</p>
 
-                            </td>
 
-                        </template>
-                        <template #تاریخ="{item}">
+        </CDataTable>
 
-                            <td>
-                                <p class="text-muted">{{item.date}}</p>
+      </CTab>
+      <CTab title="حذف شده" >
+        <CDataTable
+            :items="items_deleted"
+            :fields="fields"
 
-                            </td>
+            :items-per-page="20"
+            hover
+            sorter
+            pagination
+        >
+          <template #ردیف="{item}">
 
-                        </template>
-                        <template #نمایش="{item}">
+            <td>
+              <p class="text-muted">{{item.post_id}}</p>
 
-                            <td>
-                                <p class="text-muted">{{item.view_count}}</p>
+            </td>
 
-                            </td>
+          </template>
+          <template #عنوان="{item}">
 
-                        </template>
+            <td>
+              <p class="text-muted">{{item.title}}</p>
 
+            </td>
 
-                        <template #تصویر="{item}">
+          </template>
 
+          <template #توضیحات="{item}">
 
-                            <td>
-                                <CImg width="50px" height="50px" v-bind:src="item.image"  />
-                            </td>
+            <td>
+              <p class="text-muted">{{item.summary.substring(0,20)+"..."}}</p>
+            </td>
 
-                        </template>
+          </template>
+          <template #کاربر="{item}">
 
-                        <template #عملیات="{item,index}">
-                            <td class="py-2">
-                                <CButton
-                                    color="primary"
-                                    variant="outline"
-                                    square
-                                    size="sm"
-                                    @click="editDetails(item,index)"
-                                >ویرایش
-                                </CButton>
-                                <CButton
-                                        color="danger"
-                                        variant="outline"
-                                        square
-                                        size="sm"
-                                        @click="delete_dialog(item,index)"
-                                >حذف
-                                </CButton>
-                            </td>
-                        </template>
+            <td>
+              <p class="text-muted">{{item.user}}</p>
 
+            </td>
 
+          </template>
+          <template #تاریخ="{item}">
 
-                    </CDataTable>
+            <td>
+              <p class="text-muted">{{item.date}}</p>
 
-                </CTab>
-                <CTab title="حذف شده" >
-                    <CDataTable
-                        :items="items_deleted"
-                        :fields="fields"
+            </td>
 
-                        :items-per-page="20"
-                        hover
-                        sorter
-                        pagination
-                    >
-                        <template #ردیف="{item}">
+          </template>
+          <template #نمایش="{item}">
 
-                            <td>
-                                <p class="text-muted">{{item.post_id}}</p>
+            <td>
+              <p class="text-muted">{{item.view_count}}</p>
 
-                            </td>
+            </td>
 
-                        </template>
-                        <template #عنوان="{item}">
+          </template>
 
-                            <td>
-                                <p class="text-muted">{{item.title}}</p>
 
-                            </td>
+          <template #تصویر="{item}">
 
-                        </template>
 
-                        <template #توضیحات="{item}">
+            <td>
+              <CImg width="50px" height="50px" v-bind:src="item.image"  />
+            </td>
 
-                            <td>
-                                <p class="text-muted">{{item.summary.substring(0,20)+"..."}}</p>
-                            </td>
+          </template>
 
-                        </template>
-                        <template #کاربر="{item}">
+          <template #عملیات="{item,index}">
+            <td class="py-2">
+              <CButton
+                  color="primary"
+                  variant="outline"
+                  square
+                  size="sm"
+                  @click="editDetails(item,index)"
+              >ویرایش
+              </CButton>
 
-                            <td>
-                                <p class="text-muted">{{item.user}}</p>
+            </td>
+          </template>
 
-                            </td>
 
-                        </template>
-                        <template #تاریخ="{item}">
 
-                            <td>
-                                <p class="text-muted">{{item.date}}</p>
+        </CDataTable>
 
-                            </td>
+      </CTab>
+    </CTabs>
+  </CCardBody>
 
-                        </template>
-                        <template #نمایش="{item}">
-
-                            <td>
-                                <p class="text-muted">{{item.view_count}}</p>
-
-                            </td>
-
-                        </template>
-
-
-                        <template #تصویر="{item}">
-
-
-                            <td>
-                                <CImg width="50px" height="50px" v-bind:src="item.image"  />
-                            </td>
-
-                        </template>
-
-                        <template #عملیات="{item,index}">
-                            <td class="py-2">
-                                <CButton
-                                    color="primary"
-                                    variant="outline"
-                                    square
-                                    size="sm"
-                                    @click="editDetails(item,index)"
-                                >ویرایش
-                                </CButton>
-
-                            </td>
-                        </template>
-
-
-
-                    </CDataTable>
-
-                </CTab>
-            </CTabs>
-        </CCardBody>
-
+</CCard>
 
     </div>
 
@@ -305,27 +270,6 @@
     import axios from "axios";
     import {bus} from "../../../main";
 
-    var items_active = [
-
-    ];
-    var items_deactive = [
-
-    ];
-    var items_deleted = [
-
-    ];
-
-    const fields = [
-        {key: 'ردیف', _style: 'width:10%'},
-        {key: 'عنوان', _style: 'width:10%'},
-        {key: 'توضیحات', _style: 'width:10%'},
-        {key: 'کاربر', _style: 'width:10%;'},
-        {key: 'تاریخ', _style: 'width:10%;'},
-        {key: 'نمایش', _style: 'width:10%;'},
-        {key: 'تصویر', _style: 'width:10%;'},
-        {key: 'عملیات', _style: 'width:30%;'},
-
-    ];
 
 
     export default {
@@ -342,16 +286,19 @@
                 previewImage: '',
                 description: '',
                 test_sub:'ssssssssssss',
-                items_active: items_active.map((item, id) => {
-                    return {...item, id}
-                }),
-                fields,
-                items_deactive: items_deactive.map((item, id) => {
-                    return {...item, id}
-                }),
-                items_deleted: items_deleted.map((item, id) => {
-                    return {...item, id}
-                }),
+                items_active:[],
+                fields:[
+                  {key: 'row',label:'', _style: 'width:10%'},
+                  {key: 'title',label:'عنوان', _style: 'width:10%'},
+                  {key: 'user',label:'کاربر', _style: 'width:10%;'},
+                  {key: 'date',label:'تاریخ', _style: 'width:10%;'},
+                  {key: 'views',label:'نمایش', _style: 'width:10%;'},
+                  {key: 'image',label:'تصویر', _style: 'width:10%;'},
+                  {key: 'operation',label:'عملیات', _style: 'width:30%;'},
+
+                ],
+                items_deactive:[],
+                items_deleted:[],
                 details: [],
                 collapseDuration: 0,
                 status_form: 0
@@ -368,59 +315,37 @@
                 }
             });
         }, watch: {
-            '$route.params.cat_id': function (id) {
-                this.get_categories();
-            }
+
         },
         methods: {
-            get_style(color) {
-                return {
-                    myStyle: {
-                        backgroundColor: color
-                    }
-                }
-            },
+
             editDetails(item,index) {
-                // this.$set(this.items[item.id], '_toggled', !item._toggled)
               this.$router.push({path:"/dashboard/news/edit-news/"+item.post_id});
-                // this.name = this.items[item.id].name
-                // this.color = this.items[item.id].color
-                // this.description = this.items[item.id].description
-                // this.previewImage = this.items[item.id].image
-                // this.status_form = this.items[item.id].cat_id;
-                // // this.$nextTick(() => {
-                //     this.collapseDuration = 0
-                // })
-            }, get_news() {
+
+            },
+          get_news() {
                 var self = this;
                 // console.log("route id "+this.$route.params.cat_id);
 
-                axios.get('/api/admin/posts', {}).then(function (response) {
+                axios.get('/api/admin/blog/get_posts', {}).then(function (response) {
 
                     var contents = response.data;
 
-                    // items = content_cats.orders;
 
                     self.items_active = contents.posts_active.map((item, id) => {
                         return {...item, id}
-                    }),
-                        fields;
+                    })
                     self.items_deactive = contents.posts_deactive.map((item, id) => {
                         return {...item, id}
-                    }),
-                        fields;
+                    })
                     self.items_deleted = contents.posts_deleted.map((item, id) => {
                         return {...item, id}
-                    }),
-                        fields;
-                    console.log("cats is " + self.items_active);
+                    })
                     // self.description = '';
                     // localStorage.setItem("api_token", response.data.access_token);
                     // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
                         console.log(error);
                     });
 
@@ -470,8 +395,7 @@
 
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 // this.get_categories();

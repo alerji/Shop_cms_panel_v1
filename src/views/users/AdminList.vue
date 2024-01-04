@@ -229,8 +229,7 @@ this.get_admins();
                     // self.$router.push({ path: 'notes' });
                 })
             .catch(function (error) {
-                    self.message = 'Incorrect E-mail or password';
-                    self.showMessage = true;
+
                     console.log(error);
                 });
 
@@ -271,8 +270,7 @@ if(res.data.error==1){
 
                 })
                     .catch(function (error) {
-                        self.message = 'Incorrect E-mail or password';
-                        self.showMessage = true;
+
                         console.log(error);
                     });
 // this.get_categories();
