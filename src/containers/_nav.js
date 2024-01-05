@@ -140,8 +140,8 @@ export default [
                         to: '/dashboard/products/comments',
                         role: 'verify_product_comments'
                     }, {
-                        name: "خصوصیات دسته بندی",
-                        to: '/dashboard/products/category-properties',
+                        name: "خصوصیات",
+                        to: '/dashboard/products/product-bundles',
                         role: 'product_property'
                     }, {
                         name: "برند ها",

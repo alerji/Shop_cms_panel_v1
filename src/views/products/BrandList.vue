@@ -4,7 +4,7 @@
       <CCol col="8">
         <CCard>
           <CCardHeader>
-            <strong>لیست دسته بندی</strong>
+            <strong>لیست برند</strong>
 
           </CCardHeader>
           <CCardBody>
@@ -29,7 +29,7 @@
               <template #نام="{item}">
 
                 <td>
-                  <p class="text-muted">{{ item.name }}</p>
+                  <p class="text-muted">{{ item.title.title }}</p>
 
                 </td>
 
@@ -46,14 +46,6 @@
 
               <template #عملیات="{item,index}">
                 <td class="py-2">
-                  <CButton
-                      color="primary"
-                      variant="outline"
-                      square
-                      size="sm"
-                      @click="$router.push({path:'/dashboard/products/list/'+item.id})"
-                  >محصولات
-                  </CButton>
                   <CButton
                       color="primary"
                       variant="outline"
@@ -98,15 +90,15 @@
                 <CInput
                     v-model="name"
 
-                    label="نام دسته"
-                    placeholder="نام دسته"
+                    label="نام برند"
+                    placeholder="نام برند"
                 />
               </CCol>
               <CCol col="12">
                 <CTextarea
                     v-model="description"
 
-                    label="توضیحات دسته"
+                    label="توضیحات برند"
                     placeholder="توضیحات"
 
                     rows="4"
@@ -127,7 +119,7 @@
             <CButton
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
-              ثبت دسته
+              ثبت برند
             </CButton>
           </CCardFooter>
         </CCard>
@@ -186,8 +178,8 @@ export default {
   methods: {
 
     editDetails(item) {
-      this.name = item.name;
-      this.description = item.description;
+      this.name = item.title.title;
+      this.description = item.title.summary;
       this.previewImage = item.image;
 
       this.status_form = item.id;
@@ -195,20 +187,15 @@ export default {
     },
     get_categories() {
       var self = this;
-      var formData = new FormData();
-      formData.append('cat_id', this.$route.params.cat_id)
-      axios.post('/api/admin/product/get_categories',formData, {}).then(function (response) {
+var formData = new FormData();
+      axios.post('/api/admin/product/get_brands',formData, {}).then(function (response) {
 
         var content_cats = response.data;
 
-        // items = content_cats.orders;
         self.items = content_cats.orders.map((item, row_id) => {
           return {...item, row_id}
         })
-        // console.log("cats is "+items);
-        // self.description = '';
-        // localStorage.setItem("api_token", response.data.access_token);
-        // self.$router.push({ path: 'notes' });
+
       })
           .catch(function (error) {
 
@@ -216,10 +203,7 @@ export default {
           });
 
     },
-    goSubCategories(item) {
 
-      this.$router.push({path: '/dashboard/product/categories/' + item.id});
-    },
 
     login() {
 
@@ -228,9 +212,9 @@ export default {
       const formData = new FormData()
       let url;
       if (this.status_form == 0) {
-        url = "/api/admin/product/insert_category";
+        url = "/api/admin/product/insert_brand";
       } else {
-        url = "/api/admin/product/update_category";
+        url = "/api/admin/product/update_brand";
         formData.append('id', this.status_form)
 
       }
@@ -238,13 +222,13 @@ export default {
       formData.append('image', this.file);
 
       formData.append('name', this.name);
-      formData.append('cat', this.$route.params.cat_id);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
         console.log(res)
 
 
         if (res.data.error == 0) {
+          url = "/api/admin/category";
           self.name = '';
           self.color = '';
           self.description = '';
@@ -255,6 +239,8 @@ export default {
         }
 
       })
+
+
           .catch(function (error) {
 
             console.log(error);
@@ -273,7 +259,7 @@ export default {
       let self = this;
       const formData = new FormData()
       let url;
-      url = "/api/admin/product/delete_category";
+      url = "/api/admin/product/delete_brand";
 
 
       formData.append('id', this.status_form);
@@ -290,8 +276,6 @@ export default {
           .catch(function (error) {
             console.log(error);
           });
-// this.get_categories();
-      // this.$router.push({ path: '/posts/'});
     },
   }
 }

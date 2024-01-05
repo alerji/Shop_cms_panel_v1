@@ -138,10 +138,10 @@
       },
       commaOnly(input)
       {
-        if(input==""){
+        if(input=="" || input==null){
           return "";
         }
-        var value = input;
+        var value = input.toString();
         var values = value.split("");
 
         var update = "";

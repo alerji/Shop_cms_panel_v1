@@ -10,8 +10,19 @@ import Vuex from 'vuex'
 import i18n from './i18n'
 
 import Vueditor from 'vueditor'
+
 import ImageSelector from "./views/includes/ImageSelector";
 Vue.component('ImageSelector', ImageSelector);
+
+import CDataTableFixed from "./views/DataTableFixed/CDataTableFixed";
+Vue.component('CDataTableFixed', CDataTableFixed);
+
+import CInputCurrency from "./views/CInputCurrency/CInputCurrency";
+Vue.component('CInputCurrency', CInputCurrency);
+
+import VuePersianDatetimePicker from  'vue-persian-datetime-picker';
+Vue.component('date-picker', VuePersianDatetimePicker);
+import moment from 'moment-jalaali'
 
 import 'vueditor/dist/style/vueditor.min.css'
 
@@ -43,6 +54,34 @@ axios.interceptors.response.use((response) => {
   bus.$emit("show_spinner", 'false');
 
   return Promise.reject(error);
+});
+i18n.locale = 'fa';
+var display_time = "";
+var start_date = 0;
+if (i18n.locale == 'fa') {
+  display_time = 'jYYYY/jMM/jDD';
+  start_date = 6;
+}
+if (i18n.locale == 'en') {
+  display_time = 'YYYY/MM/DD'
+
+  start_date = 1
+}
+Vue.use(VuePersianDatetimePicker, {
+  props: {
+    // min:min_date,
+    // max:max_date,
+    format: "YYYY-MM-DD",
+    inputFormat: 'YYYY-MM-DD',
+    displayFormat: display_time,
+    editable: true,
+    locale: i18n.locale,
+    startDate: start_date,
+    color: "dimgray",
+    altFormat: 'YYYY-MM-DD HH:mm',
+    autoSubmit: true,
+
+  }
 });
 Vue.config.performance = true
 Vue.use(CoreuiVue)

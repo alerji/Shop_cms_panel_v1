@@ -51,11 +51,6 @@
 
               </CCol>
 
-              <CCol col="12">
-                <div class="border" id="editorjs"></div>
-
-              </CCol>
-
             </CRow>
             <CRow>
 
@@ -127,12 +122,10 @@
         </CCard>
         <CCard>
           <CCardHeader>
-            <CButton color="secondary" @click="reload_data_content()">
-              <CIcon name="cil-reload"/>
-            </CButton>
+<CButton color="secondary" @click="reload_data_content()"><CIcon name="cil-reload"/></CButton>
           </CCardHeader>
           <CCardBody>
-            <CRow v-if="editorData!=null">
+            <CRow v-if="editor!=null">
               <CCol>
                 <ReadabilitySeoRate
                     :content.sync="content_text"
@@ -163,14 +156,13 @@ import Treeselect from '@riophae/vue-treeselect'
 // import the styles
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-import editorjs_config from "@/plugins/editorjs_config";
+
 import {ASYNC_SEARCH} from '@riophae/vue-treeselect'
 import ReadabilitySeoRate from "@/views/includes/ReadabilitySeoRate";
 
 const simulateAsyncOperation = fn => {
   setTimeout(fn, 2000)
 }
-
 
 export default {
   name: 'Login',
@@ -183,9 +175,8 @@ export default {
 
     return {
       editor: null,
-      editorjs: null,
-      content_text: '',
-      content_html: '',
+      content_text:'',
+      content_html:'',
       value_category: [],
       value_tags: [],
       value_keywords: [],
@@ -236,6 +227,12 @@ export default {
       },
       // editor: ClassicEditor,
       editorData: '',
+      editorConfig: {
+        extraPlugins: [],
+
+        language: 'fa'
+        // The configuration of the editor.
+      },
       title: '',
       favorite_url: '',
       seo_title: '',
@@ -254,41 +251,45 @@ export default {
     }
   },
   mounted() {
-    var self = this;
-    // editorjs_config.onChange = (api, event) => {
-    //   console.log('Now I know that Editor\'s content changed!', event)
-    //   self.editor_changed();
-    // }
-    this.editorjs = new EditorJS(editorjs_config);
+var self = this;
+    this.editor = this.$refs['editor1'];
+    this.editor.setContent('');
 
+    this.editor.upload = function (obj, callback) {
+      let formData = new FormData();
+      let xhr = new XMLHttpRequest();
 
+      formData.append('upload', obj.files[0]);
+      xhr.open('POST', axios.defaults.baseURL + 'api/admin/html_uploader');
+      // xhr.setRequestHeader('Content-type', 'application/json')
+
+      xhr.send(formData);
+      xhr.onload = function () {
+        callback(xhr.responseText);
+      };
+      xhr.onerror = function (err) {
+        console.log(err);
+      }
+    }
     this.get_categories();
     if (this.$route.params.post_id != null) {
       this.status_form = this.$route.params.post_id;
       this.get_post_info();
     }
-  },
-  watch: {
-    '$route.params.post_id': function () {
+  }, watch: {
+    '$route.params.post_id': function (id) {
       this.get_categories();
-    },
-    'editorData': function () {
-      let tmp = document.createElement("DIV");
-      tmp.innerHTML = this.editorData;
-      this.content_text = tmp.textContent || tmp.innerText || "";
-
-      this.content_html = this.editorData;
     },
 
   },
   methods: {
-    editor_changed() {
-      this.editorjs.save().then((outputData) => {
-        console.log('Article data: ', outputData)
-        this.editorData = outputData;
-      }).catch((error) => {
-        console.log('Saving failed: ', error)
-      });
+    reload_data_content(){
+      let tmp = document.createElement("DIV");
+      tmp.innerHTML = this.editor.getContent();
+      this.content_text = tmp.textContent || tmp.innerText || "";
+
+      this.content_html = this.editor.getContent();
+      console.log("change value schanged",this.content_text)
     },
     editDetails(item) {
       // this.$set(this.items[item.id], '_toggled', !item._toggled)

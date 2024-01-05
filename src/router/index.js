@@ -4,9 +4,11 @@ import axios from "axios";
 import OrderList from "../views/orders/OrderList";
 import OrderInfo from "../views/orders/OrderInfo";
 import Redirect from "../views/redirect/Redirect";
-import Sources from "@/views/products/Sources.vue";
 import AddOrder from "@/views/orders/AddOrder";
 import CategoryList from "../views/blog/category/CategoryList";
+import BrandList from "@/views/products/BrandList";
+import ProductBundles from "@/views/products/bundles/ProductBundles";
+import ProductBundleItems from "@/views/products/bundles/ProductBundleItems";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -41,7 +43,6 @@ const CommentsList = () => import('@/views/comments/CommentsList');
 //Products
 const AddProduct = () => import('@/views/products/AddProduct');
 const ProductTagsList = () => import('@/views/products/ProductTagsList');
-const ProductKeywordsList = () => import('@/views/products/ProductKeywordsList');
 
 const ProductCommentsList = () => import('@/views/products/ProductCommentsList');
 const ProductList = () => import('@/views/products/ProductList');
@@ -51,9 +52,6 @@ const ProductPropertyTemplateList = () => import('@/views/products/properties/Pr
 const ProductPropertyTemplateGroupList = () => import('@/views/products/properties/ProductPropertyTemplateGroupList');
 const ProductPropertyTemplateGroupItemList = () => import('@/views/products/properties/ProductPropertyTemplateGroupItemsList');
 
-const CategoryPropertyList = () => import('@/views/products/category_property/CategoryPropertyList');
-const CategoryPropertyValues = () => import('@/views/products/category_property/CategoryPropertyValues');
-const AddPropertyToCategory = () => import('@/views/products/category_property/AddPropertyToCategory');
 
 
 // Views - Notifications
@@ -255,16 +253,7 @@ function configRoutes() {
                                 requiresRole: "insert_product"
                             }
                         },
-                        {
-                            path: 'sources/:id',
-                            name: 'منابع',
-                            props: true,
-                            component: Sources,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "insert_product"
-                            }
-                        },
+
                         {
                             path: 'create',
                             name: 'افزودن محصول',
@@ -300,15 +289,6 @@ function configRoutes() {
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "edit_product_tags"
-                            }
-                        }, {
-                            path: 'keywords',
-                            name: 'کلمات کلیدی محصولات',
-                            props: true,
-                            component: ProductKeywordsList,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "edit_product_keywords"
                             }
                         },{
                             path: 'comments',
@@ -347,28 +327,28 @@ function configRoutes() {
                                 requiresRole: "product_property"
                             }
                         },{
-                            path: 'category-properties',
+                            path: 'product-bundles',
                             name: 'خصوصیات محصولات',
                             props: true,
-                            component: CategoryPropertyList,
+                            component: ProductBundles,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "product_property"
                             }
                         },{
-                            path: 'property-values/:property_id',
+                            path: 'bundle-items/:bundle_id',
                             name: 'مقادیر خصوصیت',
                             props: true,
-                            component: CategoryPropertyValues,
+                            component: ProductBundleItems,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "product_property"
                             }
                         },{
-                            path: 'category-properties/:cat_id',
-                            name: 'خصوصیت دسته بندی',
+                            path: 'brands',
+                            name: 'برند',
                             props: true,
-                            component: AddPropertyToCategory,
+                            component: BrandList,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "product_property"
@@ -415,7 +395,7 @@ function configRoutes() {
                         },
                         {
                             path: 'add-news',
-                            name: 'افزودن خبر',
+                            name: 'افزودن نوشته',
                             props: true,
                             component: AddNews,
                             meta: {
@@ -424,7 +404,7 @@ function configRoutes() {
                             }
                         },{
                             path: 'edit-news/:post_id',
-                            name: 'ویرایش خبر',
+                            name: 'ویرایش نوشته',
                             props: true,
                             component: EditNews,
                             meta: {
@@ -433,7 +413,7 @@ function configRoutes() {
                             }
                         }, {
                             path: 'all-news',
-                            name: 'همه اخبار',
+                            name: 'همه نوشته ها',
                             props: true,
                             component: NewsList,
                             meta: {
@@ -448,15 +428,6 @@ function configRoutes() {
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "edit_tags"
-                            }
-                        }, {
-                            path: 'keywords',
-                            name: 'کلمات کلیدی',
-                            props: true,
-                            component: KeywordsList,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "edit_keywords"
                             }
                         }, {
                             path: 'comments',

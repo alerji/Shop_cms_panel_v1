@@ -15,4 +15,3 @@ export default {
   @import 'assets/scss/style';
 </style>
 
-

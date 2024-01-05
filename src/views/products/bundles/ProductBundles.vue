@@ -4,8 +4,7 @@
       <CCol col="8">
         <CCard>
           <CCardHeader>
-            <strong>لیست دسته بندی</strong>
-
+            لیست خصوصیات
           </CCardHeader>
           <CCardBody>
 
@@ -29,33 +28,33 @@
               <template #نام="{item}">
 
                 <td>
-                  <p class="text-muted">{{ item.name }}</p>
+                  <p class="text-muted">{{ item.title.title }}</p>
 
                 </td>
 
               </template>
-
-              <template #تصویر="{item}">
-
+              <template #code="{item}">
 
                 <td>
-                  <CImg width="50px" height="50px" v-bind:src="item.image"/>
+                  <p class="text-muted">{{ item.code }}</p>
+
                 </td>
 
               </template>
 
-              <template #عملیات="{item,index}">
+
+              <template #عملیات="{item}">
                 <td class="py-2">
                   <CButton
                       color="primary"
                       variant="outline"
                       square
                       size="sm"
-                      @click="$router.push({path:'/dashboard/products/list/'+item.id})"
-                  >محصولات
+                      @click="goSubCategories(item)"
+                  >مقادیر خصوصیات
                   </CButton>
                   <CButton
-                      color="primary"
+                      color="warning"
                       variant="outline"
                       square
                       size="sm"
@@ -63,19 +62,11 @@
                   >ویرایش
                   </CButton>
                   <CButton
-                      color="primary"
-                      variant="outline"
-                      square
-                      size="sm"
-                      @click="goSubCategories(item)"
-                  >زیر دسته ها
-                  </CButton>
-                  <CButton
                       color="danger"
                       variant="outline"
                       square
                       size="sm"
-                      @click="delete_item_dialog(item)"
+                      @click="delete_dialog(item)"
                   >حذف
                   </CButton>
                 </td>
@@ -90,7 +81,8 @@
       <CCol col="4">
         <CCard>
           <CCardHeader>
-            <strong>ثبت دسته بندی</strong>
+            <strong>ثبت خصوصیت</strong>
+
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -98,26 +90,29 @@
                 <CInput
                     v-model="name"
 
-                    label="نام دسته"
-                    placeholder="نام دسته"
+                    label="نام خصوصیت"
                 />
               </CCol>
               <CCol col="12">
-                <CTextarea
-                    v-model="description"
+                <CInput
+                    v-model="code"
 
-                    label="توضیحات دسته"
-                    placeholder="توضیحات"
-
-                    rows="4"
+                    label="کد خصوصیت"
                 />
-
               </CCol>
               <CCol col="12">
-                <ImageSelector label="تصویر"
-                               :file.sync="file"
-                               :preview-image="previewImage"
-                />
+                <div class="control_wrapper">
+                  <treeselect
+                      v-model="value_category"
+                      :multiple="true"
+                      :normalizer="normalizer_category"
+:append-to-body="true"
+                      :options="options_category"
+                      placeholder="دسته بندی محصول را انتخاب کنید"
+                  />
+
+                </div>
+
               </CCol>
             </CRow>
 
@@ -127,12 +122,15 @@
             <CButton
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
-              ثبت دسته
+              <CIcon name="cil-check-circle"/>
+             {{status_form==0 ? 'ثبت خصوصیت' : 'ویرایش خصوصیت' }}
             </CButton>
           </CCardFooter>
         </CCard>
       </CCol>
+
     </CRow>
+
 
 
   </div>
@@ -141,74 +139,87 @@
 
 <script>
 import axios from "axios";
+import {bus} from "../../../main";
 
-import {bus} from '../../main';
+import Treeselect from '@riophae/vue-treeselect'
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+
+import {ASYNC_SEARCH} from '@riophae/vue-treeselect'
+
+const simulateAsyncOperation = fn => {
+  setTimeout(fn, 200)
+}
 
 
 export default {
   name: 'Login',
+  components:{
+    Treeselect,
+
+  },
   data() {
     return {
-      confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
-      file: null,
-      color: '',
-      previewImage: null,
+      file: '',
+      code: '',
+      previewImage: '',
       description: '',
       items: [],
       fields: [
         {key: 'ردیف', _style: 'width:10%'},
-        {key: 'تصویر', _style: 'width:10%;'},
         {key: 'نام', _style: 'width:10%'},
+        {key: 'code',label:'کد', _style: 'width:10%'},
         {key: 'عملیات', _style: 'width:40%;'},
-
       ],
+      options_category: [],
+      value_category: [],
 
-      status_form: 0,
+      normalizer_category(node) {
+        return {
+          id: node.id,
+          label: node.name,
+          children: node.children,
+        }
+      },
 
+      status_form: 0
     }
   }, mounted() {
-    this.get_categories();
-    bus.$on(this.confirm_delete_name, (data) => {
+    bus.$on('delete_confirm', (data) => {
       // alert(data);
-      if (data == "true") {
+      if (data == 'true') {
         this.delete_item();
 
       } else {
         this.status_form = 0;
       }
     });
-  }, watch: {
-    '$route.params.cat_id': function () {
-      this.get_categories();
-    }
-  },
+    this.get_data();
+    this.get_categories();
+
+  }, watch: {},
   methods: {
 
     editDetails(item) {
-      this.name = item.name;
-      this.description = item.description;
-      this.previewImage = item.image;
-
+      var self = this;
+      this.name = item.title.title;
+      this.code = item.code;
+      this.value_category = []
+      item.categories.forEach(function (val){
+        self.value_category.push(val.category_id)
+      })
       this.status_form = item.id;
 
     },
     get_categories() {
       var self = this;
       var formData = new FormData();
-      formData.append('cat_id', this.$route.params.cat_id)
-      axios.post('/api/admin/product/get_categories',formData, {}).then(function (response) {
+      axios.post('/api/admin/product/get_categories_with_children',formData, {}).then(function (response) {
 
         var content_cats = response.data;
 
-        // items = content_cats.orders;
-        self.items = content_cats.orders.map((item, row_id) => {
-          return {...item, row_id}
-        })
-        // console.log("cats is "+items);
-        // self.description = '';
-        // localStorage.setItem("api_token", response.data.access_token);
-        // self.$router.push({ path: 'notes' });
+        self.options_category = content_cats.orders;
+
       })
           .catch(function (error) {
 
@@ -216,11 +227,28 @@ export default {
           });
 
     },
-    goSubCategories(item) {
+    get_data() {
+      var self = this;
+      var formData = new FormData();
+      axios.post('/api/admin/product/get_bundles', formData, {}).then(function (response) {
 
-      this.$router.push({path: '/dashboard/product/categories/' + item.id});
+        var content_cats = response.data;
+
+        self.items = content_cats.tags.map((item, row_id) => {
+          return {...item, row_id}
+        });
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
     },
 
+    goSubCategories(item) {
+      this.$router.push({path: '/dashboard/products/bundle-items/' + item.id});
+    },
     login() {
 
 
@@ -228,42 +256,36 @@ export default {
       const formData = new FormData()
       let url;
       if (this.status_form == 0) {
-        url = "/api/admin/product/insert_category";
+        url = "/api/admin/product/add_bundle";
       } else {
-        url = "/api/admin/product/update_category";
+        url = "/api/admin/product/update_bundle";
         formData.append('id', this.status_form)
 
       }
 
-      formData.append('image', this.file);
-
       formData.append('name', this.name);
-      formData.append('cat', this.$route.params.cat_id);
-      formData.append('description', this.description);
+      formData.append('code', this.code);
+      formData.append('cat_list', this.value_category);
+
       axios.post(url, formData, {}).then((res) => {
-        console.log(res)
+        self.$root.modal_component.show_api_response_modals(res);
 
-
-        if (res.data.error == 0) {
-          self.name = '';
-          self.color = '';
-          self.description = '';
-          self.previewImage = '';
-          self.previewImage_header = '';
-          self.status_form = 0;
-          self.get_categories();
-        }
+        self.status_form = 0;
+        self.name = '';
+        self.code = '';
+        self.value_category = [];
+        self.get_data();
 
       })
+
           .catch(function (error) {
 
             console.log(error);
           });
 
     },
-    delete_item_dialog(item) {
-      this.$root.modal_component.show_confirm_modal(this.$t("warning"), this.$t("deleteMessage"), [this.$t("ok")], this.confirm_delete_name);
-
+    delete_dialog(item) {
+      this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], 'delete_confirm');
       this.status_form = item.id;
 
     },
@@ -273,26 +295,25 @@ export default {
       let self = this;
       const formData = new FormData()
       let url;
-      url = "/api/admin/product/delete_category";
+      url = "/api/admin/product/delete_bundle";
 
 
       formData.append('id', this.status_form);
 
       axios.post(url, formData, {}).then((res) => {
-
         self.$root.modal_component.show_api_response_modals(res);
+
         self.status_form = 0;
-
-        self.get_categories();
-
+        self.get_data();
 
       })
           .catch(function (error) {
+
             console.log(error);
           });
-// this.get_categories();
-      // this.$router.push({ path: '/posts/'});
     },
+
+
   }
 }
 

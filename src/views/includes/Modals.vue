@@ -143,7 +143,7 @@
                 this.successModal = true;
             },
             show_api_response_modals(res_data){
-              if(res_data.data.statusCode!=0){
+              if(res_data.data.error!=0){
                 this.alert_color="danger"
                 // this.show_danger_modal(this.$t("dialogs.error"),res_data.data.message);
                 this.message_api = res_data.data.msg;
@@ -156,10 +156,10 @@
 
               }else{
                 this.alert_color="success"
-                this.message_api = res_data.data.message;
+                this.message_api = res_data.data.msg;
                 this.title = this.$t('ok');
                 Vue.$toast.open({
-                  message: res_data.data.message,
+                  message: res_data.data.msg,
                   type: 'success',
                   // all of other options may go here
                 });
