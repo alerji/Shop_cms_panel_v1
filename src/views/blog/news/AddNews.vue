@@ -44,15 +44,13 @@
 
             </CRow>
             <CRow>
-              <CCol col="12">
-                <Vueditor
-                    style="height: 400px" ref="editor1"></Vueditor>
-
-
-              </CCol>
 
               <CCol col="12">
-                <div class="border" id="editorjs"></div>
+<editorjs
+    :content_json.sync="content_json"
+    :content_text.sync="content_text"
+    :content_html.sync="content_html"
+/>
 
               </CCol>
 
@@ -157,13 +155,13 @@
 </template>
 
 <script>
+import editorjs from "@/views/includes/editorjs.vue";
 import axios from "axios";
 
 import Treeselect from '@riophae/vue-treeselect'
 // import the styles
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-import editorjs_config from "@/plugins/editorjs_config";
 import {ASYNC_SEARCH} from '@riophae/vue-treeselect'
 import ReadabilitySeoRate from "@/views/includes/ReadabilitySeoRate";
 
@@ -177,13 +175,14 @@ export default {
   components: {
     ReadabilitySeoRate,
     Treeselect,
+    editorjs
     // ckeditor: CKEditor.component
   },
   data() {
 
     return {
       editor: null,
-      editorjs: null,
+      content_json: '',
       content_text: '',
       content_html: '',
       value_category: [],
@@ -254,13 +253,6 @@ export default {
     }
   },
   mounted() {
-    var self = this;
-    // editorjs_config.onChange = (api, event) => {
-    //   console.log('Now I know that Editor\'s content changed!', event)
-    //   self.editor_changed();
-    // }
-    this.editorjs = new EditorJS(editorjs_config);
-
 
     this.get_categories();
     if (this.$route.params.post_id != null) {
@@ -282,14 +274,7 @@ export default {
 
   },
   methods: {
-    editor_changed() {
-      this.editorjs.save().then((outputData) => {
-        console.log('Article data: ', outputData)
-        this.editorData = outputData;
-      }).catch((error) => {
-        console.log('Saving failed: ', error)
-      });
-    },
+
     editDetails(item) {
       // this.$set(this.items[item.id], '_toggled', !item._toggled)
       this.name = this.items[item.id].name
