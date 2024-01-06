@@ -9,6 +9,8 @@ import CategoryList from "../views/blog/category/CategoryList";
 import BrandList from "@/views/products/BrandList";
 import ProductBundles from "@/views/products/bundles/ProductBundles";
 import ProductBundleItems from "@/views/products/bundles/ProductBundleItems";
+import Shipping from "@/views/settings/Shipping";
+import OrderStatuses from "@/views/settings/OrderStatuses";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -356,16 +358,6 @@ function configRoutes() {
                         },
                     ]
                 },
-                {
-                    path: '/dashboard/settings',
-                    name: 'تنظیمات',
-                    component: Settings,
-                    props: true,
-                    meta: {
-                        requiresAuth: true,
-                        requiresRole: "edit_settings"
-                    }
-                },
 
                 //*************************************************
                 //*************************************************
@@ -374,7 +366,7 @@ function configRoutes() {
 
                 {
                     path: 'news',
-                    name: 'خبر',
+                    name: 'نوشته',
                     props: true,
                     component: {render (c){return c('router-view')}},
                     meta: {
@@ -453,16 +445,7 @@ function configRoutes() {
                         requiresRole: "ui_settings"
                     },
                     children:[
-                        {
-                            path: 'redirect',
-                            name: 'ریدایرکت',
-                            props: true,
-                            component: Redirect,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "ui_settings"
-                            }
-                        },
+
                         {
                             path: 'slider-images/:slider_id',
                             name: 'تصاویر اسلایدر',
@@ -473,25 +456,7 @@ function configRoutes() {
                                 requiresRole: "ui_settings"
                             }
                         },
-                        {
-                            path: 'home-ui',
-                            name: 'بخش',
-                            props: true,
-                            component: SectionList,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "ui_settings"
-                            }
-                        }, {
-                            path: 'section-rows/:section_id',
-                            name: 'سطرهای بخش',
-                            props: true,
-                            component: SectionRows,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "ui_settings"
-                            }
-                        },  {
+                         {
                             path: 'menus/:menu_id',
                             name: 'منو',
                             props: true,
@@ -517,6 +482,61 @@ function configRoutes() {
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "edit_settings"
+                            }
+                        },
+                    ]
+                },
+                //****************************************
+                {
+                    path: '/dashboard/settings',
+                    name: 'تنظیمات',
+                    props: true,
+                    component: {render (c){return c('router-view')}},
+
+                    meta: {
+                        requiresAuth: true,
+                        requiresRole: "ui_settings"
+                    },
+                    children:[
+
+                        {
+                            path: 'redirect',
+                            name: 'ریدایرکت',
+                            props: true,
+                            component: Redirect,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
+                            }
+                        },
+                        {
+                            path: 'shipping',
+                            name: 'روش های ارسال',
+                            props: true,
+                            component: Shipping,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
+                            }
+                        },
+                        {
+                            path: 'order_status',
+                            name: 'وضعیت های سفارش',
+                            props: true,
+                            component: OrderStatuses,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
+                            }
+                        },
+                        {
+                            path: 'other',
+                            name: 'تنظیمات کلی',
+                            props: true,
+                            component: Settings,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
                             }
                         },
                     ]

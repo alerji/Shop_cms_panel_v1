@@ -4,7 +4,7 @@
       <CCol col="12">
         <CCard>
           <CCardHeader>
-            <strong>ثبت خبر</strong>
+            <strong>ثبت نوشته</strong>
 
           </CCardHeader>
           <CCardBody>
@@ -13,7 +13,7 @@
                 <CInput
                     v-model="title"
 
-                    label="عنوان خبر"
+                    label="عنوان نوشته"
                     placeholder="عنوان"
                     vertical
                 />
@@ -33,7 +33,7 @@
               <CCol col="4">
                 <CInput
                     v-model="favorite_url"
-                    label="لینک خبر"
+                    label="لینک نوشته"
 
                     placeholder="لینک"
                 />
@@ -91,7 +91,7 @@
                     :normalizer="normalizer_category"
                     :append-to-body="true"
                     :options="options_category"
-                    placeholder="دسته بندی خبر را انتخاب کنید"
+                    placeholder="دسته بندی نوشته را انتخاب کنید"
                 />
 
 
@@ -115,11 +115,11 @@
           <CCardFooter>
             <CButton v-if="status_form==0" @click="login()" type="submit" ref="submit_form" size="sm" color="primary">
               <CIcon name="cil-check-circle"/>
-              ثبت خبر
+              ثبت نوشته
             </CButton>
             <CButton v-if="status_form!=0" @click="login()" type="submit" ref="submit_form" size="sm" color="primary">
               <CIcon name="cil-check-circle"/>
-              ویرایش خبر
+              ویرایش نوشته
             </CButton>
           </CCardFooter>
         </CCard>

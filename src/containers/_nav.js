@@ -174,11 +174,7 @@ export default [
                         to: "/dashboard/display/menus/0",
                         role: 'ui_settings'
                     },
-                    {
-                        name: "ریدایرکت",
-                        to: '/dashboard/display/redirect',
-                        role: 'ui_settings'
-                    },
+
 
 
 
@@ -187,16 +183,39 @@ export default [
             //**************************8 //**************************8
 
             //**************************8 //**************************8
-
             {
 
-                _name: 'CSidebarNavItem',
-                name: "تنظیمات",
+                _name: 'CSidebarNavDropdown',
+                name: 'تنظیمات',
                 route: '/dashboard/settings',
-                to: '/dashboard/reports/all',
-                icon: 'cil-book',
-                role: 'edit_settings',
+                icon: 'cil-barcode',
+                role: 'ui_settings',
+
+                items: [
+                    {
+                        name: 'روش های ارسال',
+                        to: '/dashboard/settings/shipping',
+                        role: 'ui_settings'
+                    },
+                    {
+                        name: "ریدایرکت",
+                        to: '/dashboard/settings/redirect',
+                        role: 'ui_settings'
+                    },
+                    {
+                        name: "وضعیت های سفارش",
+                        to: '/dashboard/settings/order_status',
+                        role: 'ui_settings'
+                    },
+                    {
+                        name: "تنظیمات کلی",
+                        to: '/dashboard/settings/other',
+                        role: 'ui_settings'
+                    },
+
+                ]
             },
+
             {
 
                 _name: 'CSidebarNavItem',
