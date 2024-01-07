@@ -39,15 +39,9 @@
                 </td>
               </template>
 
-              <template #sms_to_admin="{item}">
-                <td>
-                  <p class="text-muted" v-if="item.sms_to_admin">بله</p>
-                  <p class="text-muted" v-else>خیر</p>
-                </td>
-              </template>
               <template #admins="{item}">
                 <td>
-                  <p class="text-muted" v-for="admin in item.admins">{{admin.user.name}}</p>
+                  <p class="text-muted" v-for="admin in item.admins">{{ admin.user.name }}</p>
 
                 </td>
               </template>
@@ -99,7 +93,7 @@
                 <CSwitch
                     color="success"
                     shape="pill"
-v-model="visible_to_customer"
+                    :checked.sync="visible_to_customer"
                 />
                 <label>نمایش به مشتری</label>
 
@@ -108,7 +102,7 @@ v-model="visible_to_customer"
                 <CSwitch
                     shape="pill"
                     color="success"
-                    v-model="sms_to_customer"
+                    :checked.sync="sms_to_customer"
 
                 />
                 <label>ارسال پیامک به مشتری</label>
@@ -128,6 +122,7 @@ v-model="visible_to_customer"
                     v-model="sms_to_admins"
                     :multiple="true"
                     :async="async_search_admin"
+                    :options="admins_options"
                     :load-options="load_admins"
                     placeholder="انتخاب مدیران"
                     :normalizer="normalizer_admins"
@@ -189,24 +184,24 @@ export default {
       previewImage: null,
       description: '',
       items: [],
-      visible_to_customer:true,
-      async_search_admin:true,
-      sms_to_customer:true,
-      sms_to_customer_code:'',
-      sms_to_admins_code:'',
-      sms_to_admins:[],
+      visible_to_customer: true,
+      async_search_admin: true,
+      sms_to_customer: true,
+      sms_to_customer_code: '',
+      sms_to_admins_code: '',
+      sms_to_admins: [],
+      admins_options: [],
       fields: [
-        {key: 'title',label: 'عنوان', _style: 'width:20%'},
-        {key: 'visible',label: 'نمایش به کاربر', _style: 'width:10%'},
-        {key: 'sms_to_customer',label: 'پیامک به کاربر', _style: 'width:20%'},
-        {key: 'sms_to_admin',label: 'پیامک به مدیر', _style: 'width:20%'},
-        {key: 'admins',label: 'مدیران', _style: 'width:20%'},
+        {key: 'title', label: 'عنوان', _style: 'width:20%'},
+        {key: 'visible', label: 'نمایش به کاربر', _style: 'width:10%'},
+        {key: 'sms_to_customer', label: 'پیامک به کاربر', _style: 'width:20%'},
+        {key: 'admins', label: 'مدیران', _style: 'width:20%'},
         {key: 'عملیات', _style: 'width:15%;'},
       ],
       normalizer_admins(node) {
         return {
           id: node.id,
-          label: node.name+" "+node.phone,
+          label: node.name + " " + node.phone,
         }
       },
       status_form: 0,
@@ -249,11 +244,32 @@ export default {
     },
 
     editDetails(item) {
+      var self = this;
       this.name = item.title;
-      this.description = item.description;
-      this.price = item.price;
-      this.previewImage = item.image;
+      var visible =false;
+      if(item.visible==1){
+        visible =true;
+      }
+      var send_customer =false;
+      if(item.send_sms_to_customer==1){
+        send_customer = true;
+      }
+      this.visible_to_customer = visible
+      this.sms_to_customer = send_customer
+      this.sms_to_customer_code =item.customer_send_code
+      this.sms_to_admins_code = item.admins_send_code
+      this.sms_to_admins = []
 
+      item.admins.forEach(function (val){
+        self.async_search_admin = false
+        self.sms_to_admins.push(val.user_id);
+        self.admins_options.push({id:val.user.id,name:val.user.name,phone:val.user.phone})
+        setTimeout(function (){
+          self.async_search_admin = true
+
+        },200)
+      })
+      this.status_form = 0;
       this.status_form = item.id;
 
     },
@@ -292,10 +308,17 @@ export default {
         formData.append('id', this.status_form)
 
       }
-
+      var visible =0;
+      if(this.visible_to_customer){
+        visible =1;
+      }
+      var send_customer =0;
+      if(this.sms_to_customer){
+        send_customer =1;
+      }
       formData.append('name', this.name);
-      formData.append('visible_to_customer', this.visible_to_customer);
-      formData.append('sms_to_customer', this.sms_to_customer);
+      formData.append('visible_to_customer', visible);
+      formData.append('sms_to_customer', send_customer);
       formData.append('sms_to_customer_code', this.sms_to_customer_code);
       formData.append('sms_to_admins_code', this.sms_to_admins_code);
       formData.append('sms_to_admins', this.sms_to_admins);
@@ -305,10 +328,11 @@ export default {
 
         if (res.data.error == 0) {
           self.name = '';
-          self.price = '';
-          self.description = '';
-          self.previewImage = '';
-          self.previewImage_header = '';
+          self.visible_to_customer = true
+          self.sms_to_customer = true
+          self.sms_to_customer_code = ''
+          self.sms_to_admins_code = ''
+          self.sms_to_admins = []
           self.status_form = 0;
           self.get_categories();
         }
