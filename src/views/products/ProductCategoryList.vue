@@ -201,14 +201,10 @@ export default {
 
         var content_cats = response.data;
 
-        // items = content_cats.orders;
         self.items = content_cats.orders.map((item, row_id) => {
           return {...item, row_id}
         })
-        // console.log("cats is "+items);
-        // self.description = '';
-        // localStorage.setItem("api_token", response.data.access_token);
-        // self.$router.push({ path: 'notes' });
+
       })
           .catch(function (error) {
 
@@ -241,8 +237,8 @@ export default {
       formData.append('cat', this.$route.params.cat_id);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
-        console.log(res)
 
+        self.$root.modal_component.show_api_response_modals(res);
 
         if (res.data.error == 0) {
           self.name = '';
@@ -290,8 +286,6 @@ export default {
           .catch(function (error) {
             console.log(error);
           });
-// this.get_categories();
-      // this.$router.push({ path: '/posts/'});
     },
   }
 }

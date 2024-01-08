@@ -27,12 +27,16 @@
 
               </template>
               <template #نام="{item}">
-
                 <td>
                   <p class="text-muted">{{ item.name }}</p>
-
                 </td>
-
+              </template>
+              <template #رنگ="{item}">
+                <td  >
+                  <div :style="`background:${item.color}`">
+                    {{item.color}}
+                  </div>
+                </td>
               </template>
 
               <template #تصویر="{item}">
@@ -46,6 +50,7 @@
 
               <template #عملیات="{item,index}">
                 <td class="py-2">
+
                   <CButton
                       color="primary"
                       variant="outline"
@@ -54,14 +59,7 @@
                       @click="editDetails(item)"
                   >ویرایش
                   </CButton>
-                  <CButton
-                      color="primary"
-                      variant="outline"
-                      square
-                      size="sm"
-                      @click="goSubCategories(item)"
-                  >زیر دسته ها
-                  </CButton>
+
                   <CButton
                       color="danger"
                       variant="outline"
@@ -82,7 +80,7 @@
       <CCol col="4">
         <CCard>
           <CCardHeader>
-            <strong>ثبت دسته بندی</strong>
+            <strong>ثبت لیبل</strong>
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -90,27 +88,19 @@
                 <CInput
                     v-model="name"
 
-                    label="نام دسته"
-                    placeholder="نام دسته"
+                    label="نام"
+                    placeholder="نام"
                 />
               </CCol>
               <CCol col="12">
-                <CTextarea
-                    v-model="description"
-
-                    label="توضیحات دسته"
-                    placeholder="توضیحات"
-
-                    rows="4"
+                <CInput
+                    v-model="color"
+                    label="رنگ"
+                    type="color"
                 />
 
               </CCol>
-              <CCol col="12">
-                <ImageSelector label="تصویر"
-                               :file.sync="file"
-                               :preview-image="previewImage"
-                />
-              </CCol>
+
             </CRow>
 
 
@@ -119,7 +109,7 @@
             <CButton
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
-              ثبت دسته
+              ثبت لیبل
             </CButton>
           </CCardFooter>
         </CCard>
@@ -134,7 +124,7 @@
 <script>
 import axios from "axios";
 
-import {bus} from '../../../main';
+import {bus} from '../../main';
 
 
 export default {
@@ -150,8 +140,8 @@ export default {
       items: [],
       fields: [
         {key: 'ردیف', _style: 'width:10%'},
-        {key: 'تصویر', _style: 'width:10%;'},
         {key: 'نام', _style: 'width:10%'},
+        {key: 'رنگ', _style: 'width:10%;'},
         {key: 'عملیات', _style: 'width:40%;'},
 
       ],
@@ -179,6 +169,7 @@ export default {
 
     editDetails(item) {
       this.name = item.name;
+      this.color = item.color;
       this.description = item.description;
       this.previewImage = item.image;
 
@@ -187,25 +178,22 @@ export default {
     },
     get_categories() {
       var self = this;
-var formData = new FormData();
-formData.append('cat_id', this.$route.params.cat_id)
-      axios.post('/api/admin/blog/get_categories',formData, {}).then(function (response) {
+      var formData = new FormData();
+      formData.append('cat_id', this.$route.params.cat_id)
+      axios.post('/api/admin/product/get_label',formData, {}).then(function (response) {
 
         var content_cats = response.data;
+
+        // items = content_cats.orders;
         self.items = content_cats.orders.map((item, row_id) => {
           return {...item, row_id}
         })
-
       })
           .catch(function (error) {
 
             console.log(error);
           });
 
-    },
-    goSubCategories(item) {
-
-      this.$router.push({path: '/dashboard/news/categories/' + item.id});
     },
 
     login() {
@@ -215,24 +203,21 @@ formData.append('cat_id', this.$route.params.cat_id)
       const formData = new FormData()
       let url;
       if (this.status_form == 0) {
-        url = "/api/admin/blog/insert_category";
+        url = "/api/admin/product/insert_label";
       } else {
-        url = "/api/admin/blog/update_category";
+        url = "/api/admin/product/update_label";
         formData.append('id', this.status_form)
 
       }
 
-      formData.append('image', this.file);
+      formData.append('color', this.color);
 
       formData.append('name', this.name);
-      formData.append('cat', this.$route.params.cat_id);
-      formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
+
         self.$root.modal_component.show_api_response_modals(res);
 
-
         if (res.data.error == 0) {
-          url = "/api/admin/category";
           self.name = '';
           self.color = '';
           self.description = '';
@@ -243,18 +228,6 @@ formData.append('cat_id', this.$route.params.cat_id)
         }
 
       })
-
-          // axios.post(  '/admin/category', {
-          //     name: self.name,
-          //     description: self.description,
-          //     image: self.image,
-          //     cat: 0,
-          // }).then(function (response) {
-          //     self.name = '';
-          //     self.description = '';
-          //     // localStorage.setItem("api_token", response.data.access_token);
-          //     // self.$router.push({ path: 'notes' });
-          // })
           .catch(function (error) {
 
             console.log(error);
@@ -273,7 +246,7 @@ formData.append('cat_id', this.$route.params.cat_id)
       let self = this;
       const formData = new FormData()
       let url;
-      url = "/api/admin/blog/delete_category";
+      url = "/api/admin/product/delete_label";
 
 
       formData.append('id', this.status_form);
@@ -290,8 +263,6 @@ formData.append('cat_id', this.$route.params.cat_id)
           .catch(function (error) {
             console.log(error);
           });
-// this.get_categories();
-      // this.$router.push({ path: '/posts/'});
     },
   }
 }

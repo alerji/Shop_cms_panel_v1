@@ -11,6 +11,7 @@ import ProductBundles from "@/views/products/bundles/ProductBundles";
 import ProductBundleItems from "@/views/products/bundles/ProductBundleItems";
 import Shipping from "@/views/settings/Shipping";
 import OrderStatuses from "@/views/settings/OrderStatuses";
+import ProductLabelList from "@/views/products/ProductLabelList.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -351,6 +352,15 @@ function configRoutes() {
                             name: 'برند',
                             props: true,
                             component: BrandList,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "product_property"
+                            }
+                        },{
+                            path: 'labels',
+                            name: 'لیبل ها',
+                            props: true,
+                            component: ProductLabelList,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "product_property"

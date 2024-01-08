@@ -147,6 +147,10 @@ export default [
                         name: "برند ها",
                         to: '/dashboard/products/brands',
                         role: 'product_property'
+                    }, {
+                        name: "لیبل ها",
+                        to: '/dashboard/products/labels',
+                        role: 'product_property'
                     },
 
 

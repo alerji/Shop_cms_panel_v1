@@ -1,9 +1,14 @@
 {
   "fromRow": "از ردیف",
-"warning": "اخطار",
-"ok": "بله",
-"error": "خطا",
-"cancel": "انصراف",
-"deleteMessage": "آیا از حذف این مورد اطمینان دارید؟",
-  "current": "جاری"
+  "warning": "اخطار",
+  "ok": "بله",
+  "error": "خطا",
+  "cancel": "انصراف",
+  "deleteMessage": "آیا از حذف این مورد اطمینان دارید؟",
+  "current": "جاری",
+  "login": "ورود",
+  "userName": "نام کاربری",
+  "password": "رمز عبور",
+  "forgotPassword": "فراموشی رمز عبور",
+  "mobileNoOrEmail": "شماره موبایل"
 }
