@@ -190,6 +190,27 @@ export default [
             {
 
                 _name: 'CSidebarNavDropdown',
+                name: 'صفحات',
+                route: '/dashboard/pages',
+                icon: 'cil-barcode',
+                role: 'ui_settings',
+
+                items: [
+                    {
+                        name: 'افزودن صفحه',
+                        to: '/dashboard/pages/add',
+                        role: 'ui_settings'
+                    },
+                    {
+                        name: "لیست صفحات",
+                        to: '/dashboard/pages/list',
+                        role: 'ui_settings'
+                    },
+                ]
+            },
+            {
+
+                _name: 'CSidebarNavDropdown',
                 name: 'تنظیمات',
                 route: '/dashboard/settings',
                 icon: 'cil-barcode',
@@ -213,7 +234,7 @@ export default [
                     },
                     {
                         name: "تنظیمات کلی",
-                        to: '/dashboard/settings/other',
+                        to: '/dashboard/settings/main-setting',
                         role: 'ui_settings'
                     },
 

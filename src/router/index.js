@@ -12,6 +12,8 @@ import ProductBundleItems from "@/views/products/bundles/ProductBundleItems";
 import Shipping from "@/views/settings/Shipping";
 import OrderStatuses from "@/views/settings/OrderStatuses";
 import ProductLabelList from "@/views/products/ProductLabelList.vue";
+import PageList from "@/views/pageList/PageList";
+import AddPage from "@/views/pageList/AddPage";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -540,7 +542,7 @@ function configRoutes() {
                             }
                         },
                         {
-                            path: 'other',
+                            path: 'main-setting',
                             name: 'تنظیمات کلی',
                             props: true,
                             component: Settings,
@@ -596,6 +598,38 @@ function configRoutes() {
                 },
 
                 //*************************************************
+                {
+                    path: 'pages',
+                    name: 'صفحات',
+                    props: true,
+                    component: {render (c){return c('router-view')}},
+                    meta: {
+                        requiresAuth: true,
+                        requiresRole: "edit_settings"
+                    },
+                    children:[
+                        {
+                            path: 'list',
+                            name: 'لیست صفحات',
+                            props: true,
+                            component: PageList,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "edit_settings"
+                            }
+                        },{
+                            path: 'add',
+                            name: 'افزودن صفحه',
+                            props: true,
+                            component: AddPage,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "edit_settings"
+                            }
+                        },
+
+                    ]
+                },
 
 
             ]
