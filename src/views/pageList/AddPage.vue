@@ -88,7 +88,7 @@
             آنالیز سئو
           </CCardHeader>
           <CCardBody>
-            <CRow v-if="editorData!=null">
+            <CRow >
               <CCol>
                 <ReadabilitySeoRate
                     :content.sync="content_text"
@@ -180,13 +180,13 @@ export default {
     '$route.params.post_id': function () {
       this.get_categories();
     },
-    'editorData': function () {
-      let tmp = document.createElement("DIV");
-      tmp.innerHTML = this.editorData;
-      this.content_text = tmp.textContent || tmp.innerText || "";
-
-      this.content_html = this.editorData;
-    },
+    // 'editorData': function () {
+    //   let tmp = document.createElement("DIV");
+    //   tmp.innerHTML = this.editorData;
+    //   this.content_text = tmp.textContent || tmp.innerText || "";
+    //
+    //   this.content_html = this.editorData;
+    // },
 
   },
   methods: {
@@ -246,7 +246,7 @@ export default {
       }
       formData.append('name', this.title)
       formData.append('url', this.favorite_url)
-      formData.append('text', this.content_html)
+      formData.append('text', this.content_json)
       formData.append('meta_desc', this.seo_summary)
       formData.append('meta_title', this.seo_title)
       formData.append('keyword', this.keyword)

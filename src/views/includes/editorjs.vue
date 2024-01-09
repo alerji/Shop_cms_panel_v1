@@ -17,7 +17,7 @@ export default {
   components: {
   },
   props:{
-    first_content: String,
+    first_content: Object,
     content_json: Object,
     content_text: String,
     content_html: String,
@@ -47,6 +47,10 @@ parser:null,
     }
     this.editorjs = new EditorJS(editorjs_config);
 
+    setTimeout(function (){
+      self.editor_changed()
+
+    },500)
 
 
   },

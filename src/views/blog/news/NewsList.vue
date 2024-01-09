@@ -52,7 +52,7 @@
                   variant="outline"
                   square
                   size="sm"
-                  @click="editDetails(item,index)"
+                  @click="editDetails(item)"
               >ویرایش
               </CButton>
 
@@ -61,7 +61,7 @@
                   variant="outline"
                   square
                   size="sm"
-                  @click="delete_dialog(item,index)"
+                  @click="delete_dialog(item)"
               >حذف
               </CButton>
             </td>
@@ -150,7 +150,7 @@
                   variant="outline"
                   square
                   size="sm"
-                  @click="editDetails(item,index)"
+                  @click="editDetails(item)"
               >ویرایش
               </CButton>
               <CButton
@@ -158,7 +158,7 @@
                   variant="outline"
                   square
                   size="sm"
-                  @click="delete_dialog(item,index)"
+                  @click="delete_dialog(item)"
               >حذف
               </CButton>
             </td>
@@ -245,7 +245,7 @@
                   variant="outline"
                   square
                   size="sm"
-                  @click="editDetails(item,index)"
+                  @click="editDetails(item)"
               >ویرایش
               </CButton>
 
@@ -280,12 +280,14 @@
         },
         data() {
             return {
-                name: '',
+              confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+
+              name: '',
                 file: '',
                 color: '',
                 previewImage: '',
                 description: '',
-                test_sub:'ssssssssssss',
+                test_sub:'asd',
                 items_active:[],
                 fields:[
                   {key: 'row',label:'', _style: 'width:10%'},
@@ -305,7 +307,7 @@
             }
         }, mounted() {
             this.get_news();
-            bus.$on('delete_confirm', (data) => {
+            bus.$on(this.confirm_delete_name, (data) => {
                 // alert(data);
                 if (data=='true'){
                     this.delete_item();
@@ -319,9 +321,9 @@
         },
         methods: {
 
-            editDetails(item,index) {
-              this.$router.push({path:"/dashboard/news/edit-news/"+item.post_id});
-
+            editDetails(item) {
+              console.log("item edit is",item)
+              this.$router.push({path:"/dashboard/news/edit-news/"+item.id});
             },
           get_news() {
                 var self = this;
@@ -332,18 +334,16 @@
                     var contents = response.data;
 
 
-                    self.items_active = contents.posts_active.map((item, id) => {
-                        return {...item, id}
+                    self.items_active = contents.posts_active.map((item, row_id) => {
+                        return {...item, row_id}
                     })
-                    self.items_deactive = contents.posts_deactive.map((item, id) => {
-                        return {...item, id}
+                    self.items_deactive = contents.posts_deactive.map((item, row_id) => {
+                        return {...item, row_id}
                     })
-                    self.items_deleted = contents.posts_deleted.map((item, id) => {
-                        return {...item, id}
+                    self.items_deleted = contents.posts_deleted.map((item, row_id) => {
+                        return {...item, row_id}
                     })
-                    // self.description = '';
-                    // localStorage.setItem("api_token", response.data.access_token);
-                    // self.$router.push({ path: 'notes' });
+
                 })
                     .catch(function (error) {
                         console.log(error);
@@ -355,14 +355,12 @@
             }, goAddNews() {
 
                 this.$router.push({path: '/add-news'});
-// this.get_categories();
-                // this.$router.push({ path: '/posts/'});
             },
             delete_dialog(item) {
-                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],'delete_confirm');
+                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],this.confirm_delete_name);
 
 
-                this.status_form = item.post_id;
+                this.status_form = item.id;
                 // this.$nextTick(() => {
                 //     this.collapseDuration = 0
                 // })

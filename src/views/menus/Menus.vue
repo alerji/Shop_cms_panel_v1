@@ -251,7 +251,7 @@ export default {
       console.log("route id " + this.$route.params.menu_id);
 var formData = new FormData();
       formData.append("menu_id", this.$route.params.menu_id)
-      axios.post('/api/admin/site/get_menu/',formData, {}).then(function (response) {
+      axios.post('/api/admin/site/get_menu',formData, {}).then(function (response) {
 
         var content_cats = response.data;
 

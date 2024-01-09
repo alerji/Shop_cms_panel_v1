@@ -46,7 +46,8 @@
             <CRow>
 
               <CCol col="12">
-<editorjs
+<editorjs v-if="loaded_page"
+    :first_content.sync="content_json"
     :content_json.sync="content_json"
     :content_text.sync="content_text"
     :content_html.sync="content_html"
@@ -130,7 +131,7 @@
             </CButton>
           </CCardHeader>
           <CCardBody>
-            <CRow v-if="editorData!=null">
+            <CRow >
               <CCol>
                 <ReadabilitySeoRate
                     :content.sync="content_text"
@@ -182,7 +183,8 @@ export default {
 
     return {
       editor: null,
-      content_json: '',
+      loaded_page:false,
+      content_json: {},
       content_text: '',
       content_html: '',
       value_category: [],
@@ -210,19 +212,10 @@ export default {
             }).then(function (response) {
               options = response.data;
               callback(null, options);
-              // localStorage.setItem("api_token", response.data.access_token);
-              // self.$router.push({ path: 'notes' });
             })
                 .catch(function (error) {
                   console.log(error);
                 });
-
-
-            //  const options = this.get_keywords(searchQuery);
-            // const options = [1, 2, 3, 4, 5].map(i => ({
-            //     id: `${searchQuery}-${i}`,
-            //     name: `${searchQuery}-${i}`,
-            // }))
 
           })
         }
@@ -258,19 +251,21 @@ export default {
     if (this.$route.params.post_id != null) {
       this.status_form = this.$route.params.post_id;
       this.get_post_info();
+    }else{
+      this.loaded_page= true
     }
   },
   watch: {
     '$route.params.post_id': function () {
       this.get_categories();
     },
-    'editorData': function () {
-      let tmp = document.createElement("DIV");
-      tmp.innerHTML = this.editorData;
-      this.content_text = tmp.textContent || tmp.innerText || "";
-
-      this.content_html = this.editorData;
-    },
+    // 'editorData': function () {
+    //   let tmp = document.createElement("DIV");
+    //   tmp.innerHTML = this.editorData;
+    //   this.content_text = tmp.textContent || tmp.innerText || "";
+    //
+    //   this.content_html = this.editorData;
+    // },
 
   },
   methods: {
@@ -312,29 +307,28 @@ export default {
       var self = this;
       var formData = new FormData();
       formData.append('post_id', self.status_form);
-      axios.post('/api/admin/post_info', formData, {}).then(function (response) {
+      axios.post('/api/admin/blog/post_info', formData, {}).then(function (response) {
         var post_data = response.data;
 
         self.previewImage = post_data.post.image;
         post_data.post.categories.forEach((val) => {
-          self.value_category.push(val.cat_id);
+          self.value_category.push(val.category_id);
         });
         post_data.post.tags.forEach((val) => {
-          self.value_tags.push(val.name);
+          self.value_tags.push(val.tag.title.title);
         });
-        post_data.post.keywords.forEach((val) => {
-          self.value_keywords.push(val.name);
-        });
+
         // self.value_category = post_data.post.categories;
         //  self.options_=post_data.post.tags;
         // self.value_keywords=post_data.post.keywords;
-        self.title = post_data.post.title;
+        self.title = post_data.post.title.title;
         self.favorite_url = post_data.post.favorite_url;
-        self.editorData = post_data.post.summary;
-        self.editor.setContent(post_data.post.summary)
-        self.seo_summary = post_data.post.meta_description;
-        self.seo_title = post_data.post.seo_title;
-        self.keyword = post_data.post.keyword;
+        self.content_json = JSON.parse(post_data.post.title.description);
+
+        self.seo_summary = post_data.post.title.short_description;
+        self.seo_title = post_data.post.title.seo_title;
+        self.keyword = post_data.post.title.keyword;
+        self.loaded_page= true
 
         // localStorage.setItem("api_token", response.data.access_token);
         // self.$router.push({ path: 'notes' });
@@ -364,7 +358,7 @@ export default {
       formData.append('tags', this.value_tags)
       formData.append('name', this.title)
       formData.append('url', this.favorite_url)
-      formData.append('text', this.editor.getContent())
+      formData.append('text', JSON.stringify(this.content_json))
       formData.append('meta_desc', this.seo_summary)
       formData.append('meta_title', this.seo_title)
       formData.append('keyword', this.keyword)
