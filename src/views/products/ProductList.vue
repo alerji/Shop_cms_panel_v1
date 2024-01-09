@@ -149,7 +149,6 @@ import {bus} from "../../main";
 export default {
   name: 'Login',
   components: {
-    CInputCurrency,
     // Use the <ckeditor> component in this view.
     // ckeditor: CKEditor.component
   },

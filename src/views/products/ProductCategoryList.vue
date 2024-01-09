@@ -214,7 +214,7 @@ export default {
     },
     goSubCategories(item) {
 
-      this.$router.push({path: '/dashboard/product/categories/' + item.id});
+      this.$router.push({path: '/dashboard/products/category/' + item.id});
     },
 
     login() {

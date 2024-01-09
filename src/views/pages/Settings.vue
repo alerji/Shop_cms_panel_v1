@@ -1,148 +1,186 @@
 <template>
-    <div>
-        <CRow>
-            <CCol col="12">
-                <CCard >
-                    <CCardHeader>
-                        <strong>اطلاعات سایت</strong>
+  <div>
+    <CRow>
+      <CCol col="12">
+        <CCard>
+          <CCardHeader>
+            <strong>اطلاعات سایت</strong>
+          </CCardHeader>
+          <CCardBody>
+            <CTabs>
+              <CTab title="اطلاعات سایت">
+                <CRow>
+                  <CCol col="4" v-for="lang in languages">
+                    <CInput
+                        v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].title"
 
-                    </CCardHeader>
-                    <CCardBody>
-                        <CRow>
-                            <CCol col="4" v-for="lang in languages">
-                                <CInput
-                                        v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].title"
+                        :label="lang.name"
+                        placeholder="عنوان سایت"
+                        vertical
+                    />
+                    <CSelect
+                        v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].currency_id"
 
-                                        :label="lang.name"
-                                        placeholder="عنوان سایت"
-                                        vertical
-                                />
-                              <CSelect
-                                        v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].currency_id"
+                        :options="currencies"
+                        placeholder="ارز"
+                        vertical
+                    />
+                  </CCol>
+                </CRow>
+                <CRow>
+                  <CCol col="6">
+                    <ImageSelector label="لوگو"
+                                   :file.sync="logo_file"
+                                   :preview-image="site_config.logo"
+                    />
 
-                                        :options="currencies"
-                                        placeholder="ارز"
-                                        vertical
-                                />
-                            </CCol>
-                        </CRow>
+                  </CCol>
+                  <CCol col="6">
+                    <ImageSelector label="ایکون مرورگر (favicon)"
+                                   :file.sync="favicon_file"
+                                   :preview-image="site_config.favicon"
+                    />
 
-                        <CRow>
-                            <CCol col="6">
-                              <ImageSelector label="لوگو"
-                                             :file.sync="logo_file"
-                                             :preview-image="site_config.logo"
-                              />
+                  </CCol>
+                </CRow>
+                <CButton @click="login()" size="sm"
+                         color="primary">
+                  <CIcon name="cil-check-circle"/>
+                  بروزرسانی اطلاعات
+                </CButton>
+              </CTab>
+              <CTab title="تنظیمات پیامک">
+                <CRow>
+                  <CCol col="4" v-for="temp in sms_templates">
+                    <CInput
+                        v-model="temp.value"
+                        :label="temp.key"
+                        :description="temp.description"
+                    />
+                  </CCol>
 
-                            </CCol>
-                          <CCol col="6">
-                              <ImageSelector label="ایکون مرورگر (favicon)"
-                                             :file.sync="favicon_file"
-                                             :preview-image="site_config.favicon"
-                              />
-
-                            </CCol>
-                        </CRow>
-
-
-
-                    </CCardBody>
-                    <CCardFooter>
-                        <CButton @click="login()" type="submit" ref="submit_form" size="sm"
-                                 color="primary">
-                            <CIcon name="cil-check-circle"/>
-                            بروزرسانی اطلاعات
-                        </CButton>
-
-                    </CCardFooter>
-                </CCard>
-            </CCol>
-        </CRow>
-
-        <CCardBody>
-
-        </CCardBody>
+                </CRow>
+                <CButton @click="update_template()" size="sm"
+                         color="primary">
+                  <CIcon name="cil-check-circle"/>
+                  بروزرسانی اطلاعات
+                </CButton>
+              </CTab>
+            </CTabs>
 
 
-    </div>
+          </CCardBody>
+        </CCard>
+      </CCol>
+    </CRow>
+
+    <CCardBody>
+
+    </CCardBody>
+
+
+  </div>
 
 </template>
 
 <script>
-    import axios from "axios";
+import axios from "axios";
 
 
-    // import the styles
+// import the styles
 
-    export default {
-        name: 'Login',
-        components: {},
-        data() {
+export default {
+  name: 'Login',
+  components: {},
+  data() {
 
-            return {
+    return {
 
-                site_config:{},
-                languages:[],
-                currencies:[],
-              logo_file:null,
-              logo_previewImage:null,
-              favicon_file:null,
-              favicon_previewImage:null,
-            }
-        },
-        mounted() {
-
-            this.get_data();
-
-        }, watch: {},
-        methods: {
-
-            get_data() {
-                var self = this;
-var formData = new FormData();
-                axios.post('/api/admin/site/get_config',formData, {}).then(function (response) {
-                    // console.log("cats is "+response.data.groups);
-                    // console.log("cats is "+items);
-
-                    var content_cats = response.data;
-
-                  self.site_config =content_cats.configs
-                  self.currencies=self.sort_array([],content_cats.currencies,"id","title")
-                  self.languages = content_cats.languages
-
-                })
-                    .catch(function (error) {
-
-                        console.log(error);
-                    });
-
-            },
-
-            login() {
-
-
-                let self = this;
-                const formData = new FormData()
-                let url;
-                url = "/api/admin/site/update_config";
-
-
-                formData.append('site_config', JSON.stringify(this.site_config));
-                formData.append('logo_file',this.logo_file);
-                formData.append('favicon_file',this.favicon_file);
-
-                axios.post(url, formData, {}).then((res) => {
-                    self.$root.modal_component.show_api_response_modals(res);
-
-
-                }).catch(function (error) {
-
-                    console.log(error);
-                });
-
-            }
-        }
+      site_config: {},
+      languages: [],
+      currencies: [],
+      sms_templates: [],
+      logo_file: null,
+      logo_previewImage: null,
+      favicon_file: null,
+      favicon_previewImage: null,
     }
+  },
+  mounted() {
+
+    this.get_data();
+
+  }, watch: {},
+  methods: {
+
+    get_data() {
+      var self = this;
+      var formData = new FormData();
+      axios.post('/api/admin/site/get_config', formData, {}).then(function (response) {
+        // console.log("cats is "+response.data.groups);
+        // console.log("cats is "+items);
+
+        var content_cats = response.data;
+
+        self.site_config = content_cats.configs
+        self.currencies = self.sort_array([], content_cats.currencies, "id", "title")
+        self.languages = content_cats.languages
+        self.sms_templates = content_cats.sms_templates
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+
+    login() {
+
+
+      let self = this;
+      const formData = new FormData()
+      let url;
+      url = "/api/admin/site/update_config";
+
+
+      formData.append('site_config', JSON.stringify(this.site_config));
+      formData.append('logo_file', this.logo_file);
+      formData.append('favicon_file', this.favicon_file);
+
+      axios.post(url, formData, {}).then((res) => {
+        self.$root.modal_component.show_api_response_modals(res);
+
+
+      }).catch(function (error) {
+
+        console.log(error);
+      });
+
+    },
+    update_template() {
+
+
+      let self = this;
+      const formData = new FormData()
+      let url;
+      url = "/api/admin/site/update_config_sms";
+
+
+      formData.append('templates', JSON.stringify(this.sms_templates));
+
+      axios.post(url, formData, {}).then((res) => {
+        self.$root.modal_component.show_api_response_modals(res);
+
+
+      }).catch(function (error) {
+
+        console.log(error);
+      });
+
+    }
+  }
+}
 
 
 </script>
