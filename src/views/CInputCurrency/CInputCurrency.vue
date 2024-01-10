@@ -65,7 +65,7 @@
       }
     },
     mounted() {
-
+      this.state = this.get_my_currency(this.state)
     },
     computed: {
 

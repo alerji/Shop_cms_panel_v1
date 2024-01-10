@@ -47,6 +47,7 @@
 
               <CCol col="12">
 <editorjs v-if="loaded_page"
+          editor_id="add_new_editor"
     :first_content.sync="content_json"
     :content_json.sync="content_json"
     :content_text.sync="content_text"

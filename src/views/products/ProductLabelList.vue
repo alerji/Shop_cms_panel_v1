@@ -134,7 +134,7 @@ export default {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
       file: null,
-      color: '',
+      color: '#000000',
       previewImage: null,
       description: '',
       items: [],

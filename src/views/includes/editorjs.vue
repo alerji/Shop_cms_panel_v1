@@ -1,6 +1,6 @@
 <template>
-  <div style="position: relative">
-    <div class="border" id="editorjs"></div>
+  <div >
+    <div class="border" :id="editor_id"></div>
 
   </div>
 
@@ -9,61 +9,60 @@
 
 // import the styles
 
-import {editorjs_config,parser_config} from "@/plugins/editorjs_config";
+import {editorjs_config, parser_config} from "@/plugins/editorjs_config";
 
 
 export default {
   name: 'Login',
-  components: {
-  },
-  props:{
+  components: {},
+  props: {
     first_content: Object,
     content_json: Object,
     content_text: String,
     content_html: String,
+    editor_id: String,
   },
   data() {
 
     return {
+
       editor: null,
       editorjs: null,
 
-parser:null,
+      parser: null,
     }
   },
   mounted() {
     var self = this;
-
+    var config =Object.assign({}, editorjs_config);
+    config.holder = this.editor_id;
     this.parser = new edjsParser(parser_config, {}, {});
-    editorjs_config.data = this.first_content
+    config.data = this.first_content
 
-    editorjs_config.onChange = (api, event) => {
+    config.onChange = (api, event) => {
       // console.log('Now I know that Editor\'s content changed!', event)
       self.editor_changed();
 
     }
-    editorjs_config.onReady=  () => {
+    config.onReady = () => {
       new DragDrop(self.editorjs);
     }
-    this.editorjs = new EditorJS(editorjs_config);
+    this.editorjs = new EditorJS(config);
 
-    setTimeout(function (){
+    setTimeout(function () {
       self.editor_changed()
 
-    },500)
+    }, 500)
 
 
   },
-  watch: {
-
-
-  },
+  watch: {},
   methods: {
     editor_changed() {
       var self = this;
       this.editorjs.save().then((outputData) => {
         // console.log('Article data: ', outputData)
-        console.log("prser",self.parser.parse(outputData))
+        console.log("prser", self.parser.parse(outputData))
         self.editorData = self.parser.parse(outputData);
         self.$emit('update:content_json', outputData)
 

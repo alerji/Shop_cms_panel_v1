@@ -61,29 +61,40 @@
               توضیحات کوتاه
 
               <CCol col="12">
-                <ckeditor
-                    v-model="editorData"
-                    :editor-url="editorUrl"
-                ></ckeditor>
 
+                <editorjs v-if="loaded_page"
+                          editor_id="add_new_editor"
+key="add_new_editor"
+                          :first_content.sync="content_json"
+                          :content_json.sync="content_json"
+                          :content_text.sync="content_text"
+                          :content_html.sync="content_html"
+                />
 
               </CCol>
-            </CRow>
-            <CRow>
-              توضیحات کامل
               <CCol col="12">
-                <ckeditor
-                    v-model="editorData_full"
-                    :editor-url="editorUrl"
-                ></ckeditor>
+              توضیحات کامل
+
+              <editorjs v-if="loaded_page"
+                        editor_id="add_new_editor_full"
+                        key="add_new_editor_full"
+
+                        :first_content.sync="content_json_full"
+                        :content_json.sync="content_json_full"
+                        :content_text.sync="content_text_full"
+                        :content_html.sync="content_html_full"
+              />
 
 
-              </CCol>
+            </CCol>
+
             </CRow>
+            <hr>
+
             <CCol col="12">
               <CTextarea
                   v-model="seo_summary"
-
+rows="8"
                   label="سئو توضیحات"
 
               />
@@ -182,6 +193,33 @@
 
                       :options="options_category"
                       placeholder="دسته بندی محصول را انتخاب کنید"
+                  />
+
+                </div>
+
+              </CCol>
+              <CCol col="4">
+                <div class="control_wrapper">
+                  <treeselect
+                      v-model="value_brand"
+                      :multiple="false"
+                      :normalizer="normalizer_brand"
+
+                      :options="options_brand"
+                      placeholder="برند محصول را انتخاب کنید"
+                  />
+
+                </div>
+
+              </CCol>
+              <CCol col="4">
+                <div class="control_wrapper">
+                  <treeselect
+                      v-model="value_label"
+                      :multiple="false"
+                      :normalizer="normalizer_category"
+                      :options="options_label"
+                      placeholder="لیبل محصول را انتخاب کنید"
                   />
 
                 </div>
@@ -310,10 +348,9 @@
 
 <script>
 import axios from "axios";
-import CKEditor from 'ckeditor4-vue';
+
 import VueLazyload from 'vue-lazyload'
 
-Vue.use(CKEditor);
 Vue.use(VueLazyload)
 import VueUploadMultipleImage from 'vue-upload-multiple-image'
 
@@ -325,6 +362,7 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
 
 import {ASYNC_SEARCH} from '@riophae/vue-treeselect'
+import editorjs from "@/views/includes/editorjs.vue";
 // import  Readability from "@/plugins/readability";
 
 const simulateAsyncOperation = fn => {
@@ -334,16 +372,28 @@ const simulateAsyncOperation = fn => {
 export default {
   name: 'Login',
   components: {
+    editorjs,
     Treeselect,
     VueUploadMultipleImage,
-    ckeditor: CKEditor.component
   },
   data() {
 
     return {
-      editorUrl: "https://furnishium.com/ckeditor/ckeditor.js",
+      loaded_page:false,
+      content_json: {},
+      content_text: '',
+      content_html: '',
+
+      content_json_full: {},
+      content_text_full: '',
+      content_html_full: '',
+
       gallery: [],
       product_type: 1,
+      value_label: null,
+      options_label: [],
+      value_brand: null,
+      options_brand: [],
       value_category: [],
       value_tags: [],
       product_images: [],
@@ -371,6 +421,12 @@ export default {
           children: node.children,
         }
       },
+      normalizer_brand(node) {
+        return {
+          id: node.id,
+          label: node.title.title,
+        }
+      },
 
       normalizer_tags(node) {
         return {
@@ -378,9 +434,7 @@ export default {
           label: node.title,
         }
       },
-      // editor: ClassicEditor,
-      editorData: '',
-      editorData_full: '',
+
       editorConfig: {
         extraPlugins: [],
         language: 'fa'
@@ -405,6 +459,8 @@ export default {
   mounted() {
 
     this.get_categories();
+    this.get_brands();
+    this.get_product_labels();
     this.get_properties();
     this.get_currencies();
     this.get_languages();
@@ -467,6 +523,30 @@ export default {
           });
 
     },
+    get_brands() {
+      var self = this;
+      var formData = new FormData();
+      axios.post('/api/admin/product/get_brands', formData, {}).then(function (response) {
+        var content_cats = response.data;
+        self.options_brand = content_cats.orders;
+      })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    get_product_labels() {
+      var self = this;
+      var formData = new FormData();
+      axios.post('/api/admin/product/get_label', formData, {}).then(function (response) {
+        var content_cats = response.data;
+        self.options_label = content_cats.orders;
+      })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
     get_currencies() {
       var self = this;
       var formData = new FormData();
@@ -512,6 +592,8 @@ export default {
         if (self.$route.params.product_id != null) {
           self.status_form = self.$route.params.product_id;
           self.get_post_info();
+        }else{
+          self.loaded_page = true
         }
       })
           .catch(function (error) {
@@ -586,6 +668,7 @@ self.language_items.forEach(function (lng){
         post_data.post.tags.forEach((val) => {
           self.value_tags.push(val.tag.title.title);
         });
+
         self.product_property_values = post_data.post.properties;
         self.selected_property = post_data.property_id;
 
@@ -594,24 +677,31 @@ self.language_items.forEach(function (lng){
         self.favorite_url = post_data.post.favorite_url;
 
         self.title = post_data.post.title.title;
-        self.editorData = post_data.post.title.short_description;
-        self.editorData_full = post_data.post.title.description;
+        self.content_json = JSON.parse(post_data.post.title.short_description);
+        self.content_json_full = JSON.parse(post_data.post.title.description);
         self.seo_summary = post_data.post.title.meta_description;
         self.seo_title = post_data.post.title.seo_title;
         self.keyword = post_data.post.title.keyword;
-
-        if (post_data.post.price.length>0) {
-          self.product_price = post_data.post.price[0].price;
-          self.product_stock = post_data.post.price[0].stock;
-          self.product_off_price = post_data.post.price[0].off_price;
-          self.selected_currency = post_data.post.price[0].currency_id;
-          self.product_off_price_date = post_data.post.price[0].off_expire;
+        if(post_data.post.brand){
+          self.value_brand = post_data.post.brand.brand_id;
+        }
+        if(post_data.post.label){
+          self.value_label = post_data.post.label.label_id;
+        }
+        if (post_data.post.prices.length>0) {
+          self.product_price = post_data.post.prices[0].price;
+          self.product_stock = post_data.post.prices[0].stock;
+          self.product_off_price = post_data.post.prices[0].off_price;
+          self.selected_currency = post_data.post.prices[0].currency_id;
+          self.product_off_price_date = post_data.post.prices[0].off_expire;
         }
         post_data.post.gallery.forEach((val2) => {
           var item_obj = {path: val2.image, name: val2.image_id}
           self.gallery.push(item_obj);
           self.product_images.push({path: val2.image_id, default: 1})
         });
+        self.loaded_page = true
+
       }).catch(function (error) {
         console.log(error);
       });
@@ -648,11 +738,13 @@ self.language_items.forEach(function (lng){
       formData.append('product_type', this.product_type);
       formData.append('cat_list', this.value_category);
       formData.append('tags', this.value_tags);
+      formData.append('brand_id', this.value_brand);
+      formData.append('label_id', this.value_label);
       formData.append('name', this.title);
       formData.append('url', this.favorite_url);
       formData.append('code', this.code);
-      formData.append('text', this.editorData);
-      formData.append('full_text', this.editorData_full);
+      formData.append('text', JSON.stringify(this.content_json));
+      formData.append('full_text', JSON.stringify(this.content_json_full));
       formData.append('meta_desc', this.seo_summary);
       formData.append('meta_title', this.seo_title);
       formData.append('keyword', this.keyword);

@@ -1,139 +1,146 @@
 <template>
   <div>
 
-    <CButton
-        color="primary"
-        variant="outline"
-        square
-        size="sm"
-        @click="goAddNews()"
-    >افزودن محصول
-    </CButton>
-    <CCardBody>
-      <CTabs>
-        <CTab v-for="filter in filters" :title="filter.label">
-          <CDataTable
-              :items="items.filter(x=>x.status==filter.value)"
-              :fields="fields"
-              column-filter
-              :items-per-page="20"
-              hover
-              sorter
-              pagination
-          >
-            <template #row="{item,index}">
 
-              <td>
-                <p class="text-muted">{{ index+1 }}</p>
+    <CCard>
+      <CCardHeader>
+        لیست محصولات
+        <CButton
+            color="primary"
+            variant="outline"
+            square
+            size="sm"
+            @click="goAddNews()"
+        >افزودن محصول
+        </CButton>
+      </CCardHeader>
+      <CCardBody>
+        <CTabs>
+          <CTab v-for="filter in filters" :title="filter.label">
+            <CDataTable
+                :items="items.filter(x=>x.status==filter.value)"
+                :fields="fields"
+                column-filter
+                :items-per-page="20"
+                hover
+                sorter
+                pagination
+            >
+              <template #row="{item,index}">
 
-              </td>
+                <td>
+                  <p class="text-muted">{{ index+1 }}</p>
 
-            </template>
-            <template #title="{item}">
+                </td>
 
-              <td>
-                <p class="text-muted">{{ item.title.title }}</p>
+              </template>
+              <template #title="{item}">
 
-              </td>
+                <td>
+                  <p class="text-muted">{{ item.title.title }}</p>
 
-            </template>
+                </td>
 
-            <template #code="{item}">
+              </template>
 
-              <td>
-                <p class="text-muted">{{ item.code}}</p>
+              <template #code="{item}">
 
-              </td>
+                <td>
+                  <p class="text-muted">{{ item.code}}</p>
 
-            </template>
-            <template #type="{item}">
+                </td>
 
-              <td>
-                <p class="text-muted" v-if="item.type==1">فیزیکی</p>
-                <p class="text-muted" v-if="item.type==2">دانلودی</p>
-                <p class="text-muted" v-if="item.type==3">ویدئویی</p>
+              </template>
+              <template #type="{item}">
 
-              </td>
+                <td>
+                  <p class="text-muted" v-if="item.type==1">فیزیکی</p>
+                  <p class="text-muted" v-if="item.type==2">دانلودی</p>
+                  <p class="text-muted" v-if="item.type==3">ویدئویی</p>
 
-            </template>
-            <template #price="{item}">
+                </td>
 
-              <td>
-                <div style="display: inline-flex;" v-if="item.price.length>0">
-                  <CInputCurrency class="pb-0" v-model="item.price[0].price" />
-                  <CButton size="sm" ourlined color="success" @click="update_product_price(item)">
-                    <CIcon name="cil-check"/>
+              </template>
+              <template #price="{item}">
+
+                <td>
+                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                    <CInputCurrency class="pb-0" v-model="item.prices[0].price" />
+                    <CButton size="sm" ourlined color="success" @click="update_product_price(item)">
+                      <CIcon name="cil-check"/>
+                    </CButton>
+                  </div>
+
+                </td>
+
+              </template>
+
+              <template #stock="{item}">
+
+                <td>
+                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                    <CInputCurrency class="pb-0" v-model="item.prices[0].stock" />
+                    <CButton size="sm" ourlined color="success" @click="update_product_stock(item)">
+                      <CIcon name="cil-check"/>
+                    </CButton>
+                  </div>
+
+                </td>
+
+              </template>
+
+
+              <template #image="{item}">
+
+
+                <td>
+                  <CImg v-if="item.gallery.length>0" width="50px" height="50px" v-bind:src="item.gallery[0].image"/>
+                </td>
+
+              </template>
+
+              <template #operation="{item,index}">
+                <td class="py-2">
+                  <CButton
+                      color="warning"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="editDetails(item,index)"
+                  >ویرایش
                   </CButton>
-                </div>
-
-              </td>
-
-            </template>
-
-<template #stock="{item}">
-
-              <td>
-                <div style="display: inline-flex;" v-if="item.price.length>0">
-                  <CInputCurrency class="pb-0" v-model="item.price[0].stock" />
-                  <CButton size="sm" ourlined color="success" @click="update_product_stock(item)">
-                    <CIcon name="cil-check"/>
+                  <CButton
+                      color="danger"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="delete_item_dialog(item)"
+                  >حذف
                   </CButton>
-                </div>
+                  <CButton
+                      color="primary"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="go_show_product(item)"
+                  >نمایش
+                  </CButton>
 
-              </td>
-
-            </template>
-
-
-            <template #image="{item}">
-
-
-              <td>
-                <CImg v-if="item.gallery.length>0" width="50px" height="50px" v-bind:src="item.gallery[0].image"/>
-              </td>
-
-            </template>
-
-            <template #operation="{item,index}">
-              <td class="py-2">
-                <CButton
-                    color="warning"
-                    variant="outline"
-                    square
-                    class="m-1"
-                    size="sm"
-                    @click="editDetails(item,index)"
-                >ویرایش
-                </CButton>
-                <CButton
-                    color="danger"
-                    variant="outline"
-                    square
-                    class="m-1"
-                    size="sm"
-                    @click="delete_item_dialog(item)"
-                >حذف
-                </CButton>
-                <CButton
-                    color="primary"
-                    variant="outline"
-                    square
-                    class="m-1"
-                    size="sm"
-                    @click="go_show_product(item)"
-                >نمایش
-                </CButton>
-
-              </td>
-            </template>
+                </td>
+              </template>
 
 
-          </CDataTable>
+            </CDataTable>
 
-        </CTab>
+          </CTab>
 
-      </CTabs>
-    </CCardBody>
+        </CTabs>
+      </CCardBody>
+
+    </CCard>
 
 
   </div>
@@ -163,13 +170,13 @@ export default {
       description: '',
       items:[],
       fields:[
-        {key: 'row',label: 'ردیف', _style: 'width:5%'},
+        {key: 'row',label: 'ردیف', _style: 'width:3%'},
         {key: 'image', label: 'تصویر', _style: 'width:10%'},
         {key: 'title', label: 'عنوان', _style: 'width:10%'},
         {key: 'code', label: 'کد', _style: 'width:10%'},
         {key: 'type',label: 'نوع', _style: 'width:10%;'},
-        {key: 'price', label: "قیمت", _style: 'width:20%;'},
-        {key: 'stock', label: "موجودی", _style: 'width:20%;'},
+        {key: 'price', label: "قیمت", _style: 'width:15%;'},
+        {key: 'stock', label: "موجودی", _style: 'width:10%;'},
         {key: 'operation',label: 'عملیات', _style: 'width:10%;'},
 
       ],
@@ -215,7 +222,7 @@ export default {
 
       var formData = new FormData();
       formData.append("product_id", item.id)
-      formData.append("price", item.price[0].price.replace(/,/g, ''))
+      formData.append("price", item.prices[0].price.replace(/,/g, ''))
       axios.post(url, formData, {}).then(function (response) {
         self.$root.modal_component.show_api_response_modals(response);
 
@@ -232,7 +239,7 @@ export default {
 var self = this
       var formData = new FormData();
       formData.append("product_id", item.id)
-      formData.append("stock", item.price[0].stock.replace(/,/g, ''))
+      formData.append("stock", item.prices[0].stock.replace(/,/g, ''))
       axios.post(url, formData, {}).then(function (response) {
         self.$root.modal_component.show_api_response_modals(response);
 

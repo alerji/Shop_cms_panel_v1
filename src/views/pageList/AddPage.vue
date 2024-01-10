@@ -48,6 +48,8 @@
               <CCol col="12">
 <editorjs
     :content_json.sync="content_json"
+    editor_id="add_new_editor"
+
     :content_text.sync="content_text"
     :content_html.sync="content_html"
 />
