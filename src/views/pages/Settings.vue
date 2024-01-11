@@ -54,7 +54,7 @@
                   <CCol col="4" v-for="temp in sms_templates">
                     <CInput
                         v-model="temp.value"
-                        :label="temp.key"
+                        :label="temp.name"
                         :description="temp.description"
                     />
                   </CCol>
