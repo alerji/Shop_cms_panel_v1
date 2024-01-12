@@ -14,6 +14,7 @@ import OrderStatuses from "@/views/settings/OrderStatuses";
 import ProductLabelList from "@/views/products/ProductLabelList.vue";
 import PageList from "@/views/pageList/PageList";
 import AddPage from "@/views/pageList/AddPage";
+import PaymentGateways from "@/views/settings/PaymentGateways";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -536,6 +537,16 @@ function configRoutes() {
                             name: 'وضعیت های سفارش',
                             props: true,
                             component: OrderStatuses,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
+                            }
+                        },
+                        {
+                            path: 'gateways',
+                            name: 'درگاه های پرداخت',
+                            props: true,
+                            component: PaymentGateways,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "ui_settings"

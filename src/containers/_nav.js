@@ -233,6 +233,11 @@ export default [
                         role: 'ui_settings'
                     },
                     {
+                        name: "درگاه های پرداخت",
+                        to: '/dashboard/settings/gateways',
+                        role: 'ui_settings'
+                    },
+                    {
                         name: "تنظیمات کلی",
                         to: '/dashboard/settings/main-setting',
                         role: 'ui_settings'

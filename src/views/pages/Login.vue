@@ -104,6 +104,7 @@ export default {
       let self = this;
       const formData = new FormData()
       let url = "/api/admin/user/login";
+      // delete axios.defaults.headers.post['Authorization'];
       axios.defaults.headers.post['Authorization'] = "";
 
 
