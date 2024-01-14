@@ -18,7 +18,6 @@ export default [
                 name: 'داشبورد',
                 to: '/dashboard',
                 icon: 'cil-speedometer',
-                role: 'Dashboards',
             },
 
             // **************************
@@ -230,6 +229,11 @@ export default [
                     {
                         name: "وضعیت های سفارش",
                         to: '/dashboard/settings/order_status',
+                        role: 'ui_settings'
+                    },
+                    {
+                        name: "کد های تخفیف",
+                        to: '/dashboard/settings/off_coupons',
                         role: 'ui_settings'
                     },
                     {

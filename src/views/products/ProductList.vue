@@ -29,21 +29,15 @@
               <template #row="{item,index}">
 
                 <td>
-                  <p class="text-muted">{{ index+1 }}</p>
+                  <p class="text-muted">{{ index + 1 }}</p>
 
                 </td>
 
               </template>
-              <template #title="{item}">
-                <td>
-                  <p class="text-muted">{{ item.title.title }}</p>
-                </td>
-              </template>
-
               <template #code="{item}">
 
                 <td>
-                  <p class="text-muted">{{ item.code}}</p>
+                  <p class="text-muted">{{ item.code }}</p>
 
                 </td>
 
@@ -52,8 +46,10 @@
 
                 <td>
                   <CIcon name="cil-star" size="xl" v-if="item.is_featured==0"
-                  @click.v.native="update_featured_item(item,1),item.is_featured=1"/>
-                  <svg v-else  @click="update_featured_item(item,0),item.is_featured=0" height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                         @click.v.native="update_featured_item(item,1),item.is_featured=1"/>
+                  <svg v-else @click="update_featured_item(item,0),item.is_featured=0" height="24px" width="24px"
+                       version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                       xmlns:xlink="http://www.w3.org/1999/xlink"
                        viewBox="0 0 47.94 47.94" xml:space="preserve">
 <path style="fill:limegreen;" d="M26.285,2.486l5.407,10.956c0.376,0.762,1.103,1.29,1.944,1.412l12.091,1.757
 	c2.118,0.308,2.963,2.91,1.431,4.403l-8.749,8.528c-0.608,0.593-0.886,1.448-0.742,2.285l2.065,12.042
@@ -79,7 +75,7 @@
 
                 <td>
                   <div style="display: inline-flex;" v-if="item.prices.length>0">
-                    <CInputCurrency class="pb-0" v-model="item.prices[0].price" />
+                    <CInputCurrency class="pb-0" v-model="item.prices[0].price"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_price(item)">
                       <CIcon name="cil-check"/>
                     </CButton>
@@ -93,7 +89,7 @@
 
                 <td>
                   <div style="display: inline-flex;" v-if="item.prices.length>0">
-                    <CInputCurrency class="pb-0" v-model="item.prices[0].stock" />
+                    <CInputCurrency class="pb-0" v-model="item.prices[0].stock"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_stock(item)">
                       <CIcon name="cil-check"/>
                     </CButton>
@@ -166,7 +162,6 @@ import axios from "axios";
 import {bus} from "../../main";
 
 
-
 export default {
   name: 'Login',
   components: {
@@ -175,30 +170,30 @@ export default {
   },
   data() {
     return {
-      confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+      confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
 
       name: '',
       file: '',
       color: '',
       previewImage: '',
       description: '',
-      items:[],
-      fields:[
-        {key: 'row',label: 'ردیف', _style: 'width:3%'},
+      items: [],
+      fields: [
+        {key: 'row', label: 'ردیف', _style: 'width:3%'},
         {key: 'image', label: 'تصویر', _style: 'width:10%'},
-        {key: 'title', label: 'عنوان', _style: 'width:10%'},
+        {key: 'name', label: 'عنوان', _style: 'width:10%'},
         {key: 'code', label: 'کد', _style: 'width:10%'},
-        {key: 'type',label: 'نوع', _style: 'width:10%;'},
+        {key: 'type', label: 'نوع', _style: 'width:10%;'},
         {key: 'price', label: "قیمت", _style: 'width:15%;'},
         {key: 'stock', label: "موجودی", _style: 'width:10%;'},
         {key: 'is_featured', label: "★", _style: 'width:10%;'},
-        {key: 'operation',label: 'عملیات', _style: 'width:10%;'},
+        {key: 'operation', label: 'عملیات', _style: 'width:10%;'},
 
       ],
-      filters:[
-        {label:'منتشر شده',value:1},
-        {label:'منتشر نشده',value:2},
-        {label:'حذف شده',value:3}
+      filters: [
+        {label: 'منتشر شده', value: 1},
+        {label: 'منتشر نشده', value: 2},
+        {label: 'حذف شده', value: 3}
       ],
       details: [],
       collapseDuration: 0,
@@ -251,7 +246,7 @@ export default {
     },
     update_product_stock(item) {
       var url = '/api/admin/product/update_product_stock';
-var self = this
+      var self = this
       var formData = new FormData();
       formData.append("product_id", item.id)
       formData.append("stock", item.prices[0].stock.replace(/,/g, ''))
@@ -267,9 +262,9 @@ var self = this
 
     },
 
-    update_featured_item(item,status) {
+    update_featured_item(item, status) {
       var url = '/api/admin/product/update_product_featured';
-var self = this
+      var self = this
       var formData = new FormData();
       formData.append("product_id", item.id)
       formData.append("status", status)
@@ -296,7 +291,9 @@ var self = this
         var contents = response.data;
 
         self.items = contents.items;
-
+        self.items.forEach(function (val) {
+          val.name = val.title.title
+        })
 
       })
           .catch(function (error) {
@@ -306,7 +303,7 @@ var self = this
 
     },
 
-   goAddNews() {
+    goAddNews() {
 
       this.$router.push({path: '/dashboard/products/create'});
     },

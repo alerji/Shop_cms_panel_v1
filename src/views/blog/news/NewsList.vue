@@ -37,12 +37,14 @@
 
 
           <template #image="{item}">
-
-
             <td>
               <CImg width="50px" height="50px" v-bind:src="item.image"  />
             </td>
-
+          </template>
+          <template #date="{item}">
+            <td>
+              <p class="text-muted">{{get_date(item.date)}}</p>
+            </td>
           </template>
 
           <template #operation="{item,index}">
@@ -371,7 +373,7 @@
                 let self = this;
                 const formData = new FormData()
                 let url;
-                url = "/api/admin/post/delete";
+                url = "/api/admin/blog/delete_post";
 
 
                 formData.append('id', this.status_form);

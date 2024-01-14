@@ -15,6 +15,7 @@ import ProductLabelList from "@/views/products/ProductLabelList.vue";
 import PageList from "@/views/pageList/PageList";
 import AddPage from "@/views/pageList/AddPage";
 import PaymentGateways from "@/views/settings/PaymentGateways";
+import OffCoupons from "@/views/settings/OffCoupons";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -547,6 +548,16 @@ function configRoutes() {
                             name: 'درگاه های پرداخت',
                             props: true,
                             component: PaymentGateways,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_settings"
+                            }
+                        },
+                        {
+                            path: 'off_coupons',
+                            name: 'کدهای تخفیف',
+                            props: true,
+                            component: OffCoupons,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "ui_settings"

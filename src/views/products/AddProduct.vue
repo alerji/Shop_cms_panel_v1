@@ -138,7 +138,14 @@ rows="8"
                     :value.sync="selected_currency"/>
 
               </CCol>
-              <CCol col="6">
+              <CCol col="4">
+                <CInput
+                    v-model="order_point"
+                    label="نقطه سفارش"
+                    horizontal
+                />
+              </CCol>
+              <CCol col="4">
                 <CInputCurrency
                     v-model="product_off_price"
                     label="قیمت ویژه(تخفیف)"
@@ -147,7 +154,7 @@ rows="8"
                 />
 
               </CCol>
-              <CCol col="6">
+              <CCol col="4">
                 <date-picker
                     v-model="product_off_price_date"
                     label="محدودیت زمان تخفیف"
@@ -448,6 +455,7 @@ export default {
       summary: '',
       seo_summary: '',
       product_price: '',
+      order_point:0,
       product_stock: '',
       product_off_price: '',
       product_off_price_date: '',
@@ -692,6 +700,7 @@ self.language_items.forEach(function (lng){
           self.product_price = post_data.post.prices[0].price;
           self.product_stock = post_data.post.prices[0].stock;
           self.product_off_price = post_data.post.prices[0].off_price;
+          self.order_point = post_data.post.prices[0].order_point;
           self.selected_currency = post_data.post.prices[0].currency_id;
           self.product_off_price_date = post_data.post.prices[0].off_expire;
         }
@@ -750,6 +759,7 @@ self.language_items.forEach(function (lng){
       formData.append('keyword', this.keyword);
       formData.append('price', this.product_price);
       formData.append('product_stock', this.product_stock);
+      formData.append('order_point', this.order_point);
       formData.append('product_off_price', this.product_off_price);
       formData.append('product_off_price_date', this.product_off_price_date);
       formData.append('selected_currency', this.selected_currency);
@@ -766,6 +776,7 @@ self.language_items.forEach(function (lng){
           self.product_price = '';
           self.product_stock = '';
           self.product_off_price = '';
+          self.order_point = 0;
           self.product_off_price_date = '';
           self.selected_property = '0';
         }
