@@ -11,9 +11,9 @@
 
             <CCardBody class="">
                 <CTabs>
-                    <CTab :title="status.label" v-for="status in items_status">
+                    <CTab :title="status.title" v-for="status in items_status">
                         <CDataTable
-                                :items="items.filter(x=>x.status==status.value)"
+                                :items="items.filter(x=>x.statuses[0].id==status.id)"
                                 :fields="fields"
 
                                 :items-per-page="20"
@@ -21,22 +21,38 @@
                                 sorter
                                 pagination
                         >
-                            <template #ردیف="{item}">
-
+                            <template #row="{item}">
                                 <td>
                                     <p class="text-muted">{{item.row_id}}</p>
-
                                 </td>
-
                             </template>
 
-                            <template #payment="{item}">
+                            <template #date="{item}">
                                 <td>
-                                    <p v-if="item.payment==null" class="text-danger">پرداخت نشده</p>
-                                    <p v-else class="text-success">پرداخت شده</p>
+                                    <p class="text-muted">{{get_date_time(item.date)}}</p>
                                 </td>
                             </template>
-                            <template #عملیات="{item,index}">
+                            <template #user="{item}">
+                                <td>
+                                    <p class="text-muted">{{(item.user.name)}}</p>
+                                </td>
+                            </template>
+
+                            <template #user_mobile="{item}">
+                                <td>
+                                    <p class="text-muted">{{(item.user.phone)}}</p>
+                                </td>
+                            </template>
+
+                            <template #total_price="{item}">
+                                <td>
+                                    <p class="text-muted">{{get_currency(item.total_price)}}</p>
+                                </td>
+                            </template>
+
+
+
+                            <template #operation="{item,index}">
                                 <td class="py-2">
                                     <CButton
                                             color="primary"
@@ -99,18 +115,16 @@
                 description: '',
                 weights: null,
                 fields :[
-                    {key: 'ردیف',label: 'ردیف', _style: 'width:10%'},
+                    {key: 'row',label: 'ردیف', _style: 'width:10%'},
                     {key: 'date',label: 'تاریخ ثبت', _style: 'width:10%;'},
 
                     {key: 'user',label: 'مشتری', _style: 'width:10%'},
-                    {key: 'price',label: 'مبلغ', _style: 'width:10%;'},
-                    {key: 'payment',label: 'وضعیت پرداخت', _style: 'width:10%;'},
-                    // {key: 'national_code',label: 'کد ملی', _style: 'width:10%;'},
-                    // {key: 'reserve_time',label: 'ساعت رزرو', _style: 'width:10%;'},
-                    {key: 'عملیات',label: 'عملیات', _style: 'width:30%;'},
+                    {key: 'user_mobile',label: 'مشتری', _style: 'width:10%'},
+                    {key: 'total_price',label: 'مبلغ', _style: 'width:10%;'},
+                    {key: 'operation',label: 'عملیات', _style: 'width:30%;'},
 
                 ],
-items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value:2}],
+items_status:[],
                 items: [],
 
                 details: [],
@@ -120,16 +134,8 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
         },
         mounted() {
             console.log("process is "+process.env.VUE_APP_BASE_URL);
-            this.get_news();
-            bus.$on(this.delete_tag, (data) => {
-                // alert(data);
-                if (data=='true'){
-                    this.delete_item();
+            this.get_statuses();
 
-                }else{
-                    this.status_form = 0;
-                }
-            });
         },
         watch: {
             '$route.params.cat_id': function (id) {
@@ -139,43 +145,35 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
 
         },
         methods: {
-            get_style(color) {
-                return {
-                    myStyle: {
-                        backgroundColor: color
-                    }
-                }
-            },
+
             editDetails(item,index) {
-                // this.$set(this.items[item.id], '_toggled', !item._toggled)
                 this.$router.push({path:"/dashboard/products/edit/"+item.post_id});
-                // this.name = this.items[item.id].name
-                // this.color = this.items[item.id].color
-                // this.description = this.items[item.id].description
-                // this.previewImage = this.items[item.id].image
-                // this.status_form = this.items[item.id].cat_id;
-                // // this.$nextTick(() => {
-                //     this.collapseDuration = 0
-                // })
+
             },
             go_show_product(item) {
-                // this.$set(this.items[item.id], '_toggled', !item._toggled)
                 window.open(process.env.VUE_APP_BASE_URL+"products/"+item.slug,"_blank");
-                // this.$router.push({path:"/dashboard/products/edit/"+item.post_id});
-                // this.name = this.items[item.id].name
-                // this.color = this.items[item.id].color
-                // this.description = this.items[item.id].description
-                // this.previewImage = this.items[item.id].image
-                // this.status_form = this.items[item.id].cat_id;
-                // // this.$nextTick(() => {
-                //     this.collapseDuration = 0
-                // })
+
+            },
+            get_statuses() {
+                var self = this;
+
+                axios.post('/api/admin/order/get_order_status', {}).then(function (response) {
+
+
+                    self.items_status = response.data.orders
+                  self.get_news();
+
+                })
+                    .catch(function (error) {
+
+                        console.log(error);
+                    });
+
             },
             get_news() {
                 var self = this;
-                // console.log("route id "+this.$route.params.cat_id);
 
-                axios.post('/api/admin/get_all_orders', {}).then(function (response) {
+                axios.post('/api/admin/order/get_all_orders', {}).then(function (response) {
 
                     var contents = response.data;
 
@@ -185,9 +183,6 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
 
                     self.items = data_filter;
 
-                    // self.description = '';
-                    // localStorage.setItem("api_token", response.data.access_token);
-                    // self.$router.push({ path: 'notes' });
                 })
                     .catch(function (error) {
 
@@ -203,48 +198,7 @@ items_status:[{label:'ثبت شده',value:1},{label:'پرداخت شده',value
 
                 this.$router.push({path: '/dashboard/products/create'});
             },
-            delete_dialog(item) {
-                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],this.delete_tag);
 
-                this.status_form = item.post_id;
-                console.log(this.status_form)
-
-                // this.$nextTick(() => {
-                //     this.collapseDuration = 0
-                // })
-            },
-            delete_item(){
-
-
-                let self = this;
-                const formData = new FormData()
-                let url;
-                url = "/api/admin/product/delete";
-
-
-                formData.append('id', this.status_form);
-
-                axios.post(url, formData, {
-                }).then((res) => {
-                    console.log(res);
-                    if(res.data.error==1){
-                        this.$root.modal_component.show_danger_modal('خطا',res.data.msg);
-
-                    }else{
-                        this.$root.modal_component.show_success_modal('تایید',res.data.msg);
-
-                    }
-                    self.status_form=0;
-
-                    self.get_news();
-
-
-                })
-                    .catch(function (error) {
-
-                        console.log(error);
-                    });
-            },
         }
     }
 

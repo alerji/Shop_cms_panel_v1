@@ -321,7 +321,7 @@ export default {
       formData.append('sms_to_customer', send_customer);
       formData.append('sms_to_customer_code', this.sms_to_customer_code);
       formData.append('sms_to_admins_code', this.sms_to_admins_code);
-      formData.append('sms_to_admins', this.sms_to_admins);
+      formData.append('sms_to_admins', JSON.stringify(this.sms_to_admins));
       axios.post(url, formData, {}).then((res) => {
 
         self.$root.modal_component.show_api_response_modals(res);

@@ -64,18 +64,18 @@ export default [
                 name: "کاربران پنل",
                 route: '/dashboard/users',
                 icon: 'cil-truck',
-                role: 'Delivery',
+                role: 'insert_product',
 
                 items: [
 
                     {
                         name: 'گروه های دسترسی',
                         to: '/dashboard/users/permission-groups',
-                        role: 'edit_admins'
+                        role: 'insert_product'
                     }, {
                         name: 'مدیران',
                         to: '/dashboard/users/admins',
-                        role: 'edit_admins'
+                        role: 'insert_product'
                     },
                 ]
             },
@@ -86,20 +86,20 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 route: '/dashboard/orders',
                 icon: 'cil-cart',
-                role: 'Purchase',
+                role: 'insert_product',
 
                 items: [
 
                     {
                         name: 'کل سفارشات',
                         to: '/dashboard/orders/list',
-                        role: 'all_orders',
+                        role: 'insert_product',
 
                     },
                     {
                         name: 'افزودن سفارش',
                         to: '/dashboard/orders/add-order'
-                        , role: 'all_orders'
+                        , role: 'insert_product'
 
                     },
 
