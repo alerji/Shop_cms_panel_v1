@@ -41,7 +41,7 @@
           <CIcon name="cil-list"/>
         </CHeaderNavLink>
       </CHeaderNavItem>
-      <CHeaderNavItem class="d-md-down-none mx-2" v-if="1==0">
+      <CHeaderNavItem class="d-md-down-none mx-2">
         <CHeaderNavLink>
           <CIcon name="cil-envelope-open"/>
         </CHeaderNavLink>

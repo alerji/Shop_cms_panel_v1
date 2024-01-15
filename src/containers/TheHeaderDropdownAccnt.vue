@@ -21,41 +21,41 @@
 
     <CDropdownItem v-on:click="$router.push({path:'/dashboard/users/profile'})">
       <CIcon name="cil-user" /> پروفایل
-<!--      <CBadge color="success" class="ml-auto">{{ itemsCount }}</CBadge>-->
+      <CBadge color="success" class="ml-auto">{{ itemsCount }}</CBadge>
     </CDropdownItem>
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-task" /> Tasks-->
-<!--      <CBadge color="danger" class="ml-auto">{{ itemsCount }}</CBadge>-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-comment-square" /> Comments-->
-<!--      <CBadge color="warning" class="ml-auto">{{ itemsCount }}</CBadge>-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownHeader-->
-<!--      tag="div"-->
-<!--      class="text-center"-->
-<!--      color="light"-->
-<!--    >-->
-<!--      <strong>Settings</strong>-->
-<!--    </CDropdownHeader>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-user" /> Profile-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-settings" /> Settings-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-dollar" /> Payments-->
-<!--      <CBadge color="secondary" class="ml-auto">{{ itemsCount }}</CBadge>-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-file" /> Projects-->
-<!--      <CBadge color="primary" class="ml-auto">{{ itemsCount }}</CBadge>-->
-<!--    </CDropdownItem>-->
-<!--    <CDropdownDivider/>-->
-<!--    <CDropdownItem>-->
-<!--      <CIcon name="cil-shield-alt" /> Lock Account-->
-<!--    </CDropdownItem>-->
+    <CDropdownItem>
+      <CIcon name="cil-task" /> Tasks
+      <CBadge color="danger" class="ml-auto">{{ itemsCount }}</CBadge>
+    </CDropdownItem>
+    <CDropdownItem>
+      <CIcon name="cil-comment-square" /> Comments
+      <CBadge color="warning" class="ml-auto">{{ itemsCount }}</CBadge>
+    </CDropdownItem>
+    <CDropdownHeader
+      tag="div"
+      class="text-center"
+      color="light"
+    >
+      <strong>Settings</strong>
+    </CDropdownHeader>
+    <CDropdownItem>
+      <CIcon name="cil-user" /> Profile
+    </CDropdownItem>
+    <CDropdownItem>
+      <CIcon name="cil-settings" /> Settings
+    </CDropdownItem>
+    <CDropdownItem>
+      <CIcon name="cil-dollar" /> Payments
+      <CBadge color="secondary" class="ml-auto">{{ itemsCount }}</CBadge>
+    </CDropdownItem>
+    <CDropdownItem>
+      <CIcon name="cil-file" /> Projects
+      <CBadge color="primary" class="ml-auto">{{ itemsCount }}</CBadge>
+    </CDropdownItem>
+    <CDropdownDivider/>
+    <CDropdownItem>
+      <CIcon name="cil-shield-alt" /> Lock Account
+    </CDropdownItem>
     <CDropdownItem v-on:click="go_login()">
       <CIcon name="cil-lock-locked"  /> خروج
     </CDropdownItem>
@@ -69,7 +69,7 @@ export default {
     return {
       itemsCount: 42,
       user_name: "",
-      user_image: "https://furnishium.com/images/user_images/default_person.png",
+      user_image: "/img/user.png",
     }
   },methods:{
       go_login(){
@@ -80,8 +80,8 @@ export default {
         get_user_name(){
 
 
-            this.user_name= this.$store.state.user_name;
-            this.user_image= this.$store.state.user_image;
+            this.user_name= localStorage.getItem("user_name")
+            // this.user_image= this.$store.state.user_image;
 
 
 

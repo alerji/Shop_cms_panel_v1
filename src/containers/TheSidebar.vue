@@ -34,34 +34,6 @@
 
 
 <!--    </CSidebarBrand>-->
-    <CSidebarBrand class="d-md-down-none" style="flex: 0 0 13px">
-      <CRow class="c-sidebar-brand-minimized">
-        <CHeaderNav>
-
-          <TheHeaderDropdownAccnt/>
-        </CHeaderNav>
-      </CRow>
-      <CRow class="c-sidebar-brand-full" style="width: 100%">
-        <CHeaderNav>
-          <CCol col="7" style="text-align: start;">
-            <TheHeaderDropdownAccnt/>
-          </CCol>
-          <CCol col="5" style="text-align: start">
-            <div>
-              {{ title_top }}
-            </div>
-            <div>
-              <!--            <label  style="text-align: start">{{branch_name}}</label>-->
-
-            </div>
-          </CCol>
-
-        </CHeaderNav>
-
-      </CRow>
-
-
-    </CSidebarBrand>
 
     <CRenderFunction ref="sidebar_ref" flat :content-to-render="generate_nav"/>
     <!--    <CRenderFunction flat :content-to-render="$options.nav"/>-->
@@ -85,9 +57,7 @@ export default {
   },
   data() {
     return {
-      // title_top: process.env.VUE_APP_NAME,
       branch_name: localStorage.getItem("branchName"),
-      title_top: localStorage.getItem("user_name"),
       sidebar_changer: null,
       side_bar_drop_downs: null,
       opened_drop_downs: '',

@@ -152,7 +152,7 @@ function configRoutes() {
             component: TheContainer,
             children: [
                 {
-                    path: 'dashboard',
+                    path: '/',
                     name: 'پنل مدیریت',
                     component: Dashboard,
                     meta: {

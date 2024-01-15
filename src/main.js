@@ -121,21 +121,26 @@ Vue.mixin({
           }
         },
         calculate_items(list, item) {
-
           var total = 0;
-
           // try{
           list.forEach(function (val) {
             if (val[item] != null) {
               val[item] = val[item].toString().replace(/,/g, '');
               total += parseFloat(val[item]);
             }
-
           })
           return total;
-          // }catch(e){
-          //     return total;
-          // }
+        },
+        calculate_items_percent(list, item,amount) {
+          var total = 0;
+          // try{
+          list.forEach(function (val) {
+            if (val[item] != null) {
+              val[item] = val[item].toString().replace(/,/g, '');
+              total += parseFloat(val[item]);
+            }
+          })
+         return (amount*100)/total;
 
         },
         get_date(date) {

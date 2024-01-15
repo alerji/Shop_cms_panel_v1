@@ -92,13 +92,6 @@
                 />
               </CCol>
               <CCol col="12">
-                <CInput
-                    v-model="multipy"
-                    label="ضریب پرداخت درگاه"
-              type="number"
-                />
-              </CCol>
-              <CCol col="12">
                 <CSelect
                     :value.sync="status"
                     label="وضعیت درگاه"

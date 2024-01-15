@@ -42,7 +42,6 @@
                   >ویرایش
                   </CButton>
                   <CButton
-                      v-if="item.is_default==0"
                       color="danger"
                       variant="outline"
                       square
@@ -95,8 +94,8 @@
                 </CInputCurrency>
 
               </CCol>
-              <CCol col="12">
-                <CInput
+              <CCol col="12" >
+                <CInput v-if="is_percent==1"
                     v-model="max_amount"
 description="0 به معنی عدم محدودیت است"
                     label="سقف تخفیف"
@@ -270,22 +269,28 @@ export default {
 
     editDetails(item) {
       var self = this;
+
       this.name = item.title;
-      var visible =false;
-      if(item.visible==1){
-        visible =true;
+      this.code = item.code;
+      this.amount = item.amount;
+      this.max_amount = item.max_amount;
+      this.max_usage = item.max_usage;
+      this.expire_date = item.expire_date;
+      this.description = item.description;
+      this.is_percent = parseInt(item.is_percent);
+      var first_buy =false;
+      if(item.first_buy==1){
+        first_buy =true;
       }
-      var send_customer =false;
-      if(item.send_sms_to_customer==1){
-        send_customer = true;
+      var user_limit =false;
+      if(item.limit_user==1){
+        user_limit = true;
       }
-      this.visible_to_customer = visible
-      this.sms_to_customer = send_customer
-      this.sms_to_customer_code =item.customer_send_code
-      this.sms_to_admins_code = item.admins_send_code
+      this.user_limit = user_limit
+      this.first_buy = first_buy
       this.sms_to_admins = []
 
-      item.admins.forEach(function (val){
+      item.users.forEach(function (val){
         self.async_search_admin = false
         self.sms_to_admins.push(val.user_id);
         self.admins_options.push({id:val.user.id,name:val.user.name,phone:val.user.phone})
