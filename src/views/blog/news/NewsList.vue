@@ -362,7 +362,7 @@
                 this.$router.push({path: 'register'});
             }, goAddNews() {
 
-                this.$router.push({path: '/add-news'});
+                this.$router.push({path: '/dashboard/news/add-news'});
             },
             delete_dialog(item) {
                 this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],this.confirm_delete_name);

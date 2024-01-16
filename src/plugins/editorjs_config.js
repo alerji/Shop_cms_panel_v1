@@ -18,7 +18,7 @@ export const editorjs_config = {
             class: ImageTool,
             config: {
                 endpoints: {
-                    byFile: axios.defaults.baseURL + 'api/admin/html_uploader', // Your backend file uploader endpoint
+                    byFile: 'https://db.charlotte-perfume.ir/api/admin/html_uploader', // Your backend file uploader endpoint
                     byUrl: 'http://localhost:8008/fetchUrl', // Your endpoint that provides uploading by Url
                 }
             }
@@ -26,7 +26,8 @@ export const editorjs_config = {
         linkTool: {
             class: LinkTool,
             config: {
-                endpoint: 'http://localhost:8008/fetchUrl', // Your backend endpoint for url data fetching,
+                endpointList: 'https://db.charlotte-perfume.ir/api/admin/product/editor-url-search', // Your backend endpoint for url data fetching,
+                endpointUrl: 'https://db.charlotte-perfume.ir/api/admin/product/editor-url-product', // Your backend endpoint for url data fetching,
             }
         },
         table: Table,

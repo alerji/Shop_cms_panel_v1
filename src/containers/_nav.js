@@ -25,7 +25,7 @@ export default [
 
                 _name: 'CSidebarNavDropdown',
                 name: 'بلاگ',
-                route: '/dashboard/sale-orders',
+                route: '/dashboard/news',
                 icon: 'cil-address-book',
 
                 items: [

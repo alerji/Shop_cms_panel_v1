@@ -99,7 +99,7 @@ Vue.mixin({
         get_currency(number) {
           number = number.toString().replace(/,/g, '');
 
-          var fixed = parseInt(localStorage.getItem('currency_digits'));
+          var fixed = parseInt(0);
           var final_number = parseFloat(number);
           number = final_number.toFixed(fixed);
           return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -147,7 +147,7 @@ Vue.mixin({
 
         },
         get_date(date) {
-          var date_format = localStorage.getItem('setting_date_format');
+          var date_format = "YYYY-MM-DD";
           var final_date = "";
           if (i18n.locale == "fa") {
             date_format = date_format.replace("YYYY", 'jYYYY')
@@ -164,7 +164,7 @@ Vue.mixin({
 
         },
         get_date_time(date) {
-          var date_format = localStorage.getItem('setting_date_format');
+          var date_format = "YYYY-MM-DD";
           var final_date = "";
           if (i18n.locale == "fa") {
             date_format = date_format.replace("YYYY", 'jYYYY')
@@ -242,7 +242,7 @@ Vue.mixin({
           if (char == "." && price.toString().includes('.')) {
             e.preventDefault();
           }
-          var fixed = parseInt(localStorage.getItem('currency_digits'));
+          var fixed = parseInt(2);
           var price_array = price.toString().split(".");
           if (price_array[1] != null && fixed == price_array[1].length) {
             e.preventDefault();
