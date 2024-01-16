@@ -20,6 +20,9 @@ Vue.component('CDataTableFixed', CDataTableFixed);
 import CInputCurrency from "./views/CInputCurrency/CInputCurrency";
 Vue.component('CInputCurrency', CInputCurrency);
 
+import CInputText from "./views/CInputText/CInputText";
+Vue.component('CInputText', CInputText);
+
 import VuePersianDatetimePicker from  'vue-persian-datetime-picker';
 Vue.component('date-picker', VuePersianDatetimePicker);
 import moment from 'moment-jalaali'

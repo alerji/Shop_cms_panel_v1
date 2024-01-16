@@ -2,7 +2,7 @@
   <CChartBar
     :datasets="defaultDatasets"
     :options="defaultOptions"
-    :labels="['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su']"
+    :labels="info.map(function (obj) { return get_date(obj.date) })"
   />
 </template>
 s
@@ -19,6 +19,14 @@ export default {
   components: {
     CChartBar
   },
+  props:{
+    info:Array,
+  },
+  data(){
+    return{
+      labels:[],
+    }
+  },
   computed: {
     defaultDatasets () {
       const brandSuccess = getStyle('success2') || '#4dbd74'
@@ -30,14 +38,16 @@ export default {
       const data2 = []
       const data3 = []
 
-      for (let i = 0; i <= elements; i++) {
-        data1.push(random(50, 200))
+      this.info.forEach(function (val){
+        data1.push(val.daily)
         data2.push(random(80, 100))
         data3.push(65)
-      }
+
+      })
+
       return [
         {
-          label: 'My First dataset',
+          label: 'فروش ',
           backgroundColor: hexToRgba(brandInfo, 10),
           borderColor: brandInfo,
           pointHoverBackgroundColor: brandInfo,
@@ -79,9 +89,6 @@ export default {
           yAxes: [{
             ticks: {
               beginAtZero: true,
-              maxTicksLimit: 5,
-              stepSize: Math.ceil(250 / 5),
-              max: 250
             },
             gridLines: {
               display: true

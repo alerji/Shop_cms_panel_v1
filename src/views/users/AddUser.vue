@@ -97,7 +97,7 @@
                             <CCol col="12">
 
                                 <label>سطوح دسترسی</label>
-                                <CDataTable
+                                <CDataTableFixed
                                     :items="role_items"
                                     :fields="fields_role"
 
@@ -120,7 +120,7 @@
 
                                     </template>
 
-                                </CDataTable>
+                                </CDataTableFixed>
                             </CCol>
 
                         </CRow>

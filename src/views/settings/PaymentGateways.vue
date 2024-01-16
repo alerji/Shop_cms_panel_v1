@@ -9,7 +9,7 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -51,7 +51,7 @@
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
 <!--                  <CButton-->
 <!--                      color="danger"-->
@@ -65,7 +65,7 @@
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>

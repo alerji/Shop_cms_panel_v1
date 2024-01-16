@@ -250,7 +250,10 @@
             size: String,
             height:String,
             dark: Boolean,
-            striped: Boolean,
+            striped: {
+              type: Boolean,
+              default: () => { return true }
+            },
             fixed: Boolean,
             hover: Boolean,
             border: Boolean,
@@ -478,22 +481,22 @@
             },
             tableFilterData () {
                 return {
-                    label: this.tableFilter.label || 'Filter:',
-                    placeholder: this.tableFilter.placeholder || 'type string...'
+                    label: this.tableFilter.label || 'جستجو:',
+                    placeholder: this.tableFilter.placeholder || 'تایپ کنید...'
                 }
             },
             paginationSelect () {
                 return {
-                    label: this.itemsPerPageSelect.label || 'Items per page:',
+                    label: this.itemsPerPageSelect.label || 'تعداد در صفحه:',
                     values: this.itemsPerPageSelect.values || [5, 10, 20, 50]
                 }
             },
             noItemsText () {
                 const customValues = this.noItemsView || {}
                 if (this.passedItems.length) {
-                    return customValues.noResults || 'No filtering results'
+                    return customValues.noResults || 'مورد جستجو شده وجود ندارد'
                 }
-                return customValues.noItems || 'No items'
+                return customValues.noItems || 'موردی وجود ندارد'
             }
         },
         methods: {

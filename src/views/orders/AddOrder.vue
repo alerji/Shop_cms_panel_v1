@@ -96,7 +96,7 @@
                 name: '',
 
               fields: [
-                    {key: 'row', label: 'ردیف', _style: 'width:10%'},
+                {key: 'row',label: '#', _style: 'width:10%'},
                     {key: 'product', label: 'کالا', _style: 'width:10%;'},
 
                     {key: 'price', label: 'مبلغ', _style: 'width:10%'},

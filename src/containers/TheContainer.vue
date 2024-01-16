@@ -4,7 +4,7 @@
     <div class="c-app">
 
         <TheSidebar/>
-    <CWrapper>
+    <CWrapper class="bg-light">
 
       <TheHeader/>
       <div class="c-body">

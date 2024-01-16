@@ -9,7 +9,7 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -36,24 +36,27 @@
                   <CButton
                       color="primary"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       color="danger"
                       variant="outline"
                       square
+                      class="mr-1"
+
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>

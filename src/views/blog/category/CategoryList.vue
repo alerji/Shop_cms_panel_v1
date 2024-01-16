@@ -9,16 +9,17 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
+                striped
 
                 :items-per-page="20"
                 hover
                 sorter
                 pagination
             >
-              <template #ردیف="{item}">
+              <template #row="{item}">
 
                 <td>
                   <p class="text-muted">{{ item.row_id + 1 }}</p>
@@ -50,31 +51,36 @@
                       color="primary"
                       variant="outline"
                       square
+                      class="mr-1"
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
-                      color="primary"
+                      color="success"
                       variant="outline"
                       square
+                      class="mr-1"
+
                       size="sm"
                       @click="goSubCategories(item)"
-                  >زیر دسته ها
+                  ><CIcon name="cil-list" size="sm"/>
                   </CButton>
                   <CButton
                       color="danger"
                       variant="outline"
                       square
+                      class="mr-1"
+
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>
@@ -116,10 +122,25 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
+                     class="mr-1"
+
                 type="submit" ref="submit_form" size="sm" color="primary">
               ثبت دسته
+            </CButton>
+            <CButton v-if="status_form!=0"
+                @click="login()"
+                     class="mr-1"
+
+                type="submit" ref="submit_form" size="sm" color="warning">
+              ویرایش دسته
+            </CButton>
+            <CButton v-if="status_form!=0"
+                @click="reset_form()"
+                     class="mr-1"
+                type="submit" ref="submit_form" size="sm" color="danger">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -149,17 +170,18 @@ export default {
       description: '',
       items: [],
       fields: [
-        {key: 'ردیف', _style: 'width:10%'},
+        {key: 'row',label: '#', _style: 'width:5%'},
         {key: 'تصویر', _style: 'width:10%;'},
-        {key: 'نام', _style: 'width:10%'},
-        {key: 'عملیات', _style: 'width:40%;'},
+        {key: 'نام', _style: 'width:20%'},
+        {key: 'عملیات', _style: 'width:10%;'},
 
       ],
 
       status_form: 0,
 
     }
-  }, mounted() {
+  },
+  mounted() {
     this.get_categories();
     bus.$on(this.confirm_delete_name, (data) => {
       // alert(data);
@@ -183,6 +205,14 @@ export default {
       this.previewImage = item.image;
 
       this.status_form = item.id;
+
+    },
+    reset_form() {
+      this.name = '';
+      this.description = '';
+      this.previewImage = null;
+
+      this.status_form = 0;
 
     },
     get_categories() {

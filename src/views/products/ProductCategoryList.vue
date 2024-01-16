@@ -9,7 +9,7 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -18,7 +18,7 @@
                 sorter
                 pagination
             >
-              <template #ردیف="{item}">
+              <template #row="{item}">
 
                 <td>
                   <p class="text-muted">{{ item.row_id + 1 }}</p>
@@ -51,20 +51,23 @@
                       variant="outline"
                       square
                       size="sm"
+                      class="mr-1"
                       @click="$router.push({path:'/dashboard/products/list/'+item.id})"
                   >محصولات
                   </CButton>
                   <CButton
                       color="primary"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       color="primary"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="goSubCategories(item)"
@@ -73,16 +76,17 @@
                   <CButton
                       color="danger"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>
@@ -157,10 +161,10 @@ export default {
       description: '',
       items: [],
       fields: [
-        {key: 'ردیف', _style: 'width:10%'},
+        {key: 'row',label: '#', _style: 'width:7%'},
         {key: 'تصویر', _style: 'width:10%;'},
-        {key: 'نام', _style: 'width:10%'},
-        {key: 'عملیات', _style: 'width:40%;'},
+        {key: 'نام', _style: 'width:20%'},
+        {key: 'عملیات', _style: 'width:20%;'},
 
       ],
 

@@ -77,14 +77,18 @@ import {
   cilUserFemale,
   cilUserFollow,
   cilReload,
+    cilCart,
+    cilTrash,
+    cilAddressBook,
+    cilMonitor,
   cilXCircle
 
 } from '@coreui/icons'
-import { logo } from './logo'
+import { logo,eye ,page} from './logo'
 
 export const iconsSet = Object.assign(
   {},
-  { logo },
+  { logo,eye,page },
   {
     cilArrowRight,
     cilBan,
@@ -128,7 +132,11 @@ export const iconsSet = Object.assign(
     cilStar,
     cilTask,
     cilUser,
-    cilUserFemale,
+      cilAddressBook,
+      cilMonitor,
+
+      cilUserFemale,
+      cilCart,
     cilUserFollow,
     cilXCircle
   },
@@ -164,6 +172,7 @@ export const iconsSet = Object.assign(
     cibPaypal, 
     cibGooglePay,
     cilReload,
+      cilTrash,
     cibCcAmex
   }
 )

@@ -267,7 +267,7 @@ rows="8"
             </CRow>
             <CRow>
               <CCol col="12">
-                <CDataTable
+                <CDataTableFixed
                     :items="property_group_items"
                     :fields="fields_properties"
 
@@ -286,7 +286,7 @@ rows="8"
                   </template>
 
                   <template #property="{item}">
-                    <CDataTable
+                    <CDataTableFixed
                         :items="item.items"
                         :fields="fields_properties_items"
                         hover
@@ -314,12 +314,12 @@ rows="8"
 
                       </template>
 
-                    </CDataTable>
+                    </CDataTableFixed>
 
 
                   </template>
 
-                </CDataTable>
+                </CDataTableFixed>
 
               </CCol>
 

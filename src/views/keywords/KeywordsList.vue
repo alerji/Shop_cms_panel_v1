@@ -53,7 +53,7 @@
 
         <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items_tags"
                 :fields="fields"
 
@@ -62,7 +62,7 @@
                 sorter
                 pagination
             >
-                <template #ردیف="{item}">
+                <template #row="{item}">
 
                     <td>
                         <p class="text-muted">{{item.id}}</p>
@@ -97,7 +97,7 @@
                             square
                             size="sm"
                             @click="editDetails(item)"
-                        >ویرایش
+                        ><CIcon name="cil-pencil" size="sm"/>
                         </CButton>
 
 
@@ -106,7 +106,7 @@
 
 
 
-            </CDataTable>
+            </CDataTableFixed>
 
 
         </CCardBody>
@@ -125,7 +125,7 @@
 
 
     const fields = [
-        {key: 'ردیف', _style: 'width:10%'},
+      {key: 'row',label: '#', _style: 'width:10%'},
         {key: 'عنوان', _style: 'width:10%'},
         {key: 'تعداد', _style: 'width:10%'},
 

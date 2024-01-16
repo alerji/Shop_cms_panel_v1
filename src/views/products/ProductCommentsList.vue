@@ -5,7 +5,7 @@
         <CCardBody>
             <CTabs>
                 <CTab title="منتشر شده" active>
-                    <CDataTable
+                    <CDataTableFixed
                         :items="items_active"
                         :fields="fields"
 
@@ -14,7 +14,7 @@
                         sorter
                         pagination
                     >
-                        <template #ردیف="{item}">
+                        <template #row="{item}">
 
                             <td>
                                 <p class="text-muted">{{item.comment_id}}</p>
@@ -72,19 +72,19 @@
                                     square
                                     size="sm"
                                     @click="change_status(item,'2')"
-                                >حذف
+                                ><CIcon name="cil-trash" size="sm"/>
                                 </CButton>
                             </td>
                         </template>
 
 
 
-                    </CDataTable>
+                    </CDataTableFixed>
 
                 </CTab>
 
                 <CTab title="منتشر نشده" >
-                    <CDataTable
+                    <CDataTableFixed
                         :items="items_deactive"
                         :fields="fields"
 
@@ -93,7 +93,7 @@
                         sorter
                         pagination
                     >
-                        <template #ردیف="{item}">
+                        <template #row="{item}">
 
                             <td>
                                 <p class="text-muted">{{item.comment_id}}</p>
@@ -152,7 +152,7 @@
                                     square
                                     size="sm"
                                     @click="change_status(item,'2')"
-                                >حذف
+                                ><CIcon name="cil-trash" size="sm"/>
                                 </CButton>
 
 
@@ -161,11 +161,11 @@
 
 
 
-                    </CDataTable>
+                    </CDataTableFixed>
 
                 </CTab>
                 <CTab title="حذف شده" >
-                    <CDataTable
+                    <CDataTableFixed
                         :items="items_deleted"
                         :fields="fields"
 
@@ -174,7 +174,7 @@
                         sorter
                         pagination
                     >
-                        <template #ردیف="{item}">
+                        <template #row="{item}">
 
                             <td>
                                 <p class="text-muted">{{item.comment_id}}</p>
@@ -233,7 +233,7 @@
 
 
 
-                    </CDataTable>
+                    </CDataTableFixed>
 
                 </CTab>
             </CTabs>
@@ -258,7 +258,7 @@
 
 
     const fields = [
-        {key: 'ردیف', _style: 'width:10%'},
+      {key: 'row',label: '#', _style: 'width:10%'},
         {key: 'کاربر', _style: 'width:10%'},
         {key: 'محصول', _style: 'width:10%'},
         {key: 'دیدگاه', _style: 'width:10%;'},

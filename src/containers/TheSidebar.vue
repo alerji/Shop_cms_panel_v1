@@ -3,7 +3,7 @@
       fixed
       :minimize="minimize"
       :show="show"
-
+ class="bg-dark-gradient"
       dropdownMode="closeInactive"
       @update:show="(value) => $store.commit('set', ['sidebarShow', value])"
   >

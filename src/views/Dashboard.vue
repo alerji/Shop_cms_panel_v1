@@ -5,17 +5,14 @@
       <CCardBody>
         <CRow>
           <CCol col="5">
-            <h4 id="traffic" class="card-title mb-0">Traffic</h4>
-            <div class="small text-muted">November 2017</div>
+            <h4 id="traffic" class="card-title mb-0">نمودار فروش</h4>
           </CCol>
           <CCol col="7" class="d-none d-md-block">
-            <CButton color="primary" class="float-right">
-              <CIcon name="cil-cloud-download"/>
-            </CButton>
+
             <CButtonGroup class="float-right mr-3">
               <CButton
                 color="outline-secondary"
-                v-for="(value, key) in ['Day', 'Month', 'Year']"
+                v-for="(value, key) in ['روزانه', 'ماهانه', 'سالانه']"
                 :key="key"
                 class="mx-0"
                 :pressed="value === selected ? true : false"
@@ -26,57 +23,48 @@
             </CButtonGroup>
           </CCol>
         </CRow>
-        <MainChartExample style="height:300px;margin-top:40px;"/>
+        <MainChartExample :info="dashboard_data.dashboard_daily_report" style="height:300px;margin-top:40px;"/>
       </CCardBody>
       <CCardFooter>
         <CRow class="text-center">
           <CCol md col="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Visits</div>
-            <strong>29.703 Users (40%)</strong>
+            <div class="text-muted">فروش امروز</div>
+            <strong>{{get_currency(dashboard_data.today_sales)}}</strong>
             <CProgress
               class="progress-xs mt-2"
               :precision="1"
               color="success"
-              :value="40"
+              :value="100"
             />
           </CCol>
           <CCol md col="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Unique</div>
-            <strong>24.093 Users (20%)</strong>
+            <div class="text-muted">فروش این ماه</div>
+            <strong>{{get_currency(dashboard_data.month_sales)}}</strong>
             <CProgress
               class="progress-xs mt-2"
               :precision="1"
               color="info"
-              :value="20"
+              :value="100"
             />
           </CCol>
           <CCol md col="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">Pageviews</div>
-            <strong>78.706 Views (60%)</strong>
+            <div class="text-muted">فروش ماه قبل</div>
+            <strong>{{get_currency(dashboard_data.last_month_sales)}}</strong>
             <CProgress
               class="progress-xs mt-2"
               :precision="1"
               color="warning"
-              :value="60"
+              :value="100"
             />
           </CCol>
           <CCol md col="12" class="mb-sm-2 mb-0">
-            <div class="text-muted">New Users</div>
-            <strong>22.123 Users (80%)</strong>
+            <div class="text-muted">فروش سال</div>
+            <strong>{{get_currency(dashboard_data.total_sales)}}</strong>
             <CProgress
               class="progress-xs mt-2"
               :precision="1"
               color="danger"
-              :value="80"
-            />
-          </CCol>
-          <CCol md col="12" class="mb-sm-2 mb-0 d-md-down-none">
-            <div class="text-muted">Bounce Rate</div>
-            <strong>Average Rate (40.15%)</strong>
-            <CProgress
-              class="progress-xs mt-2"
-              :precision="1"
-              :value="40"
+              :value="100"
             />
           </CCol>
         </CRow>
@@ -92,6 +80,7 @@
           <CCardBody>
             <CRow>
               <CCol col="12" lg="6">
+                فروش بر اساس درگاه پرداخت
                 <hr class="mt-0">
                 <ul class="horizontal-bars type-2" >
                   <div class="progress-group" v-for="gateway in dashboard_data.gateways">
@@ -111,6 +100,7 @@
                 </ul>
               </CCol>
               <CCol col="12" lg="6">
+                کالاهای کم موجود انبار
                 <hr class="mt-0">
                 <ul class="horizontal-bars type-2">
                   <div class="progress-group" v-for="product in dashboard_data.order_point_products">
@@ -131,9 +121,11 @@
               </CCol>
             </CRow>
             <br/>
-            <CDataTable
+            <CDataTableFixed
               class="mb-0 table-outline"
               hover
+              striped
+
               :items="tableItems"
               :fields="tableFields"
               head-color="light"
@@ -196,7 +188,7 @@
                 <div class="small text-muted">Last login</div>
                 <strong>{{item.activity}}</strong>
               </td>
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
         </CCard>
       </CCol>
@@ -498,9 +490,11 @@
               </CCol>
             </CRow>
             <br/>
-            <CDataTable
+            <CDataTableFixed
               class="mb-0 table-outline"
               hover
+              striped
+
               :items="tableItems"
               :fields="tableFields"
               head-color="light"
@@ -563,7 +557,7 @@
                 <div class="small text-muted">Last login</div>
                 <strong>{{item.activity}}</strong>
               </td>
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
         </CCard>
       </CCol>
@@ -586,7 +580,7 @@ export default {
   },
   data () {
     return {
-      selected: 'Month',
+      selected: 'روزانه',
       tableItems: [
         {
           avatar: { url: 'img/avatars/1.jpg', status: 'success' },

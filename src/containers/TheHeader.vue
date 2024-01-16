@@ -1,5 +1,5 @@
 <template>
-  <CHeader fixed with-subheader light>
+  <CHeader class="header " fixed with-subheader light>
     <CToggler
       in-header
       class="ml-3 d-lg-none"
@@ -24,19 +24,19 @@
           کاربران
         </CHeaderNavLink>
       </CHeaderNavItem>
-      <CHeaderNavItem class="px-3" v-if="1==0">
+      <CHeaderNavItem class="px-3" >
         <CHeaderNavLink to="/dashboard/settings">
           تنظیمات
         </CHeaderNavLink>
       </CHeaderNavItem>
     </CHeaderNav>
-    <CHeaderNav class="mr-4">
-      <CHeaderNavItem class="d-md-down-none mx-2" v-if="1==0">
+    <CHeaderNav class="mr-4 " style="position: absolute;left: 0">
+      <CHeaderNavItem class="d-md-down-none mx-2" >
         <CHeaderNavLink>
           <CIcon name="cil-bell"/>
         </CHeaderNavLink>
       </CHeaderNavItem>
-      <CHeaderNavItem class="d-md-down-none mx-2" v-if="1==0">
+      <CHeaderNavItem class="d-md-down-none mx-2" >
         <CHeaderNavLink>
           <CIcon name="cil-list"/>
         </CHeaderNavLink>
@@ -48,9 +48,9 @@
       </CHeaderNavItem>
       <TheHeaderDropdownAccnt/>
     </CHeaderNav>
-    <CSubheader class="px-3">
-      <CBreadcrumbRouter class="border-0 mb-0"/>
-    </CSubheader>
+<!--    <CSubheader class="px-3">-->
+<!--      <CBreadcrumbRouter class="border-0 mb-0"/>-->
+<!--    </CSubheader>-->
     <CCol ref="errors_container">
       <CCard v-if="header_validate_errors.length" >
         <CCardHeader>

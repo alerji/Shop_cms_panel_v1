@@ -16,9 +16,10 @@
   <CCardBody>
     <CTabs>
       <CTab title="منتشر شده" active>
-        <CDataTable
+        <CDataTableFixed
             :items="items_active"
             :fields="fields"
+            striped
 
             :items-per-page="20"
             hover
@@ -53,30 +54,33 @@
                   color="primary"
                   variant="outline"
                   square
+                  class="mr-1"
                   size="sm"
                   @click="editDetails(item)"
-              >ویرایش
+              ><CIcon name="cil-pencil" size="sm"/>
               </CButton>
 
               <CButton
                   color="danger"
                   variant="outline"
                   square
+                  class="mr-1"
+
                   size="sm"
                   @click="delete_dialog(item)"
-              >حذف
+              ><CIcon name="cil-trash" size="sm"/>
               </CButton>
             </td>
           </template>
 
 
 
-        </CDataTable>
+        </CDataTableFixed>
 
       </CTab>
 
       <CTab title="منتشر نشده" >
-        <CDataTable
+        <CDataTableFixed
             :items="items_deactive"
             :fields="fields"
 
@@ -85,7 +89,7 @@
             sorter
             pagination
         >
-          <template #ردیف="{item}">
+          <template #row="{item}">
 
             <td>
               <p class="text-muted">{{item.post_id}}</p>
@@ -153,7 +157,7 @@
                   square
                   size="sm"
                   @click="editDetails(item)"
-              >ویرایش
+              ><CIcon name="cil-pencil" size="sm"/>
               </CButton>
               <CButton
                   color="danger"
@@ -161,18 +165,18 @@
                   square
                   size="sm"
                   @click="delete_dialog(item)"
-              >حذف
+              ><CIcon name="cil-trash" size="sm"/>
               </CButton>
             </td>
           </template>
 
 
 
-        </CDataTable>
+        </CDataTableFixed>
 
       </CTab>
       <CTab title="حذف شده" >
-        <CDataTable
+        <CDataTableFixed
             :items="items_deleted"
             :fields="fields"
 
@@ -181,7 +185,7 @@
             sorter
             pagination
         >
-          <template #ردیف="{item}">
+          <template #row="{item}">
 
             <td>
               <p class="text-muted">{{item.post_id}}</p>
@@ -246,9 +250,10 @@
                   color="primary"
                   variant="outline"
                   square
+                  class="mr-1"
                   size="sm"
                   @click="editDetails(item)"
-              >ویرایش
+              ><CIcon name="cil-pencil" size="sm"/>
               </CButton>
 
             </td>
@@ -256,7 +261,7 @@
 
 
 
-        </CDataTable>
+        </CDataTableFixed>
 
       </CTab>
     </CTabs>
@@ -292,13 +297,14 @@
                 test_sub:'asd',
                 items_active:[],
                 fields:[
-                  {key: 'row',label:'', _style: 'width:10%'},
-                  {key: 'title',label:'عنوان', _style: 'width:10%'},
+                  {key: 'row',label:'#', _style: 'width:5%'},
+                  {key: 'image',label:'تصویر', _style: 'width:10%;'},
+
+                  {key: 'title',label:'عنوان', _style: 'width:20%'},
                   {key: 'user',label:'کاربر', _style: 'width:10%;'},
                   {key: 'date',label:'تاریخ', _style: 'width:10%;'},
-                  {key: 'views',label:'نمایش', _style: 'width:10%;'},
-                  {key: 'image',label:'تصویر', _style: 'width:10%;'},
-                  {key: 'operation',label:'عملیات', _style: 'width:30%;'},
+                  {key: 'views',label:'نمایش', _style: 'width:5%;'},
+                  {key: 'operation',label:'عملیات', _style: 'width:10%;'},
 
                 ],
                 items_deactive:[],

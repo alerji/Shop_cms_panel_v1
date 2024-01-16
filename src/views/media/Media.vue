@@ -25,7 +25,7 @@
                 placeholder="New file"
             />
 
-              <CDataTable
+              <CDataTableFixed
                 hover
                 :items="items"
                 :fields="fields"
@@ -81,7 +81,7 @@
                     </CButton>
                   </td>
                 </template>
-              </CDataTable>
+              </CDataTableFixed>
 
           </CCardBody>  
         </CCard>
@@ -91,12 +91,12 @@
       <transition name="slide">
         <CCard v-if="rightCard == 'fileInfo'">
           <CCardBody>
-              <CDataTable
+              <CDataTableFixed
                 :items="fileInfo"
                 :fields="fileInfoHeader"
               >
 
-              </CDataTable>
+              </CDataTableFixed>
           </CCardBody>  
         </CCard>
         <CCard v-if="rightCard == 'renameFolder'">

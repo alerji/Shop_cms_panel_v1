@@ -56,7 +56,7 @@
 
             </CCardHeader>
             <CCardBody class="">
-              <CDataTable
+              <CDataTableFixed
                   :items="order_info.products"
                   :fields="fields_products"
 
@@ -84,7 +84,7 @@
                 </template>
 
 
-              </CDataTable>
+              </CDataTableFixed>
 
             </CCardBody>
 
@@ -122,7 +122,7 @@
                         </CButton>
                     </CCol>
                 </CRow>
-              <CDataTable
+              <CDataTableFixed
                   :items="order_info.statuses"
                   :fields="fields_status"
 
@@ -149,7 +149,7 @@
                 </template>
 
 
-              </CDataTable>
+              </CDataTableFixed>
 
             </CCardBody>
 
@@ -178,7 +178,7 @@
                 edit_product_weight: '',
                 name: '',
               fields_products: [
-                    {key: 'row', label: 'ردیف', _style: 'width:10%'},
+                {key: 'row',label: '#', _style: 'width:10%'},
                     {key: 'image', label: 'تصویر', _style: 'width:10%;'},
                     {key: 'title', label: 'کالا', _style: 'width:10%;'},
                     {key: 'count', label: 'تعداد', _style: 'width:10%;'},

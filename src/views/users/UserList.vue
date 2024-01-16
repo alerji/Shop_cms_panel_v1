@@ -11,7 +11,7 @@
       </CButton>
           <CCardBody>
 
-          <CDataTable
+          <CDataTableFixed
               :items="items"
               :fields="fields"
 
@@ -20,7 +20,7 @@
               sorter
               pagination
           >
-              <template #ردیف="{item}">
+              <template #row="{item}">
 
                   <td>
                       <p class="text-muted">{{item.user_id}}</p>
@@ -103,7 +103,7 @@
 
 
 
-          </CDataTable>
+          </CDataTableFixed>
           </CCardBody>
 
 
@@ -119,7 +119,7 @@ import  { bus } from '../../main';
     ];
 
     const fields = [
-        { key: 'ردیف', _style:'width:10%' },
+      {key: 'row',label: '#', _style: 'width:10%'},
         { key: 'نام', _style:'width:10%' },
         { key: 'ایمیل', _style:'width:10%' },
         { key: 'موبایل', _style:'width:10%;' },

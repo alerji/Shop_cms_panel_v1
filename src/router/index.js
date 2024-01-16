@@ -167,7 +167,6 @@ function configRoutes() {
                     component: {render (c){return c('router-view')}},
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "edit_admins"
                     },
                     children:[
                         {
@@ -177,7 +176,7 @@ function configRoutes() {
                             component: PermissionGroup,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_admins"
+                                requiresRole: "permission_groups"
                             }
                         },
                         {
@@ -187,7 +186,7 @@ function configRoutes() {
                             component: AdminList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_admins"
+                                requiresRole: "admins"
                             }
                         }, {
                             path: 'admins',
@@ -196,7 +195,7 @@ function configRoutes() {
                             component: UserList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_admins"
+                                requiresRole: "admins"
                             }
                         }, {
                             path: 'add-user',
@@ -205,7 +204,7 @@ function configRoutes() {
                             component: AddUser,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_users"
+                                requiresRole: "admins"
                             }
                         }, {
                             path: 'edit-user/:user_id',
@@ -214,7 +213,7 @@ function configRoutes() {
                             component: EditUser,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_users"
+                                requiresRole: "admins"
                             }
                         },
                         {
@@ -238,7 +237,6 @@ function configRoutes() {
                     component: {render (c){return c('router-view')}},
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "insert_product"
                     },
                     children:[
                         {
@@ -248,7 +246,7 @@ function configRoutes() {
                             component: ProductList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_product"
+                                requiresRole: "add_product"
                             }
                         },{
                             path: 'list/:cat_id',
@@ -257,7 +255,7 @@ function configRoutes() {
                             component: ProductList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_product"
+                                requiresRole: "add_product"
                             }
                         },
 
@@ -268,7 +266,7 @@ function configRoutes() {
                             component: AddProduct,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_product"
+                                requiresRole: "add_product"
                             }
                         }, {
                             path: 'edit/:product_id',
@@ -277,7 +275,7 @@ function configRoutes() {
                             component: AddProduct,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_product"
+                                requiresRole: "add_product"
                             }
                         }, {
                             path: 'category/:cat_id',
@@ -286,7 +284,7 @@ function configRoutes() {
                             component: ProductCategoryList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_product_category"
+                                requiresRole: "product_category"
                             }
                         }, {
                             path: 'tags',
@@ -295,7 +293,7 @@ function configRoutes() {
                             component: ProductTagsList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_product_tags"
+                                requiresRole: "product_tags"
                             }
                         },{
                             path: 'comments',
@@ -304,7 +302,7 @@ function configRoutes() {
                             component: ProductCommentsList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "verify_product_comments"
+                                requiresRole: "product_comments"
                             }
                         },{
                             path: 'property-templates',
@@ -313,7 +311,7 @@ function configRoutes() {
                             component: ProductPropertyTemplateList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "template_property"
                             }
                         },{
                             path: 'property-groups/:temp_id',
@@ -322,7 +320,7 @@ function configRoutes() {
                             component: ProductPropertyTemplateGroupList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "template_property"
                             }
                         },{
                             path: 'property-items/:group_id',
@@ -331,7 +329,7 @@ function configRoutes() {
                             component: ProductPropertyTemplateGroupItemList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "template_property"
                             }
                         },{
                             path: 'product-bundles',
@@ -340,7 +338,7 @@ function configRoutes() {
                             component: ProductBundles,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "product_bundles"
                             }
                         },{
                             path: 'bundle-items/:bundle_id',
@@ -349,7 +347,7 @@ function configRoutes() {
                             component: ProductBundleItems,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "product_bundles"
                             }
                         },{
                             path: 'brands',
@@ -358,7 +356,7 @@ function configRoutes() {
                             component: BrandList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "product_brands"
                             }
                         },{
                             path: 'labels',
@@ -367,7 +365,7 @@ function configRoutes() {
                             component: ProductLabelList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "product_property"
+                                requiresRole: "product_labels"
                             }
                         },
                     ]
@@ -385,7 +383,6 @@ function configRoutes() {
                     component: {render (c){return c('router-view')}},
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "insert_post"
                     },
                     children:[
                         {
@@ -395,7 +392,7 @@ function configRoutes() {
                             component: CategoryList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_category"
+                                requiresRole: "blog_category"
 
                             }
                         },
@@ -406,7 +403,7 @@ function configRoutes() {
                             component: AddNews,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_post"
+                                requiresRole: "blog_post"
                             }
                         },{
                             path: 'edit-news/:post_id',
@@ -415,7 +412,7 @@ function configRoutes() {
                             component: EditNews,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "insert_post"
+                                requiresRole: "blog_post"
                             }
                         }, {
                             path: 'all-news',
@@ -424,7 +421,7 @@ function configRoutes() {
                             component: NewsList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "verify_post"
+                                requiresRole: "blog_post"
                             }
                         }, {
                             path: 'tags',
@@ -433,7 +430,7 @@ function configRoutes() {
                             component: TagsList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_tags"
+                                requiresRole: "blog_tags"
                             }
                         }, {
                             path: 'comments',
@@ -442,7 +439,7 @@ function configRoutes() {
                             component: CommentsList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "verify_comments"
+                                requiresRole: "blog_comments"
                             }
                         },
                     ]
@@ -456,7 +453,6 @@ function configRoutes() {
 
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "ui_settings"
                     },
                     children:[
 
@@ -467,7 +463,7 @@ function configRoutes() {
                             component: SliderImages,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "ui_slider"
                             }
                         },
                          {
@@ -477,25 +473,7 @@ function configRoutes() {
                             component: Menus,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
-                            }
-                        }, {
-                            path: 'settings',
-                            name: 'تنظیمات',
-                            props: true,
-                            component: Menus,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "edit_settings"
-                            }
-                        },{
-                            path: 'settings',
-                            name: 'تصاویر صفحه اول',
-                            props: true,
-                            component: Menus,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "ui_menu"
                             }
                         },
                     ]
@@ -520,7 +498,7 @@ function configRoutes() {
                             component: Redirect,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "redirect"
                             }
                         },
                         {
@@ -530,7 +508,7 @@ function configRoutes() {
                             component: Shipping,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "shipping"
                             }
                         },
                         {
@@ -540,7 +518,7 @@ function configRoutes() {
                             component: OrderStatuses,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "add_order_status"
                             }
                         },
                         {
@@ -550,7 +528,7 @@ function configRoutes() {
                             component: PaymentGateways,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "gateways"
                             }
                         },
                         {
@@ -560,7 +538,7 @@ function configRoutes() {
                             component: OffCoupons,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "off_coupons"
                             }
                         },
                         {
@@ -570,7 +548,7 @@ function configRoutes() {
                             component: Settings,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "ui_settings"
+                                requiresRole: "basic_settings"
                             }
                         },
                     ]
@@ -584,7 +562,6 @@ function configRoutes() {
                     component: {render (c){return c('router-view')}},
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "edit_settings"
                     },
                     children:[
                         {
@@ -594,7 +571,7 @@ function configRoutes() {
                             component: OrderList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "order_list"
                             }
                         }, {
                             path: 'info/:order_id',
@@ -603,7 +580,7 @@ function configRoutes() {
                             component: OrderInfo,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "order_list"
                             }
                         }, {
                             path: 'add-order',
@@ -612,7 +589,7 @@ function configRoutes() {
                             component: AddOrder,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "add_order"
                             }
                         },
 
@@ -627,7 +604,6 @@ function configRoutes() {
                     component: {render (c){return c('router-view')}},
                     meta: {
                         requiresAuth: true,
-                        requiresRole: "edit_settings"
                     },
                     children:[
                         {
@@ -637,7 +613,7 @@ function configRoutes() {
                             component: PageList,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "add_page"
                             }
                         },{
                             path: 'add',
@@ -646,7 +622,7 @@ function configRoutes() {
                             component: AddPage,
                             meta: {
                                 requiresAuth: true,
-                                requiresRole: "edit_settings"
+                                requiresRole: "add_page"
                             }
                         },
 

@@ -17,7 +17,7 @@
       <CCardBody>
         <CTabs>
           <CTab v-for="filter in filters" :title="filter.label">
-            <CDataTable
+            <CDataTableFixed
                 :items="items.filter(x=>x.status==filter.value)"
                 :fields="fields"
                 column-filter
@@ -118,7 +118,7 @@
                       class="m-1"
                       size="sm"
                       @click="editDetails(item,index)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       color="danger"
@@ -127,7 +127,7 @@
                       class="m-1"
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                   <CButton
                       color="primary"
@@ -136,14 +136,14 @@
                       class="m-1"
                       size="sm"
                       @click="go_show_product(item)"
-                  >نمایش
+                  ><CIcon name="eye" size="sm"/>
                   </CButton>
 
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
 
           </CTab>
 
@@ -179,15 +179,15 @@ export default {
       description: '',
       items: [],
       fields: [
-        {key: 'row', label: 'ردیف', _style: 'width:3%'},
-        {key: 'image', label: 'تصویر', _style: 'width:10%'},
-        {key: 'name', label: 'عنوان', _style: 'width:10%'},
-        {key: 'code', label: 'کد', _style: 'width:10%'},
-        {key: 'type', label: 'نوع', _style: 'width:10%;'},
-        {key: 'price', label: "قیمت", _style: 'width:15%;'},
-        {key: 'stock', label: "موجودی", _style: 'width:10%;'},
-        {key: 'is_featured', label: "★", _style: 'width:10%;'},
-        {key: 'operation', label: 'عملیات', _style: 'width:10%;'},
+        {key: 'row',label: '#', _style: 'width:3%',sorter:false,filter:false},
+        {key: 'image', label: 'تصویر', _style: 'width:7%'},
+        {key: 'name', label: 'عنوان', _style: 'width:25%'},
+        {key: 'code', label: 'کد', _style: 'width:7%'},
+        {key: 'type', label: 'نوع', _style: 'width:7%;'},
+        {key: 'price', label: "قیمت", _style: 'width:13%;'},
+        {key: 'stock', label: "موجودی", _style: 'width:7%;'},
+        {key: 'is_featured', label: "★", _style: 'width:5%;'},
+        {key: 'operation', label: 'عملیات', _style: 'width:12%;'},
 
       ],
       filters: [

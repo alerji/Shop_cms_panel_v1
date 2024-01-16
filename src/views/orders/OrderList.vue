@@ -12,7 +12,7 @@
             <CCardBody class="">
                 <CTabs>
                     <CTab :title="status.title" v-for="status in items_status">
-                        <CDataTable
+                        <CDataTableFixed
                                 :items="items.filter(x=>x.statuses[0].id==status.id)"
                                 :fields="fields"
 
@@ -21,9 +21,9 @@
                                 sorter
                                 pagination
                         >
-                            <template #row="{item}">
+                            <template #row="{item,index}">
                                 <td>
-                                    <p class="text-muted">{{item.row_id}}</p>
+                                    <p class="text-muted">{{index+1}}</p>
                                 </td>
                             </template>
 
@@ -60,7 +60,7 @@
                                             square
                                             size="sm"
                                             @click="goRegister(item)"
-                                    >نمایش
+                                    ><CIcon name="eye" size="sm"/>
                                     </CButton>
 
                                 </td>
@@ -68,7 +68,7 @@
 
 
 
-                        </CDataTable>
+                        </CDataTableFixed>
                     </CTab>
 
                 </CTabs>
@@ -115,13 +115,13 @@
                 description: '',
                 weights: null,
                 fields :[
-                    {key: 'row',label: 'ردیف', _style: 'width:10%'},
+                    {key: 'row',label: '#', _style: 'width:3%'},
                     {key: 'date',label: 'تاریخ ثبت', _style: 'width:10%;'},
 
                     {key: 'user',label: 'مشتری', _style: 'width:10%'},
                     {key: 'user_mobile',label: 'مشتری', _style: 'width:10%'},
                     {key: 'total_price',label: 'مبلغ', _style: 'width:10%;'},
-                    {key: 'operation',label: 'عملیات', _style: 'width:30%;'},
+                    {key: 'operation',label: 'عملیات', _style: 'width:10%;'},
 
                 ],
 items_status:[],

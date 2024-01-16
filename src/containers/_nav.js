@@ -26,33 +26,35 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 name: 'بلاگ',
                 route: '/dashboard/sale-orders',
-                icon: 'cil-chart-line',
+                icon: 'cil-address-book',
 
                 items: [
                     {
                         name:"دسته بندی",
                         to: '/dashboard/news/categories/0',
+                        role: 'blog_category'
+
                     },
                     {
                         name: "افزودن نوشته",
                         to: '/dashboard/news/add-news',
-                        role: 'insert_post'
+                        role: 'blog_post'
                     },
                     {
                         name: 'لیست نوشته ها',
                         to: '/dashboard/news/all-news',
-                        role: 'insert_post',
+                        role: 'blog_post',
                     },
 
                     {
                         name: 'برچسب ها',
-                        to: '/dashboard/news/tags'
-                        , role: 'edit_tags'
+                        to: '/dashboard/news/tags',
+                        role: 'blog_tags'
                     },
                     {
                         name: "دیدگاه ها",
                         to: '/dashboard/news/comments'
-                        , role: 'verify_comments',
+                        , role: 'blog_comments',
                     },
                 ]
             },
@@ -62,19 +64,18 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 name: "کاربران پنل",
                 route: '/dashboard/users',
-                icon: 'cil-truck',
-                role: 'insert_product',
+                icon: 'cil-user',
 
                 items: [
 
                     {
                         name: 'گروه های دسترسی',
                         to: '/dashboard/users/permission-groups',
-                        role: 'insert_product'
+                        role: 'permission_groups'
                     }, {
                         name: 'مدیران',
                         to: '/dashboard/users/admins',
-                        role: 'insert_product'
+                        role: 'admins'
                     },
                 ]
             },
@@ -85,20 +86,19 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 route: '/dashboard/orders',
                 icon: 'cil-cart',
-                role: 'insert_product',
 
                 items: [
 
                     {
                         name: 'کل سفارشات',
                         to: '/dashboard/orders/list',
-                        role: 'insert_product',
+                        role: 'order_list',
 
                     },
                     {
                         name: 'افزودن سفارش',
                         to: '/dashboard/orders/add-order'
-                        , role: 'insert_product'
+                        , role: 'add_order'
 
                     },
 
@@ -111,45 +111,44 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 route: '/dashboard/products',
                 icon: 'cil-calculator',
-                role: 'insert_product',
 
                 items: [
                     {
                         name: "افزودن محصول",
                         to: '/dashboard/products/create',
-                        role: 'insert_product'
+                        role: 'add_product'
                     }, {
                         name: "لیست محصولات",
                         to: '/dashboard/products/list',
-                        role: 'insert_product'
+                        role: 'add_product'
                     }, {
                         name: "دسته بندی",
                         to: '/dashboard/products/category/0',
-                        role: 'insert_product_category'
+                        role: 'product_category'
                     }, {
                         name: "الگو مشخصات",
                         to: '/dashboard/products/property-templates',
-                        role: 'product_property'
+                        role: 'template_property'
                     }, {
                         name: "برچسب محصولات",
                         to: '/dashboard/products/tags',
-                        role: 'edit_product_tags'
+                        role: 'product_tags'
                     }, {
                         name: "دیدگاه محصولات",
                         to: '/dashboard/products/comments',
-                        role: 'verify_product_comments'
+                        role: 'product_comments'
                     }, {
                         name: "خصوصیات",
                         to: '/dashboard/products/product-bundles',
-                        role: 'product_property'
+                        role: 'product_bundles'
                     }, {
                         name: "برند ها",
                         to: '/dashboard/products/brands',
-                        role: 'product_property'
+                        role: 'product_brands'
                     }, {
                         name: "لیبل ها",
                         to: '/dashboard/products/labels',
-                        role: 'product_property'
+                        role: 'product_labels'
                     },
 
 
@@ -163,19 +162,18 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 name: 'تنظیمات نمایش',
                 route: '/dashboard/display',
-                icon: 'cil-barcode',
-                role: 'ui_settings',
+                icon: 'cil-monitor',
 
                 items: [
                     {
                         name: 'اسلایدر',
                         to: '/dashboard/display/sliders',
-                        role: 'ui_settings'
+                        role: 'ui_slider'
                     },
                     {
                         name: 'منو صفحه اصلی',
                         to: "/dashboard/display/menus/0",
-                        role: 'ui_settings'
+                        role: 'ui_menu'
                     },
 
 
@@ -191,19 +189,18 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 name: 'صفحات',
                 route: '/dashboard/pages',
-                icon: 'cil-barcode',
-                role: 'ui_settings',
+                icon: 'page',
 
                 items: [
                     {
                         name: 'افزودن صفحه',
                         to: '/dashboard/pages/add',
-                        role: 'ui_settings'
+                        role: 'add_page'
                     },
                     {
                         name: "لیست صفحات",
                         to: '/dashboard/pages/list',
-                        role: 'ui_settings'
+                        role: 'add_page'
                     },
                 ]
             },
@@ -212,53 +209,52 @@ export default [
                 _name: 'CSidebarNavDropdown',
                 name: 'تنظیمات',
                 route: '/dashboard/settings',
-                icon: 'cil-barcode',
-                role: 'ui_settings',
+                icon: 'cil-settings',
 
                 items: [
                     {
                         name: 'روش های ارسال',
                         to: '/dashboard/settings/shipping',
-                        role: 'ui_settings'
+                        role: 'shipping'
                     },
                     {
                         name: "ریدایرکت",
                         to: '/dashboard/settings/redirect',
-                        role: 'ui_settings'
+                        role: 'redirect'
                     },
                     {
                         name: "وضعیت های سفارش",
                         to: '/dashboard/settings/order_status',
-                        role: 'ui_settings'
+                        role: 'add_order_status'
                     },
                     {
                         name: "کد های تخفیف",
                         to: '/dashboard/settings/off_coupons',
-                        role: 'ui_settings'
+                        role: 'off_coupons'
                     },
                     {
                         name: "درگاه های پرداخت",
                         to: '/dashboard/settings/gateways',
-                        role: 'ui_settings'
+                        role: 'gateways'
                     },
                     {
                         name: "تنظیمات کلی",
                         to: '/dashboard/settings/main-setting',
-                        role: 'ui_settings'
+                        role: 'basic_settings'
                     },
 
                 ]
             },
 
-            {
-
-                _name: 'CSidebarNavItem',
-                name: "گزارشات کالا",
-                route: '/dashboard/reports',
-                to: '/dashboard/reports/all',
-                icon: 'cil-book',
-                role: 'edit_settings',
-            },
+            // {
+            //
+            //     _name: 'CSidebarNavItem',
+            //     name: "گزارشات کالا",
+            //     route: '/dashboard/reports',
+            //     to: '/dashboard/reports/all',
+            //     icon: 'cil-book',
+            //     role: 'edit_settings',
+            // },
             //**************************8
 
 

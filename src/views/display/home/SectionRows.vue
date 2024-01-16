@@ -175,7 +175,7 @@
 
         <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -184,7 +184,7 @@
                 sorter
                 pagination
             >
-                <template #ردیف="{item}">
+                <template #row="{item}">
 
                     <td>
                         <p class="text-muted">{{item.row_id+1}}</p>
@@ -236,13 +236,13 @@
                             square
                             size="sm"
                             @click="delete_item_dialog(item)"
-                        >حذف
+                        ><CIcon name="cil-trash" size="sm"/>
                         </CButton>
                     </td>
                 </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
         </CCardBody>
 
 
@@ -268,7 +268,7 @@
         {type_id: 'Three', name: 'C'}
     ];
     const fields = [
-        {key: 'ردیف', _style: 'width:10%'},
+      {key: 'row',label: '#', _style: 'width:10%'},
         {key: 'نام', _style: 'width:10%'},
         {key: 'نوع', _style: 'width:10%'},
         {key: 'چیدمان', _style: 'width:10%;'},

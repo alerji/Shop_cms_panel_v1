@@ -9,7 +9,7 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -18,7 +18,7 @@
                 sorter
                 pagination
             >
-              <template #ردیف="{item}">
+              <template #row="{item}">
 
                 <td>
                   <p class="text-muted">{{ item.row_id + 1 }}</p>
@@ -57,7 +57,7 @@
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
 
                   <CButton
@@ -66,13 +66,13 @@
                       square
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>
@@ -139,7 +139,7 @@ export default {
       description: '',
       items: [],
       fields: [
-        {key: 'ردیف', _style: 'width:10%'},
+        {key: 'row',label: '#', _style: 'width:5%'},
         {key: 'نام', _style: 'width:10%'},
         {key: 'رنگ', _style: 'width:10%;'},
         {key: 'عملیات', _style: 'width:40%;'},

@@ -14,7 +14,7 @@
         </CButton>
       </CCardHeader>
       <CCardBody>
-        <CDataTable
+        <CDataTableFixed
             :items="items_active"
             :fields="fields"
 
@@ -52,7 +52,7 @@
                   square
                   size="sm"
                   @click="editDetails(item,index)"
-              >ویرایش
+              ><CIcon name="cil-pencil" size="sm"/>
               </CButton>
 
               <CButton
@@ -61,13 +61,13 @@
                   square
                   size="sm"
                   @click="delete_dialog(item,index)"
-              >حذف
+              ><CIcon name="cil-trash" size="sm"/>
               </CButton>
             </td>
           </template>
 
 
-        </CDataTable>
+        </CDataTableFixed>
 
       </CCardBody>
 

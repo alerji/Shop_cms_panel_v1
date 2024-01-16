@@ -9,7 +9,7 @@
           </CCardHeader>
           <CCardBody>
 
-            <CDataTable
+            <CDataTableFixed
                 :items="items"
                 :fields="fields"
 
@@ -52,25 +52,27 @@
                   <CButton
                       color="primary"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  >ویرایش
+                  ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       v-if="item.is_default==0"
                       color="danger"
+                      class="mr-1"
                       variant="outline"
                       square
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  >حذف
+                  ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
 
 
-            </CDataTable>
+            </CDataTableFixed>
           </CCardBody>
 
         </CCard>
@@ -192,11 +194,11 @@ export default {
       sms_to_admins: [],
       admins_options: [],
       fields: [
-        {key: 'title', label: 'عنوان', _style: 'width:20%'},
+        {key: 'title', label: 'عنوان', _style: 'width:7%'},
         {key: 'visible', label: 'نمایش به کاربر', _style: 'width:10%'},
-        {key: 'sms_to_customer', label: 'پیامک به کاربر', _style: 'width:20%'},
-        {key: 'admins', label: 'مدیران', _style: 'width:20%'},
-        {key: 'عملیات', _style: 'width:15%;'},
+        {key: 'sms_to_customer', label: 'پیامک به کاربر', _style: 'width:10%'},
+        {key: 'admins', label: 'مدیران', _style: 'width:30%'},
+        {key: 'عملیات', _style: 'width:7%;'},
       ],
       normalizer_admins(node) {
         return {
