@@ -5,14 +5,33 @@
     <CCard>
       <CCardHeader>
         لیست محصولات
-        <CButton
-            color="primary"
-            variant="outline"
-            square
-            size="sm"
-            @click="goAddNews()"
-        >افزودن محصول
-        </CButton>
+        <div>
+          <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="goAddNews()"
+          >افزودن محصول
+          </CButton>
+          <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="goToDownload()"
+          >دانلود اکسل
+          </CButton>
+          <CButton
+              color="primary"
+              variant="outline"
+              square
+              size="sm"
+              @click="open_file_selector()"
+          >آپلود اکسل
+          </CButton>
+        </div>
+
       </CCardHeader>
       <CCardBody>
         <CTabs>
@@ -118,7 +137,8 @@
                       class="m-1"
                       size="sm"
                       @click="editDetails(item,index)"
-                  ><CIcon name="cil-pencil" size="sm"/>
+                  >
+                    <CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       color="danger"
@@ -127,7 +147,8 @@
                       class="m-1"
                       size="sm"
                       @click="delete_item_dialog(item)"
-                  ><CIcon name="cil-trash" size="sm"/>
+                  >
+                    <CIcon name="cil-trash" size="sm"/>
                   </CButton>
                   <CButton
                       color="info"
@@ -136,17 +157,18 @@
                       class="m-1"
                       size="sm"
                       @click="go_bundle_price(item)"
-                  ><CIcon name="cil-dollar" size="sm"/>
+                  >
+                    <CIcon name="cil-dollar" size="sm"/>
                   </CButton>
-<!--                  <CButton-->
-<!--                      color="primary"-->
-<!--                      variant="outline"-->
-<!--                      square-->
-<!--                      class="m-1"-->
-<!--                      size="sm"-->
-<!--                      @click="go_show_product(item)"-->
-<!--                  ><CIcon name="eye" size="sm"/>-->
-<!--                  </CButton>-->
+                  <!--                  <CButton-->
+                  <!--                      color="primary"-->
+                  <!--                      variant="outline"-->
+                  <!--                      square-->
+                  <!--                      class="m-1"-->
+                  <!--                      size="sm"-->
+                  <!--                      @click="go_show_product(item)"-->
+                  <!--                  ><CIcon name="eye" size="sm"/>-->
+                  <!--                  </CButton>-->
 
                 </td>
               </template>
@@ -161,7 +183,14 @@
 
     </CCard>
 
+    <CInputFile
+        custom
+        horizontal
+        id="excel_uploader_file"
+        v-show="false"
 
+        v-on:change="handleFileUpload"
+    />
   </div>
 
 </template>
@@ -186,9 +215,10 @@ export default {
       color: '',
       previewImage: '',
       description: '',
+      excel_file: null,
       items: [],
       fields: [
-        {key: 'row',label: '#', _style: 'width:3%',sorter:false,filter:false},
+        {key: 'row', label: '#', _style: 'width:3%', sorter: false, filter: false},
         {key: 'image', label: 'تصویر', _style: 'width:7%'},
         {key: 'name', label: 'عنوان', _style: 'width:25%'},
         {key: 'code', label: 'کد', _style: 'width:7%'},
@@ -224,10 +254,18 @@ export default {
   watch: {
     '$route.params.cat_id': function (id) {
       this.get_data();
+    },
+    'excel_file': function () {
+      this.upload_excel();
     }
   },
   methods: {
-
+    goToDownload() {
+      window.open(axios.defaults.baseURL + "export_products_excel")
+    },
+    goToUpload() {
+      document.getElementById("excel_selector").click()
+    },
     editDetails(item, index) {
       this.$router.push({path: "/dashboard/products/edit/" + item.id});
 
@@ -238,6 +276,23 @@ export default {
     },
     go_show_product(item) {
       window.open(process.env.VUE_APP_BASE_URL + "products/" + item.slug, "_blank");
+    },
+    upload_excel() {
+      var url = '/api/admin/product/update_product_excel';
+      var self = this
+
+      var formData = new FormData();
+      formData.append("file", this.excel_file)
+      axios.post(url, formData, {}).then(function (response) {
+        self.$root.modal_component.show_api_response_modals(response);
+        self.get_data()
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
     },
     update_product_price(item) {
       var url = '/api/admin/product/update_product_price';
@@ -352,7 +407,22 @@ export default {
           });
 // this.get_categories();
       // this.$router.push({ path: '/posts/'});
-    }
+    },
+    handleFileUpload(files, e) {
+      console.log("handle upload")
+      var myfile = e.target.files[0];
+      if (myfile == null) {
+        return
+      }
+
+      // e.target.value = '';
+      // e.target.files = '';
+      this.excel_file = myfile
+      e.target = null
+    },
+    open_file_selector() {
+      document.getElementById("excel_uploader_file").click()
+    },
   }
 }
 
