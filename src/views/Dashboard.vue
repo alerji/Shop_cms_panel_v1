@@ -23,7 +23,11 @@
             </CButtonGroup>
           </CCol>
         </CRow>
-        <MainChartExample :info="dashboard_data.dashboard_daily_report" style="height:300px;margin-top:40px;"/>
+        <NewChartJs
+            v-if="dashboard_data.dashboard_daily_report"
+            type="bar"
+            :info="dashboard_data.dashboard_daily_report"
+            style="height:300px;margin-top:40px;"/>
       </CCardBody>
       <CCardFooter>
         <CRow class="text-center">
@@ -570,13 +574,14 @@ import MainChartExample from './charts/MainChartExample'
 import WidgetsDropdown from './widgets/WidgetsDropdown'
 import WidgetsBrand from './widgets/WidgetsBrand'
 import axios from "axios";
-
+import NewChartJs from "@/views/charts/NewChartJs.vue";
 export default {
   name: 'Dashboard',
   components: {
     MainChartExample,
     WidgetsDropdown,
-    WidgetsBrand
+    WidgetsBrand,
+    NewChartJs
   },
   data () {
     return {

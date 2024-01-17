@@ -23,7 +23,7 @@ export const editorjs_config = {
                 }
             }
         },
-        linkTool: {
+        productTool: {
             class: LinkTool,
             config: {
                 endpointList: 'https://db.charlotte-perfume.ir/api/admin/product/editor-url-search', // Your backend endpoint for url data fetching,

@@ -5,7 +5,7 @@
     :labels="info.map(function (obj) { return get_date(obj.date) })"
   />
 </template>
-s
+
 <script>
 import { CChartBar } from '@coreui/vue-chartjs'
 import { getStyle, hexToRgba } from '@coreui/utils/src'
@@ -26,12 +26,12 @@ export default {
     return{
       labels:[],
     }
-  },
+  },mounted() {
+
+    },
   computed: {
     defaultDatasets () {
-      const brandSuccess = getStyle('success2') || '#4dbd74'
-      const brandInfo = getStyle('info') || '#20a8d8'
-      const brandDanger = getStyle('danger') || '#f86c6b'
+      const brandInfo = getStyle('info') || '#3399ff'
 
       let elements = 27
       const data1 = []
@@ -48,11 +48,15 @@ export default {
       return [
         {
           label: 'فروش ',
-          backgroundColor: hexToRgba(brandInfo, 10),
+          backgroundColor: brandInfo,
           borderColor: brandInfo,
           pointHoverBackgroundColor: brandInfo,
           borderWidth: 2,
-          data: data1
+          borderRadius: 6,
+          data: data1,
+          borderSkipped: false,
+          barPercentage: 0.6,
+          categoryPercentage: 0.5
         },
         // {
         //   label: 'My Second dataset',
@@ -83,21 +87,27 @@ export default {
         scales: {
           xAxes: [{
             gridLines: {
-              drawOnChartArea: false
-            }
+              drawOnChartArea: true,
+              display: false
+
+            },
           }],
           yAxes: [{
             ticks: {
               beginAtZero: true,
             },
             gridLines: {
+              borderDash: [2, 4],
+              color: 'rgba(105,105,105,0.34)',
+              drawOnChartArea: true,
+
               display: true
             }
           }]
         },
         elements: {
           point: {
-            radius: 0,
+            radius: 5,
             hitRadius: 10,
             hoverRadius: 4,
             hoverBorderWidth: 3

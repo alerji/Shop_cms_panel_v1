@@ -840,7 +840,7 @@
         }
 
         static get toolbox() {
-            return {icon: I, title: "Link"}
+            return {icon: I, title: "Product"}
         }
 
         static get enableLineBreaks() {

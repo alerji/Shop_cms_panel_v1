@@ -16,6 +16,7 @@ import PageList from "@/views/pageList/PageList";
 import AddPage from "@/views/pageList/AddPage";
 import PaymentGateways from "@/views/settings/PaymentGateways";
 import OffCoupons from "@/views/settings/OffCoupons";
+import ProductBundlePrice from "@/views/products/ProductBundlePrice.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -273,6 +274,15 @@ function configRoutes() {
                             name: 'ویرایش محصول',
                             props: true,
                             component: AddProduct,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_product"
+                            }
+                        }, {
+                            path: 'bundle_price/:product_id',
+                            name: 'قیمت خصوصیتی',
+                            props: true,
+                            component: ProductBundlePrice,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_product"

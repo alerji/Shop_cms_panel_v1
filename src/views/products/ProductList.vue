@@ -130,14 +130,23 @@
                   ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                   <CButton
-                      color="primary"
+                      color="info"
                       variant="outline"
                       square
                       class="m-1"
                       size="sm"
-                      @click="go_show_product(item)"
-                  ><CIcon name="eye" size="sm"/>
+                      @click="go_bundle_price(item)"
+                  ><CIcon name="cil-dollar" size="sm"/>
                   </CButton>
+<!--                  <CButton-->
+<!--                      color="primary"-->
+<!--                      variant="outline"-->
+<!--                      square-->
+<!--                      class="m-1"-->
+<!--                      size="sm"-->
+<!--                      @click="go_show_product(item)"-->
+<!--                  ><CIcon name="eye" size="sm"/>-->
+<!--                  </CButton>-->
 
                 </td>
               </template>
@@ -221,6 +230,10 @@ export default {
 
     editDetails(item, index) {
       this.$router.push({path: "/dashboard/products/edit/" + item.id});
+
+    },
+    go_bundle_price(item, index) {
+      this.$router.push({path: "/dashboard/products/bundle_price/" + item.id});
 
     },
     go_show_product(item) {
