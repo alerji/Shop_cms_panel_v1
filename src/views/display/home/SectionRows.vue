@@ -282,6 +282,8 @@
         name: 'Login',
         data() {
             return {
+              confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+
                 name: '',
                 post_count: '',
                 file: '',
@@ -320,7 +322,7 @@
             this.get_rows();
             this.get_types();
             this.get_templates();
-            bus.$on('delete_confirm', (data) => {
+            bus.$on(this.confirm_delete_name, (data) => {
                 // alert(data);
                 if (data == 'true') {
                     this.delete_item();
@@ -413,7 +415,7 @@
 
             },
             delete_item_dialog(item) {
-                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],'delete_confirm');
+                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این ردیف هستید؟",['تایید'],this.confirm_delete_name);
                 // this.$refs.modal2.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],'delete_confirm');
                 // console.log(this.$el.modal2.title2);
                 // console.log(this.modals2.title2);

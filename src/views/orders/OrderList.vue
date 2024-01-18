@@ -11,7 +11,7 @@
 
             <CCardBody class="">
                 <CTabs>
-                    <CTab :title="status.title" v-for="status in items_status">
+                    <CTab :title="status.title" v-for="(status,index) in items_status" :key="'title-'+index">
                         <CDataTableFixed
                                 :items="items.filter(x=>x.statuses[0].id==status.id)"
                                 :fields="fields"

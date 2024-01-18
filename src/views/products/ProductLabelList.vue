@@ -56,6 +56,8 @@
                       variant="outline"
                       square
                       size="sm"
+                      class="mr-1"
+
                       @click="editDetails(item)"
                   ><CIcon name="cil-pencil" size="sm"/>
                   </CButton>
@@ -64,6 +66,8 @@
                       color="danger"
                       variant="outline"
                       square
+                      class="mr-1"
+
                       size="sm"
                       @click="delete_item_dialog(item)"
                   ><CIcon name="cil-trash" size="sm"/>
@@ -106,10 +110,24 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
+                     class="mr-1"
                 type="submit" ref="submit_form" size="sm" color="primary">
               ثبت لیبل
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="login()"
+                     class="mr-1"
+                     size="sm" color="warning">
+              ویرایش لیبل
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="cancel_form()"
+                     class="mr-1"
+
+                     size="sm" color="danger">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -142,7 +160,7 @@ export default {
         {key: 'row',label: '#', _style: 'width:5%'},
         {key: 'نام', _style: 'width:10%'},
         {key: 'رنگ', _style: 'width:10%;'},
-        {key: 'عملیات', _style: 'width:40%;'},
+        {key: 'عملیات', _style: 'width:10%;'},
 
       ],
 
@@ -167,7 +185,15 @@ export default {
   },
   methods: {
 
-    editDetails(item) {
+    cancel_form() {
+      this.name = ''
+      this.color = ''
+      this.description = ''
+      this.previewImage =  ''
+
+      this.status_form = 0
+
+    }, editDetails(item) {
       this.name = item.name;
       this.color = item.color;
       this.description = item.description;

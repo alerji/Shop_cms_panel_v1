@@ -110,14 +110,14 @@
                   <div class="progress-group" v-for="product in dashboard_data.order_point_products">
                     <div class="progress-group-header">
                       <CIcon name="cil-user" class="progress-group-icon"/>
-                      <span class="title">{{product.title.title}}</span>
-                      <span class="ml-auto font-weight-bold">(کمبود موجودی)</span>
+                      <span class="title">{{product.product.title.title}}</span>
+                      <span class="ml-auto font-weight-bold">({{product.stock}} عدد)</span>
                     </div>
                     <div class="progress-group-bars">
                       <CProgress
                         class="progress-xs"
                         :value="100"
-                        color="error"
+                        color="danger"
                       />
                     </div>
                   </div>

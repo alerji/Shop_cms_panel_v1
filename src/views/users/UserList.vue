@@ -135,6 +135,8 @@ import  { bus } from '../../main';
         name: 'Login',
         data() {
             return {
+              confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+
                 name: '',
                 file: '',
                 color: '',
@@ -155,7 +157,7 @@ import  { bus } from '../../main';
             // console.log(this.router.$refs.root_view);
             // console.log(this.router.$refs.modal2);
 
-            bus.$on('delete_confirm', (data) => {
+            bus.$on(this.confirm_delete_name, (data) => {
                 // alert(data);
                 if (data == 'true') {
                     this.delete_admin();
@@ -194,7 +196,7 @@ this.get_admins();
                 // })
             },
             delete_user(item) {
-                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],'delete_confirm');
+                this.$root.modal_component.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],this.confirm_delete_name);
                 // this.$refs.modal2.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],'delete_confirm');
                 // console.log(this.$el.modal2.title2);
                 // console.log(this.modals2.title2);

@@ -48,6 +48,7 @@
                   <CButton
                       color="primary"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="goSubCategories(item)"
@@ -56,6 +57,7 @@
                   <CButton
                       color="warning"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="editDetails(item)"
@@ -64,6 +66,7 @@
                   <CButton
                       color="danger"
                       variant="outline"
+                      class="mr-1"
                       square
                       size="sm"
                       @click="delete_dialog(item)"
@@ -119,11 +122,24 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
               <CIcon name="cil-check-circle"/>
-             {{status_form==0 ? 'ثبت خصوصیت' : 'ویرایش خصوصیت' }}
+              ویرایش خصوصیت
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="login()"
+                     class="mr-1"
+                     size="sm" color="warning">
+              ویرایش خصوصیت
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="cancel_form()"
+                     class="mr-1"
+
+                     size="sm" color="danger">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -159,6 +175,8 @@ export default {
   },
   data() {
     return {
+      confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+
       name: '',
       file: '',
       code: '',
@@ -166,10 +184,10 @@ export default {
       description: '',
       items: [],
       fields: [
-        {key: 'row',label: '#', _style: 'width:10%'},
-        {key: 'نام', _style: 'width:10%'},
+        {key: 'row',label: '#', _style: 'width:3%'},
+        {key: 'نام', _style: 'width:20%'},
         {key: 'code',label:'کد', _style: 'width:10%'},
-        {key: 'عملیات', _style: 'width:40%;'},
+        {key: 'عملیات', _style: 'width:30%;'},
       ],
       options_category: [],
       value_category: [],
@@ -185,7 +203,7 @@ export default {
       status_form: 0
     }
   }, mounted() {
-    bus.$on('delete_confirm', (data) => {
+    bus.$on(this.confirm_delete_name, (data) => {
       // alert(data);
       if (data == 'true') {
         this.delete_item();
@@ -209,6 +227,15 @@ export default {
         self.value_category.push(val.category_id)
       })
       this.status_form = item.id;
+
+    },
+    cancel_form() {
+      var self = this;
+      this.name = ''
+      this.code =''
+      this.value_category = []
+
+      this.status_form = 0
 
     },
     get_categories() {
@@ -285,7 +312,7 @@ export default {
 
     },
     delete_dialog(item) {
-      this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], 'delete_confirm');
+      this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], this.confirm_delete_name);
       this.status_form = item.id;
 
     },

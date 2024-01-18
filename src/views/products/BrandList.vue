@@ -112,10 +112,24 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
               ثبت برند
+            </CButton>
+
+            <CButton v-if="status_form!=0"
+                     @click="login()"
+                     class="mr-1"
+                     size="sm" color="warning">
+              ویرایش برند
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="cancel_form()"
+                     class="mr-1"
+
+                     size="sm" color="danger">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -173,6 +187,14 @@ export default {
   },
   methods: {
 
+    cancel_form() {
+      this.name = '';
+      this.description = '';
+      this.previewImage = null;
+
+      this.status_form = 0;
+
+    },
     editDetails(item) {
       this.name = item.title.title;
       this.description = item.title.summary;

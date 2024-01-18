@@ -28,8 +28,7 @@ const Dashboard = () => import('@/views/Dashboard');
 const PermissionGroup = () => import('@/views/permissions/PermissionGroups');
 const AdminList = () => import('@/views/users/AdminList');
 const UserList = () => import('@/views/users/UserList');
-const AddUser = () => import('@/views/users/AddUser');
-const EditUser = () => import('@/views/users/EditUser');
+
 const UserProfile = () => import('@/views/users/UserProfile');
 
 const Sliders = () => import('@/views/slider/Sliders');
@@ -194,24 +193,6 @@ function configRoutes() {
                             name: 'کاربران',
                             props: true,
                             component: UserList,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "admins"
-                            }
-                        }, {
-                            path: 'add-user',
-                            name: 'افزودن کاربر',
-                            props: true,
-                            component: AddUser,
-                            meta: {
-                                requiresAuth: true,
-                                requiresRole: "admins"
-                            }
-                        }, {
-                            path: 'edit-user/:user_id',
-                            name: 'ویرایش کاربر',
-                            props: true,
-                            component: EditUser,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "admins"
