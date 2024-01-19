@@ -1,4 +1,4 @@
-const version = '3.8.2' // set this however you want to.
+const version = '3.8.3' // set this however you want to.
 
 module.exports = {
   lintOnSave: false,

@@ -17,6 +17,7 @@ import AddPage from "@/views/pageList/AddPage";
 import PaymentGateways from "@/views/settings/PaymentGateways";
 import OffCoupons from "@/views/settings/OffCoupons";
 import ProductBundlePrice from "@/views/products/ProductBundlePrice.vue";
+import TemplateSettings from "@/views/settings/TemplateSettings";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -447,6 +448,25 @@ function configRoutes() {
                     },
                     children:[
 
+                        {
+                            path: 'template_settings',
+                            name: 'تنظیمات قالب',
+                            props: true,
+                            component: TemplateSettings,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "template_settings"
+                            }
+                        }, {
+                            path: 'sliders',
+                            name: 'اسلایدر',
+                            props: true,
+                            component: Sliders,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_slider"
+                            }
+                        },
                         {
                             path: 'slider-images/:slider_id',
                             name: 'تصاویر اسلایدر',

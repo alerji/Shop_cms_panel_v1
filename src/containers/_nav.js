@@ -166,6 +166,10 @@ export default [
 
                 items: [
                     {
+                        name: 'تنظیمات قالب',
+                        to: '/dashboard/display/template_settings',
+                        role: 'template_settings'
+                    }, {
                         name: 'اسلایدر',
                         to: '/dashboard/display/sliders',
                         role: 'ui_slider'

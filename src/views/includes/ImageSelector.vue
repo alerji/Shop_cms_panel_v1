@@ -3,7 +3,7 @@
     <CCol>
       <div class="form-group">
         <label>
-          {{label}}
+          {{ label }}
         </label>
         <CInputFile
             :label="$t('image')"
@@ -19,7 +19,7 @@
           <CImg height="100px"
                 width="100px"
                 v-model="preview"
-                 :src="preview"
+                :src="preview"
           />
 
         </div>
@@ -38,25 +38,27 @@ export default {
   inheritAttrs: false,
   components: {},
   props: {
+    baseUrl:String,
     file: File,
     label: String,
-    previewImage: {type:[String],default:"/img/placeholder.png"}
+    base64: String,
+    previewImage: {type: [String], default: "/img/placeholder.png"}
   },
   data() {
     return {
-      preview:"/img/placeholder.png"
+      preview: "/img/placeholder.png"
     }
   },
   computed: {},
-  watch:{
-    'previewImage':function (){
+  watch: {
+    'previewImage': function () {
       this.preview = this.previewImage
 
     }
   },
   mounted() {
-    if(this.previewImage!=null){
-      this.preview = this.previewImage
+    if (this.previewImage != null) {
+      this.preview = this.baseUrl+this.previewImage
     }
   },
   methods: {
@@ -71,10 +73,20 @@ export default {
       // e.target.value = '';
       // e.target.files = '';
       this.$emit('update:file', myfile)
+      this.encodeImageFileAsURL(myfile)
     },
     open_file_selector() {
       this.$refs.file_selector.$el.getElementsByTagName('input')[0].click()
     },
+    encodeImageFileAsURL(file) {
+      var self = this
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        self.$emit('update:base64', reader.result)
+
+      }
+      reader.readAsDataURL(file);
+    }
   },
 
 
