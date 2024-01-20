@@ -12,7 +12,7 @@ color="primary" size="sm" @click="login()">
           </CCardHeader>
           <CCardBody v-if="full_load">
             <CTabs>
-              <CTab v-for="temp in template_settings.config" :title="temp.title">
+              <CTab v-for="(temp,index) in template_settings.config" :title="temp.title" :key="'ww'+index">
                 <CRow>
                   <CCol v-for="item in temp.items" col="6">
                     <ImageSelector

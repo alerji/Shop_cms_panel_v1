@@ -86,7 +86,23 @@
                     label="نام ایتم"
                 />
               </CCol>
+
               <CCol col="12">
+                <CSelect
+                    :options="view_types"
+                    :value.sync="view_type"
+                    type="color"
+                    label="نوع ایکون"
+                />
+              </CCol>
+              <CCol col="12" v-if="view_type==1">
+                <CInput
+                    type="color"
+                    label="رنگ"
+v-model="color"
+                />
+              </CCol>
+              <CCol col="12"  v-if="view_type==2">
                 <ImageSelector label="تصویر"
                                :file.sync="file"
                                :preview-image="previewImage"
@@ -128,6 +144,8 @@ export default {
       name: '',
       file: null,
       color: '',
+      view_type:0 ,
+      view_types:[{label:'بدون نمایش',value:0},{label:'نمایش رنگ',value:1},{label:'نمایش تصویر',value:2}] ,
       previewImage: null,
       description: '',
       items: [],
@@ -160,6 +178,8 @@ export default {
 
     editDetails(item) {
       this.name = item.title.title;
+      this.view_type = parseInt(item.view_type);
+      this.color = item.color;
 
       this.status_form = item.id;
 
@@ -201,6 +221,8 @@ export default {
 
       formData.append('image', this.file);
       formData.append('name', this.name);
+      formData.append('view_type', this.view_type);
+      formData.append('color', this.color);
       formData.append('bundle_id', this.$route.params.bundle_id);
 
       axios.post(url, formData, {}).then((res) => {
