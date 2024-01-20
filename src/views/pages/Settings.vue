@@ -18,6 +18,13 @@
                         placeholder="عنوان سایت"
                         vertical
                     />
+                    <CInput
+                        v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].description"
+
+                        :label="lang.description"
+                        placeholder="توضیحات سایت"
+                        vertical
+                    />
                     <CSelect
                         v-model="site_config.titles.filter(x=>x.lng==lang.id)[0].currency_id"
 
@@ -43,6 +50,14 @@
 
                   </CCol>
                 </CRow>
+                <hr>
+
+                <CCol col="3">
+                  <CInput label="درصد ارزش افزوده"
+                          v-model="vat"
+                  />
+
+                </CCol>
                 <CButton @click="login()" size="sm"
                          color="primary">
                   <CIcon name="cil-check-circle"/>
@@ -98,6 +113,7 @@ export default {
 
       site_config: {},
       languages: [],
+      vat: "0",
       currencies: [],
       sms_templates: [],
       logo_file: null,
@@ -126,7 +142,7 @@ export default {
         self.currencies = self.sort_array([], content_cats.currencies, "id", "title")
         self.languages = content_cats.languages
         self.sms_templates = content_cats.sms_templates
-
+        self.vat = content_cats.vat
       })
           .catch(function (error) {
 
@@ -147,6 +163,7 @@ export default {
       formData.append('site_config', JSON.stringify(this.site_config));
       formData.append('logo_file', this.logo_file);
       formData.append('favicon_file', this.favicon_file);
+      formData.append('vat', this.vat);
 
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);
