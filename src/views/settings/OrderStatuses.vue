@@ -21,7 +21,7 @@
 
               <template #title="{item}">
                 <td>
-                  <p class="text-muted">{{ item.title }}</p>
+                  <p class="text-muted">{{ item.title.title }}</p>
                 </td>
               </template>
 
@@ -89,6 +89,23 @@
                     v-model="name"
 
                     label="عنوان"
+                />
+              </CCol>
+              <CCol col="12">
+                <CInput
+                    type="number"
+                    v-model="proccess"
+
+                    label="درصد پیشرفت"
+                    description="0 تا 100"
+                />
+              </CCol>
+              <CCol col="12">
+                <CInput
+                    type="color"
+                    v-model="color"
+
+                    label="رنگ"
                 />
               </CCol>
               <CCol col="12" style="display: inline-flex;align-self: center; gap: 10px;">
@@ -183,6 +200,8 @@ export default {
       name: '',
       file: null,
       price: '',
+      proccess:'0',
+      color:'#ffffff',
       previewImage: null,
       description: '',
       items: [],
@@ -247,7 +266,9 @@ export default {
 
     editDetails(item) {
       var self = this;
-      this.name = item.title;
+      this.name = item.title.title;
+      this.proccess = item.proccess;
+      this.color = item.color;
       var visible =false;
       if(item.visible==1){
         visible =true;
@@ -319,6 +340,8 @@ export default {
         send_customer =1;
       }
       formData.append('name', this.name);
+      formData.append('proccess', this.proccess);
+      formData.append('color', this.color);
       formData.append('visible_to_customer', visible);
       formData.append('sms_to_customer', send_customer);
       formData.append('sms_to_customer_code', this.sms_to_customer_code);
