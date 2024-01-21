@@ -130,7 +130,7 @@ export default {
   methods: {
 
     editDetails(item, index) {
-      this.$router.push({path: "/dashboard/pages/edit-page/" + item.id});
+      this.$router.push({path: "/dashboard/pages/edit/" + item.id});
 
     },
     get_news() {
@@ -142,8 +142,8 @@ var formData = new FormData();
         var contents = response.data;
 
 
-        self.items_active = contents.posts.map((item, id) => {
-          return {...item, id}
+        self.items_active = contents.posts.map((item, row_id) => {
+          return {...item, row_id}
         })
 
       })

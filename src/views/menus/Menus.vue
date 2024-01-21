@@ -108,6 +108,12 @@ striped
                 />
               </CCol>
               <CCol col="12">
+                <CLinkSelector
+                    v-model="link"
+                    label="لینک"
+                    placeholder="لینک"
+
+                />
                 <CInput
                     v-model="link"
                     label="لینک"
@@ -138,6 +144,7 @@ striped
           </CCardFooter>
         </CCard>
       </CCol>
+      <sl-vue-tree v-model="nodes"/>
 
     </CRow>
 
@@ -150,11 +157,27 @@ striped
 import axios from "axios";
 import {bus} from '../../main';
 
+import 'sl-vue-tree/dist/sl-vue-tree-dark.css'
+import SlVueTree from 'sl-vue-tree'
 
 export default {
   name: 'Login',
+  components:{
+    SlVueTree
+  },
   data() {
     return {
+      nodes : [
+        {title: 'Item1', isLeaf: true},
+        {title: 'Item2', isLeaf: true, data: { visible: false }},
+        {title: 'Folder1'},
+        {
+          title: 'Folder2', isExpanded: true, children: [
+            {title: 'Item3', isLeaf: true},
+            {title: 'Item4', isLeaf: true}
+          ]
+        }
+      ],
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
 
       name: '',

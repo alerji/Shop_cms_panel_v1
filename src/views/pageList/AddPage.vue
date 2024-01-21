@@ -46,13 +46,14 @@
             <CRow>
 
               <CCol col="12">
-<editorjs
-    :content_json.sync="content_json"
-    editor_id="add_new_editor"
 
-    :content_text.sync="content_text"
-    :content_html.sync="content_html"
-/>
+                <editorjs v-if="loaded_page"
+                          editor_id="add_new_editor_page"
+                          :first_content.sync="content_json"
+                          :content_json.sync="content_json"
+                          :content_text.sync="content_text"
+                          :content_html.sync="content_html"
+                />
 
               </CCol>
 
@@ -141,6 +142,7 @@ export default {
   data() {
 
     return {
+      loaded_page:false,
       editor: null,
       content_json: '',
       content_text: '',
@@ -172,15 +174,16 @@ export default {
   },
   mounted() {
 
-    this.get_categories();
     if (this.$route.params.post_id != null) {
       this.status_form = this.$route.params.post_id;
       this.get_post_info();
+    }else{
+      this.loaded_page=true
     }
   },
   watch: {
     '$route.params.post_id': function () {
-      this.get_categories();
+      this.get_post_info();
     },
     // 'editorData': function () {
     //   let tmp = document.createElement("DIV");
@@ -193,17 +196,6 @@ export default {
   },
   methods: {
 
-    editDetails(item) {
-      // this.$set(this.items[item.id], '_toggled', !item._toggled)
-      this.name = this.items[item.id].name
-      this.color = this.items[item.id].color
-      this.description = this.items[item.id].description
-      this.previewImage = this.items[item.id].image
-      this.status_form = this.items[item.id].cat_id;
-      // this.$nextTick(() => {
-      //     this.collapseDuration = 0
-      // })
-    },
     get_post_info() {
       var self = this;
       var formData = new FormData();
@@ -216,13 +208,20 @@ export default {
         // self.value_category = post_data.post.categories;
         //  self.options_=post_data.post.tags;
         // self.value_keywords=post_data.post.keywords;
-        self.title = post_data.post.title;
+        self.title = post_data.post.title.title;
         self.favorite_url = post_data.post.favorite_url;
-        self.editorData = post_data.post.summary;
-        self.editor.setContent(post_data.post.summary)
-        self.seo_summary = post_data.post.meta_description;
-        self.seo_title = post_data.post.seo_title;
-        self.keyword = post_data.post.keyword;
+        self.seo_summary = post_data.post.title.meta_description;
+        try{
+          self.content_json = JSON.parse(post_data.post.title.description);
+
+        }catch (e) {
+          self.content_json = "";
+
+        }
+
+        self.seo_title = post_data.post.title.seo_title;
+        self.keyword = post_data.post.title.keyword;
+        self.loaded_page=true
 
         // localStorage.setItem("api_token", response.data.access_token);
         // self.$router.push({ path: 'notes' });
@@ -248,7 +247,7 @@ export default {
       }
       formData.append('name', this.title)
       formData.append('url', this.favorite_url)
-      formData.append('text', this.content_json)
+      formData.append('text', JSON.stringify(this.content_json))
       formData.append('meta_desc', this.seo_summary)
       formData.append('meta_title', this.seo_title)
       formData.append('keyword', this.keyword)

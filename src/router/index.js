@@ -636,6 +636,16 @@ function configRoutes() {
                                 requiresRole: "add_page"
                             }
                         },
+                        {
+                            path: 'edit/:post_id',
+                            name: 'ویرایش صفحه',
+                            props: true,
+                            component: AddPage,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        },
 
                     ]
                 },

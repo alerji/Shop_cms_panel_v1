@@ -23,6 +23,9 @@ Vue.component('CInputCurrency', CInputCurrency);
 import CInputText from "./views/CInputText/CInputText";
 Vue.component('CInputText', CInputText);
 
+import CLinkSelector from "./views/CLinkSelector/CLinkSelector";
+Vue.component('CLinkSelector', CLinkSelector);
+
 import VuePersianDatetimePicker from  'vue-persian-datetime-picker';
 Vue.component('date-picker', VuePersianDatetimePicker);
 import moment from 'moment-jalaali'
