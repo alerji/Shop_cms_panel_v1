@@ -2,7 +2,7 @@
 <template>
 
     <div class="c-app">
-
+<svg-icons/>
         <TheSidebar/>
     <CWrapper class="bg-light">
 
@@ -38,6 +38,7 @@ import Modals from "../views/includes/Modals";
 import Loading from "../views/includes/LoadingPage";
 import Vue from "vue";
 import axios from "axios";
+import SvgIcons from "./svgIcons";
 export const modal2 = null;
 // Vue.use(Loading)
 //
@@ -60,6 +61,7 @@ export default {
 
         }
     },components: {
+    SvgIcons,
       Modals,
       Loading,
     TheSidebar,

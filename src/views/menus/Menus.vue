@@ -5,78 +5,82 @@
         <CCard>
           <CCardHeader>
             <CCardBody>
+              <sl-vue-tree v-model="menus" @click="contextMenuIsVisible=false"
+                           @drop="node_droped"
+                           @nodecontextmenu="contextmenu"/>
+<!--              <CDataTableFixed-->
+<!--                  :items="items"-->
+<!--                  :fields="fields"-->
+<!--                  striped-->
+<!--                  :items-per-page="20"-->
+<!--                  hover-->
+<!--                  sorter-->
+<!--                  pagination-->
+<!--              >-->
+<!--                <template #row="{item}">-->
 
-              <CDataTableFixed
-                  :items="items"
-                  :fields="fields"
-striped
-                  :items-per-page="20"
-                  hover
-                  sorter
-                  pagination
-              >
-                <template #row="{item}">
+<!--                  <td>-->
+<!--                    <p class="text-muted">{{ item.id }}</p>-->
 
-                  <td>
-                    <p class="text-muted">{{ item.id }}</p>
+<!--                  </td>-->
 
-                  </td>
+<!--                </template>-->
+<!--                <template #نام="{item}">-->
 
-                </template>
-                <template #نام="{item}">
+<!--                  <td>-->
+<!--                    <p class="text-muted">{{ item.title.title }}</p>-->
 
-                  <td>
-                    <p class="text-muted">{{ item.title.title }}</p>
+<!--                  </td>-->
 
-                  </td>
+<!--                </template>-->
 
-                </template>
+<!--                <template #لینک="{item}">-->
+<!--                  <td>-->
+<!--                    <p class="text-muted">{{ item.url }}</p>-->
+<!--                  </td>-->
+<!--                </template>-->
 
-                <template #لینک="{item}">
-                  <td>
-                    <p class="text-muted">{{ item.url }}</p>
-                  </td>
-                </template>
-
-                <template #نوع="{item}">
-                  <td>
-                    <p class="text-muted">{{ types.filter(x=>x.value==item.type)[0].label }}</p>
-                  </td>
-                </template>
-
-
-                <template #عملیات="{item,index}">
-                  <td class="py-2">
-
-                    <CButton
-                        color="primary"
-                        variant="outline"
-                        square
-                        size="sm"
-                        @click="goSubMenus(item,index)"
-                    >زیر منو ها
-                    </CButton>
-                    <CButton
-                        color="warning"
-                        variant="outline"
-                        square
-                        size="sm"
-                        @click="editDetails(item)"
-                    ><CIcon name="cil-pencil" size="sm"/>
-                    </CButton>
-                    <CButton
-                        color="danger"
-                        variant="outline"
-                        square
-                        size="sm"
-                        @click="delete_item_dialog(item)"
-                    ><CIcon name="cil-trash" size="sm"/>
-                    </CButton>
-                  </td>
-                </template>
+<!--                <template #نوع="{item}">-->
+<!--                  <td>-->
+<!--                    <p class="text-muted">{{ types.filter(x => x.value == item.type)[0].label }}</p>-->
+<!--                  </td>-->
+<!--                </template>-->
 
 
-              </CDataTableFixed>
+<!--                <template #عملیات="{item,index}">-->
+<!--                  <td class="py-2">-->
+
+<!--                    <CButton-->
+<!--                        color="primary"-->
+<!--                        variant="outline"-->
+<!--                        square-->
+<!--                        size="sm"-->
+<!--                        @click="goSubMenus(item,index)"-->
+<!--                    >زیر منو ها-->
+<!--                    </CButton>-->
+<!--                    <CButton-->
+<!--                        color="warning"-->
+<!--                        variant="outline"-->
+<!--                        square-->
+<!--                        size="sm"-->
+<!--                        @click="editDetails(item)"-->
+<!--                    >-->
+<!--                      <CIcon name="cil-pencil" size="sm"/>-->
+<!--                    </CButton>-->
+<!--                    <CButton-->
+<!--                        color="danger"-->
+<!--                        variant="outline"-->
+<!--                        square-->
+<!--                        size="sm"-->
+<!--                        @click="delete_item_dialog(item)"-->
+<!--                    >-->
+<!--                      <CIcon name="cil-trash" size="sm"/>-->
+<!--                    </CButton>-->
+<!--                  </td>-->
+<!--                </template>-->
+
+
+<!--              </CDataTableFixed>-->
             </CCardBody>
 
           </CCardHeader>
@@ -114,6 +118,10 @@ striped
                     placeholder="لینک"
 
                 />
+                <CIconSelector
+                    label="ایکون"
+                    v-model="selected_icon"
+                />
                 <CInput
                     v-model="link"
                     label="لینک"
@@ -139,14 +147,26 @@ striped
               <CIcon name="cil-check-circle"/>
               ویرایش منو
             </CButton>
+            <CButton v-if="status_form !=0 "
+                     @click="clear_edit()"
+                     type="submit" ref="submit_form" size="sm" color="warning">
+              <CIcon name="cil-check-circle"/>
+              انصراف
+            </CButton>
 
 
           </CCardFooter>
         </CCard>
       </CCol>
-      <sl-vue-tree v-model="nodes"/>
+
 
     </CRow>
+
+    <div class="contextmenu" ref="contextmenu" v-show="contextMenuIsVisible">
+      <div @click="editDetails(selected_node)">ویرایش منو</div>
+      <div @click="delete_item_dialog(selected_node)">حذف منو</div>
+      <div @click="contextMenuIsVisible=false">انصراف</div>
+    </div>
 
 
   </div>
@@ -157,31 +177,23 @@ striped
 import axios from "axios";
 import {bus} from '../../main';
 
-import 'sl-vue-tree/dist/sl-vue-tree-dark.css'
-import SlVueTree from 'sl-vue-tree'
+import '../../assets/scss/sl-vue-tree-dark.css'
+import SlVueTree from 'sl-vue-tree/src/sl-vue-tree.vue'
 
 export default {
   name: 'Login',
-  components:{
+  components: {
     SlVueTree
   },
   data() {
     return {
-      nodes : [
-        {title: 'Item1', isLeaf: true},
-        {title: 'Item2', isLeaf: true, data: { visible: false }},
-        {title: 'Folder1'},
-        {
-          title: 'Folder2', isExpanded: true, children: [
-            {title: 'Item3', isLeaf: true},
-            {title: 'Item4', isLeaf: true}
-          ]
-        }
-      ],
-      confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+      contextMenuIsVisible: false,
+      menus: [ ],
+      confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
 
       name: '',
       file: '',
+      selected_icon: '',
       link: '',
       previewImage: '',
       description: '',
@@ -193,13 +205,14 @@ export default {
         {label: 'مگامنو', value: 3}
       ],
       fields: [
-        {key: 'row',label: '#', _style: 'width:10%'},
+        {key: 'row', label: '#', _style: 'width:10%'},
         {key: 'نام', _style: 'width:20%'},
         {key: 'لینک', _style: 'width:20%;'},
         {key: 'نوع', _style: 'width:20%;'},
         {key: 'عملیات', _style: 'width:40%;'},
       ],
       details: [],
+      selected_node:{},
       collapseDuration: 0,
       status_form: 0
     }
@@ -221,22 +234,106 @@ export default {
   },
   methods: {
 
+    contextmenu(node, event) {
+      this.selected_node = node
+      event.preventDefault();
+      this.contextMenuIsVisible = true;
+      const $contextMenu = this.$refs.contextmenu;
+      // $contextMenu.style.left = event.clientX + 'px';
+      // $contextMenu.style.top = event.clientY + 'px';
+      var m = this.getMousePosition(event);
+      var s = this.getScrollPosition(event);
+      var client_height = document.body.clientHeight;
+      var display_context = document.getElementById('context_menu');
+
+
+      $contextMenu.style.left = m.x + s.x + "px";
+      $contextMenu.style.top = m.y + s.y + "px";
+
+
+    },
+    getMousePosition(e) {
+      e = e || window.event;
+      var position = {
+        'x': e.clientX,
+        'y': e.clientY
+      }
+      return position;
+    },
+    getScrollPosition() {
+      var x = 0;
+      var y = 0;
+
+      if (typeof (window.pageYOffset) == 'number') {
+        x = window.pageXOffset;
+        y = window.pageYOffset;
+      } else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+        x = document.documentElement.scrollLeft;
+        y = document.documentElement.scrollTop;
+      } else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
+        x = document.body.scrollLeft;
+        y = document.body.scrollTop;
+      }
+
+      var position = {
+        'x': x,
+        'y': y
+      }
+
+      return position;
+    },
+
     editDetails(item) {
-      this.name = item.title.title;
-      this.type = item.type;
+      this.contextMenuIsVisible = false;
+
+      console.log("edit called",item)
+      this.name = item.title;
+      this.selected_type = item.type;
       this.link = item.url;
+      this.icon = item.icon;
 
       this.status_form = item.id;
 
-    }, clear_edit() {
+    },
+    clear_edit() {
       this.name = '';
       this.link = '';
       this.status_form = 0;
     },
+    node_droped(data1,dat2){
+      // console.log("droped",data1);
+      // console.log("droped",dat2);
+      let self = this;
+      const formData = new FormData()
+      let url;
+      url = "/api/admin/site/arrange_menu";
+      formData.append("is_mobile", this.$route.params.menu_id)
+      formData.append("placement", dat2.placement)
+      formData.append("parent_node", dat2.node.id)
+      formData.append("node", data1[0].id)
+
+
+
+      axios.post(url, formData, {}).then((res) => {
+        console.log(res);
+
+        self.status_form = 0;
+
+        self.get_categories();
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+    },
     delete_item_dialog(item) {
+      this.contextMenuIsVisible = false;
+
       this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟\n در صورت حذف زیر منو ها هم حذف میشوند", ['تایید'], this.confirm_delete_name);
 
-      this.status_form =item.id;
+      this.status_form = item.id;
 
     }, delete_item() {
 
@@ -272,15 +369,13 @@ export default {
     get_categories() {
       var self = this;
       console.log("route id " + this.$route.params.menu_id);
-var formData = new FormData();
-      formData.append("menu_id", this.$route.params.menu_id)
-      axios.post('/api/admin/site/get_menu',formData, {}).then(function (response) {
+      var formData = new FormData();
+      formData.append("is_mobile", this.$route.params.menu_id)
+      axios.post('/api/admin/site/get_menu', formData, {}).then(function (response) {
 
         var content_cats = response.data;
 
-        self.items = content_cats.orders.map((item, row_id) => {
-          return {...item, row_id}
-        });
+        self.menus = content_cats.menus
 
       })
           .catch(function (error) {
@@ -312,10 +407,11 @@ var formData = new FormData();
 
 
       // formData.append('image', this.file)
-      formData.append('name', this.name);
-      formData.append('link', this.link);
+      formData.append('title', this.name);
+      formData.append('url', this.link);
+      formData.append('icon', this.selected_icon);
       formData.append('type', this.selected_type);
-      formData.append('menu', this.$route.params.menu_id)
+      formData.append('is_mobile', this.$route.params.menu_id)
       // formData.append('description', this.description)
       axios.post(url, formData, {}).then((res) => {
         console.log(res);
@@ -345,3 +441,20 @@ var formData = new FormData();
 
 
 </script>
+<style>
+.contextmenu {
+  position: absolute;
+  background-color: white;
+  color: black;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+.contextmenu > div {
+  padding: 10px;
+}
+
+.contextmenu > div:hover {
+  background-color: rgba(100, 100, 255, 0.5);
+}
+</style>

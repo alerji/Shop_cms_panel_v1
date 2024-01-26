@@ -175,8 +175,13 @@ export default [
                         role: 'ui_slider'
                     },
                     {
-                        name: 'منو صفحه اصلی',
+                        name: 'منو دسکتاپ',
                         to: "/dashboard/display/menus/0",
+                        role: 'ui_menu'
+                    },
+                    {
+                        name: 'منو موبایل',
+                        to: "/dashboard/display/menus/1",
                         role: 'ui_menu'
                     },
 

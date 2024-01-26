@@ -77,7 +77,7 @@
               axios.post('/api/admin/site/search_links', {
                 search: searchQuery,
 
-              }).then(function (response) {
+              },{show_pros:false}).then(function (response) {
                 options = response.data;
                 callback(null, options);
                 // localStorage.setItem("api_token", response.data.access_token);
