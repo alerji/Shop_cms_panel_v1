@@ -335,7 +335,8 @@ export default {
 
       this.status_form = item.id;
 
-    }, delete_item() {
+    },
+    delete_item() {
 
 
       let self = this;
@@ -386,7 +387,8 @@ export default {
     },
     goRegister() {
       this.$router.push({path: 'register'});
-    }, goSubMenus(item, index) {
+    },
+    goSubMenus(item, index) {
       this.$router.push({path: '/dashboard/display/menus/' + this.items[index].id});
     },
 
