@@ -63,7 +63,7 @@
     <CCol sm="6" lg="3">
       <CWidgetDropdown
         color="warning"
-        :header="info.sms_credit.Data"
+        :header="info.sms_credit.Data.toString()"
         text="موجودی پیامک"
       >
         <template #default>
@@ -97,7 +97,7 @@
     <CCol sm="6" lg="3">
       <CWidgetDropdown
         color="danger"
-        :header="info.products_count"
+        :header="info.products_count.toString()"
         text="کل کالا ها"
       >
         <template #default>

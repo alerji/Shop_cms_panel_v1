@@ -47,6 +47,21 @@ export default {
     config.onReady = () => {
       new DragDrop(self.editorjs);
     }
+    config.onReady =  () => {
+      new Undo(self.editorjs);
+    }
+    config.tools.columns = {
+      class : editorjsColumns,
+
+          config : {
+        EditorJsLibrary :  EditorJS, // Pass the library instance to the columns instance.
+
+            tools : {
+          header: Header,
+              paragraph : Paragraph,
+        } // IMPORTANT! ref the column_tools
+      }
+    }
     this.editorjs = new EditorJS(config);
 
     setTimeout(function () {
@@ -87,3 +102,8 @@ export default {
 
 </script>
 
+<style>
+.ce-block__content, .ce-toolbar__content{
+  max-width: 650px;
+}
+</style>

@@ -44,7 +44,11 @@ export const editorjs_config = {
             class: ToggleBlock,
             inlineToolbar: true,
         },
-
+        breakLine: {
+            class: BreakLine,
+            inlineToolbar: true,
+            shortcut: 'CMD+SHIFT+ENTER',
+        },
         embed: Embed,
 
     }

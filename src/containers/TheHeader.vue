@@ -13,7 +13,7 @@
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
       <CIcon name="logo" height="48" alt="Logo"/>
     </CHeaderBrand>
-    <CHeaderNav class="d-md-down-none mr-auto">
+    <CHeaderNav class="d-md-down-none ml-auto">
       <CHeaderNavItem class="px-3">
         <CHeaderNavLink to="/dashboard">
           داشبورد
@@ -51,22 +51,6 @@
 <!--    <CSubheader class="px-3">-->
 <!--      <CBreadcrumbRouter class="border-0 mb-0"/>-->
 <!--    </CSubheader>-->
-    <CCol ref="errors_container">
-      <CCard v-if="header_validate_errors.length" >
-        <CCardHeader>
-          <strong>خطا های زیر را برطرف کنید </strong>
-
-        </CCardHeader>
-        <CCardBody>
-          <div>
-
-            <CAlert  v-for="error in header_validate_errors"  show color="danger">{{ error }}</CAlert>
-
-          </div>
-        </CCardBody>
-      </CCard>
-
-    </CCol>
   </CHeader>
 </template>
 

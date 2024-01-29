@@ -75,7 +75,7 @@ export default {
       go_login(){
 
           localStorage.setItem('token','');
-          // this.$router.push({ path: '/login'});
+          this.$router.push({ path: '/dashboard/login'});
       },
         get_user_name(){
 

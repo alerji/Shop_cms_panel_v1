@@ -119,6 +119,8 @@ export default {
         }else{
 
           localStorage.setItem('token',res.data.token);
+          localStorage.setItem('site_url',res.data.site);
+          localStorage.setItem('user_name',res.data.user_name);
           axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
           self.$router.push({ path: '/dashboard'});

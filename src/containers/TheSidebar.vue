@@ -14,6 +14,7 @@
           <CImg v-show="true"  style="text-align: start;margin-right: 3px;margin-left: 3px" id="logo_image" :src="get_logo()" width="80px" height="50px"/>
 
                     <label id="company_name"  style="text-align: start;margin-right: 3px;margin-left: 3px">فروشگاه</label>
+                    <label  @click="go_to_site()" style="cursor: pointer"><CIcon name="eye"/></label>
 
         </CHeaderNav>
 
@@ -70,6 +71,9 @@ export default {
     },
     minimize() {
       return this.$store.state.sidebarMinimize
+    },
+    go_to_site() {
+window.open(localStorage.getItem("site_url"))
     },
     generate_nav() {
       var out_pot = nav;
