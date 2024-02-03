@@ -11,7 +11,7 @@
 
             <CCardBody class="">
                 <CTabs>
-                    <CTab :title="status.title.title" v-for="(status,index) in items_status" :key="'title-'+index">
+                    <CTab :title="status.title.title+ ' ('+items.filter(x=>x.statuses[0].id==status.id).length+')'" v-for="(status,index) in items_status" :key="'title-'+index">
                         <CDataTableFixed
                                 :items="items.filter(x=>x.statuses[0].id==status.id)"
                                 :fields="fields"
@@ -172,8 +172,12 @@ items_status:[],
             },
             get_news() {
                 var self = this;
+var formData = new FormData();
+if (this.$route.params.customer_id){
+  formData.append("user_id",this.$route.params.customer_id);
 
-                axios.post('/api/admin/order/get_all_orders', {}).then(function (response) {
+}
+                axios.post('/api/admin/order/get_all_orders',formData, {}).then(function (response) {
 
                     var contents = response.data;
 

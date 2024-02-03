@@ -6,7 +6,7 @@
           <CCard class="p-4">
             <CCardBody>
               <CForm v-on:keyup.enter="login()">
-                <img  width="120px" height="auto" src="/login_image.png"/>
+                <img  width="120px" height="auto" src="/img/panel_icon.png"/>
                 <h4 class="mt-3">{{ $t('login') }}</h4>
                 <CInput
                     :placeholder="$t('userName')"

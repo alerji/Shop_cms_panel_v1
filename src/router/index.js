@@ -18,6 +18,7 @@ import PaymentGateways from "@/views/settings/PaymentGateways";
 import OffCoupons from "@/views/settings/OffCoupons";
 import ProductBundlePrice from "@/views/products/ProductBundlePrice.vue";
 import TemplateSettings from "@/views/settings/TemplateSettings";
+import CustomerList from "@/views/orders/CustomerList.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -584,6 +585,16 @@ function configRoutes() {
                                 requiresAuth: true,
                                 requiresRole: "order_list"
                             }
+                        },
+                        {
+                            path: 'list/:customer_id',
+                            name: 'لیست سفارشات',
+                            props: true,
+                            component: OrderList,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "order_list"
+                            }
                         }, {
                             path: 'info/:order_id',
                             name: 'اطلاعات سفارش',
@@ -598,6 +609,15 @@ function configRoutes() {
                             name: 'افزودن سفارش',
                             props: true,
                             component: AddOrder,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_order"
+                            }
+                        },{
+                            path: 'customers',
+                            name: 'لیست مشتریان',
+                            props: true,
+                            component: CustomerList,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_order"

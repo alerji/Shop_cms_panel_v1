@@ -101,6 +101,12 @@ export default [
                         , role: 'add_order'
 
                     },
+                    {
+                        name: 'مشتریان',
+                        to: '/dashboard/orders/customers'
+                        , role: 'add_order'
+
+                    },
 
                 ]
             },
