@@ -94,7 +94,11 @@ router.beforeEach((to, from, next) => {
         //  window.location.href = '/home';
     }
 
-
+    // document.body.scro
+if(from.meta.saveScroll){
+    console.log("path has save scroll")
+    localStorage.setItem("scroll"+window.location.path,window.pageYOffset.toString())
+}
     if (to.matched.some(record => record.meta.requiresAuth)) {
         console.log("validate requiresAuth");
 
@@ -229,6 +233,7 @@ function configRoutes() {
                             props: true,
                             component: ProductList,
                             meta: {
+                                saveScroll: true,
                                 requiresAuth: true,
                                 requiresRole: "add_product"
                             }

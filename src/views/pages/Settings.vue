@@ -51,13 +51,23 @@
                   </CCol>
                 </CRow>
                 <hr>
+<CRow>
+  <CCol col="3">
+    <CInput label="درصد ارزش افزوده"
+            v-model="vat"
+    />
 
-                <CCol col="3">
-                  <CInput label="درصد ارزش افزوده"
-                          v-model="vat"
-                  />
+  </CCol>
+  <CCol col="3">
+    <CInput
+        style="direction: ltr"
+        label="کد گوگل انالیتیکس"
+        v-model="google_analytics"
+    />
 
-                </CCol>
+  </CCol>
+</CRow>
+
                 <CButton @click="login()" size="sm"
                          color="primary">
                   <CIcon name="cil-check-circle"/>
@@ -114,6 +124,7 @@ export default {
       site_config: {},
       languages: [],
       vat: "0",
+      google_analytics: "",
       currencies: [],
       sms_templates: [],
       logo_file: null,
@@ -143,6 +154,7 @@ export default {
         self.languages = content_cats.languages
         self.sms_templates = content_cats.sms_templates
         self.vat = content_cats.vat
+        self.google_analytics = content_cats.google_analytics
       })
           .catch(function (error) {
 
@@ -164,6 +176,7 @@ export default {
       formData.append('logo_file', this.logo_file);
       formData.append('favicon_file', this.favicon_file);
       formData.append('vat', this.vat);
+      formData.append('google_analytics', this.google_analytics);
 
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);

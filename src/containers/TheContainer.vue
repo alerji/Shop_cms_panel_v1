@@ -1,9 +1,8 @@
-
 <template>
 
-    <div class="c-app">
-<svg-icons/>
-        <TheSidebar/>
+  <div class="c-app">
+    <svg-icons/>
+    <TheSidebar/>
     <CWrapper class="bg-light">
 
       <TheHeader/>
@@ -11,13 +10,22 @@
         <main class="c-main">
           <CContainer fluid>
 
-              <Modals ref="modal2"/>
-              <Loading ref="loading_component"/>
+            <Modals ref="modal2"/>
+            <Loading ref="loading_component"/>
 
-              <transition name="fade">
-              <router-view ref="root_view">
+            <transition name="fade">
+              <!--              <keep-alive max="5">-->
 
-              </router-view>
+              <!--                <router-view ref="root_view">-->
+
+              <!--                </router-view>-->
+              <!--              </keep-alive>-->
+              <keep-alive max="10">
+
+                <router-view v-slot="{ Component }" ref="root_view">
+                  <component :is="Component"/>
+                </router-view>
+              </keep-alive>
 
             </transition>
 
@@ -39,6 +47,7 @@ import Loading from "../views/includes/LoadingPage";
 import Vue from "vue";
 import axios from "axios";
 import SvgIcons from "./svgIcons";
+
 export const modal2 = null;
 // Vue.use(Loading)
 //
@@ -52,38 +61,49 @@ export const modal2 = null;
 // })
 export default {
   name: 'TheContainer',
-    props: {
+  props: {},
+  data() {
+    return {
+      modals2: '',
 
-},
-    data() {
-        return {
-             modals2: '',
-
-        }
-    },components: {
+    }
+  }, components: {
     SvgIcons,
-      Modals,
-      Loading,
+    Modals,
+    Loading,
     TheSidebar,
     TheHeader,
     TheFooter,
-  },methods:{
+  },
+  methods: {},
+  watch: {
+    '$route.path': function () {
+      const pos = localStorage.getItem("scroll" + window.location.path)
+      console.log("path changed",this.$route.path,pos)
 
+      if (pos != null) {
+        console.log("path changed",pos)
+setTimeout(function (){
+  window.scrollTo(0, parseInt(pos))
+
+},1000)
+      }
     }
-  ,mounted() {
-       this.$root.modal_component = this.$refs.modal2;
-       this.$root.loading_component = this.$refs.loading_component;
-       // this.modal2 = this.$refs.modal2;
-       // this.loading = this.$refs.loading;
-       // this.modals2 = this.$refs.modal2;
-       //  this.$root.loading_component.loading = true;
-       // this.$refs.modal2.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],'delete_confirm');
+  },
+  mounted() {
+    this.$root.modal_component = this.$refs.modal2;
+    this.$root.loading_component = this.$refs.loading_component;
+    // this.modal2 = this.$refs.modal2;
+    // this.loading = this.$refs.loading;
+    // this.modals2 = this.$refs.modal2;
+    //  this.$root.loading_component.loading = true;
+    // this.$refs.modal2.show_confirm_modal('اخطار',"آیا مایل به حذف این کاربر هستید؟",['تایید'],'delete_confirm');
 // this.get_categories();
 //         console.log(this.modal2.title2);
 //         console.log(this.modals2.title2+" export");
 
-        //If i console log this.$refs.loading i got my component
-    }
+    //If i console log this.$refs.loading i got my component
+  }
 }
 </script>
 
@@ -92,6 +112,7 @@ export default {
 .fade-leave-active {
   transition: opacity 0.3s;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;

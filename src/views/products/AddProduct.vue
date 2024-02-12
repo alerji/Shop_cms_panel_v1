@@ -685,8 +685,8 @@ self.language_items.forEach(function (lng){
         self.favorite_url = post_data.post.favorite_url;
 
         self.title = post_data.post.title.title;
-        self.content_json = JSON.parse(post_data.post.title.short_description);
-        self.content_json_full = JSON.parse(post_data.post.title.description);
+        self.content_json = post_data.post.title.short_description;
+        self.content_json_full = post_data.post.title.description;
         self.seo_summary = post_data.post.title.meta_description;
         self.seo_title = post_data.post.title.seo_title;
         self.keyword = post_data.post.title.keyword;
