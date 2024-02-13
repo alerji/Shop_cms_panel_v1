@@ -6,22 +6,22 @@
         :show.sync="translate_dialog"
         :no-close-on-backdrop="true"
         :centered="true"
-        :title="$t('translate')"
+        title="ترجمه"
         color="dark"
     >
       <template #header>
-        <h6 class="modal-title">{{$t('translate')}}</h6>
+        <h6 class="modal-title">ترجمه</h6>
       </template>
       <div v-for="(language,lang_index) in translate_values">
         <CRow>
           <CCol col="12">
 
-            <label class="text-danger" style="text-align:center;font-size: 16px;">{{language.LngId}}</label>
+            <label class="text-danger" style="text-align:center;font-size: 16px;">{{language.LngTitle}}</label>
           </CCol>
-          <CCol v-for="(field,index) in  language" v-if="index!='LngId'" :key="index">
+          <CCol v-for="(field,index) in  language" v-if="index!='lng' && index!='LngTitle'" :key="index">
             <CInput @input="set_translate_value(lang_index,index,...arguments)"
                     v-model="language[index]"
-                    :label="translate_fields.filter(x => x.translate_key==index)[0].label"/>
+                    :label="translate_fields.filter(x => x.key==index)[0].value"/>
           </CCol>
         </CRow>
         <hr style="margin: 3px;">
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {bus} from '../../../main';
+import {bus} from '../../main';
 import Vue from 'vue';
 import VueToast from 'vue-toast-notification';
 import 'vue-toast-notification/dist/theme-sugar.css';
@@ -61,7 +61,7 @@ export default {
 
       languages: [],
       translate_get_api: '',
-      translate_add_api: '',
+      // translate_add_api: '',
       translate_dialog: false,
       translate_values: [],
       translate_fields: '',
@@ -76,21 +76,22 @@ export default {
       this.translate_fields = data[0]
 
       this.translate_get_api = data[1]
-      this.translate_add_api = data[2]
-      this.translate_record_id = data[3]
+      // this.translate_add_api = data[2]
+      this.translate_record_id = data[2]
       self.translate_values = []
-      console.log(this.translate_fields.filter(x => x.translate == true))
+      console.log(this.translate_fields)
 
       this.languages.forEach(function (lang, index) {
-        var obj = {"LngId": lang};
-        self.translate_fields.filter(x => x.translate == true).forEach(function (field) {
-          var field_key = field.translate_key;
+        var obj = {"lng": lang.id,"LngTitle": lang.name};
+        self.translate_fields.forEach(function (field) {
+          var field_key = field.key;
           obj[field_key] = ""
 
         })
         self.translate_values[index] = obj
+        console.log("translate_values",obj,lang)
+
       })
-      // console.log(self.translate_values)
       self.get_translate()
 
       // console.log(this.translate_values)
@@ -100,31 +101,31 @@ export default {
 
       let self = this;
       const formData = new FormData();
-      let url = '/Lang/' + this.translate_get_api;
+      let url = '/api/admin/site/get_translations';
 
       formData.append("id", this.translate_record_id)
+      formData.append("table", this.translate_get_api)
 
       axios.post(url, formData, {}).then((res) => {
-        if (res.data.statusCode == 0) {
           self.translate_values.forEach(function (val, lang_index) {
-            if (res.data.data.filter(x => x.lngId == val.LngId).length > 0) {
-              console.log(val, res.data.data.filter(x => x.lngId == val.LngId)[0])
+            if (res.data.filter(x => x.lng == val.lng).length > 0) {
+              console.log(val, res.data.filter(x => x.lng == val.lng)[0])
               Object.keys(val).forEach(function (item) {
-                if (item != 'LngId') {
-                  var value = res.data.data.filter(x => x.lngId == val.LngId)[0][self.camelize(item.toString())]
+                if (item != 'lng') {
+                  var value = res.data.filter(x => x.lng == val.lng)[0][self.camelize(item.toString())]
                   console.log(item, value)
                   self.set_translate_value(lang_index, item, value)
 
                 }
               })
             }
-            console.log("translate not fund", val, lang_index)
+            console.log("translate not fund2", val, res.data)
           })
           // console.log(self.translate_values)
 
           self.translate_dialog = true
 
-        }
+
 
       }).catch(function (error) {
         console.log(error);
@@ -136,20 +137,23 @@ export default {
 
       let self = this;
       const formData = new FormData();
-      let url = '/Lang/' + this.translate_add_api;
+      let url = '/api/admin/site/set_translations';
 
-      formData.append("recId", this.translate_record_id)
+      formData.append("id", this.translate_record_id)
+      formData.append("table", this.translate_get_api)
+
       var send_translate = [];
       this.translate_values.forEach(function (val) {
         var validate = false;
         Object.keys(val).forEach(function (item) {
-          if (item != 'LngId') {
+          if (item != 'lng' ) {
             if (val[item] != '') {
               validate = true
             }
           }
         })
         if (validate) {
+          delete val.LngTitle
           send_translate.push(val);
         }
       })

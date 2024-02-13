@@ -11,6 +11,7 @@
           <CContainer fluid>
 
             <Modals ref="modal2"/>
+            <TranslateModals />
             <Loading ref="loading_component"/>
 
             <transition name="fade">
@@ -45,6 +46,7 @@ import TheFooter from './TheFooter'
 import Modals from "../views/includes/Modals";
 import Loading from "../views/includes/LoadingPage";
 import Vue from "vue";
+import TranslateModals from "@/views/includes/TranslateModals.vue";
 import axios from "axios";
 import SvgIcons from "./svgIcons";
 
@@ -74,6 +76,7 @@ export default {
     TheSidebar,
     TheHeader,
     TheFooter,
+    TranslateModals,
   },
   methods: {},
   watch: {

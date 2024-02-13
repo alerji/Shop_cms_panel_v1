@@ -82,6 +82,15 @@
                       @click="delete_item_dialog(item)"
                   ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
+                  <CButton class="m-1"
+                           color="dark"
+                           square
+                           title="ترجمه"
+                           size="sm"
+                           @click="bus.$emit('open_translate_dialog', [[{key:'title',value:'عنوان'},{key:'seo_title',value:'سئو عنوان'}], 'product_category_titles', item.id]);"
+                  >
+                    <CIcon class="text-white" size="sm" name="cil-translate"/>
+                  </CButton>
                 </td>
               </template>
 
@@ -151,6 +160,11 @@ import {bus} from '../../main';
 
 export default {
   name: 'Login',
+  computed: {
+    bus() {
+      return bus
+    }
+  },
   data() {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
@@ -165,7 +179,6 @@ export default {
         {key: 'تصویر', _style: 'width:10%;'},
         {key: 'نام', _style: 'width:20%'},
         {key: 'عملیات', _style: 'width:20%;'},
-
       ],
 
       status_form: 0,
