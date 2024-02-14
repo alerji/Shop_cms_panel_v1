@@ -29,12 +29,12 @@
       <template #footer>
         <CButton @click="confirm_translate"
                  color="danger"
-        >{{$t("save")}}
+        >ذخیره
         </CButton>
         <CButton
             @click="translate_dialog = false"
             color="cancel"
-        >{{$t("cancel")}}
+        >انصراف
         </CButton>
       </template>
     </CModal>

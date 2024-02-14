@@ -83,7 +83,7 @@
                   ><CIcon name="cil-trash" size="sm"/>
                   </CButton>
                   <CButton class="m-1"
-                           color="dark"
+                           color="info"
                            square
                            title="ترجمه"
                            size="sm"
