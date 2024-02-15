@@ -23,6 +23,8 @@
                     v-model="seo_title"
                     label="سئو عنوان"
                 />
+                <SeoProgress :min_perfect="50" :max_perfect="60" :string="seo_title"/>
+
               </CCol>
               <CCol col="4">
                 <CInput
@@ -68,6 +70,7 @@
                     label="سئو توضیحات"
 
                 />
+                <SeoProgress :min_perfect="120" :max_perfect="150" :string="seo_summary"/>
 
               </CCol>
             </CRow>

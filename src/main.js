@@ -31,6 +31,9 @@ Vue.component('CIconSelector', CIconSelector);
 
 import VuePersianDatetimePicker from  'vue-persian-datetime-picker';
 Vue.component('date-picker', VuePersianDatetimePicker);
+
+import SeoProgress from "@/views/includes/SeoProgress.vue";
+Vue.component('SeoProgress', SeoProgress);
 import moment from 'moment-jalaali'
 
 import 'vueditor/dist/style/vueditor.min.css'

@@ -31,6 +31,8 @@
                     v-model="seo_title"
                     label="متا عنوان"
                 />
+                <SeoProgress :min_perfect="50" :max_perfect="60" :string="seo_title"/>
+
               </CCol>
               <CCol col="4">
                 <CInput
@@ -98,6 +100,8 @@ rows="8"
                   label="سئو توضیحات"
 
               />
+              <SeoProgress :min_perfect="120" :max_perfect="150" :string="seo_summary"/>
+
             </CCol>
 
           </CCardBody>
@@ -696,13 +700,13 @@ self.language_items.forEach(function (lng){
         if(post_data.post.label){
           self.value_label = post_data.post.label.label_id;
         }
-        if (post_data.post.prices.length>0) {
-          self.product_price = post_data.post.prices[0].price;
-          self.product_stock = post_data.post.prices[0].stock;
-          self.product_off_price = post_data.post.prices[0].off_price;
-          self.order_point = post_data.post.prices[0].order_point;
-          self.selected_currency = post_data.post.prices[0].currency_id;
-          self.product_off_price_date = post_data.post.prices[0].off_expire;
+        if (post_data.post.price_no!=null) {
+          self.product_price = post_data.post.price_no.price;
+          self.product_stock = post_data.post.price_no.stock;
+          self.product_off_price = post_data.post.price_no.off_price;
+          self.order_point = post_data.post.price_no.order_point;
+          self.selected_currency = post_data.post.price_no.currency_id;
+          self.product_off_price_date = post_data.post.price_no.off_expire;
         }
         post_data.post.gallery.forEach((val2) => {
           var item_obj = {path: val2.image, name: val2.image_id}
