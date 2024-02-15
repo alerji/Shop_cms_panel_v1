@@ -107,7 +107,8 @@
             <CRow>
               <CCol col="6">
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="blog_post"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -314,7 +315,7 @@ export default {
       axios.post('/api/admin/blog/post_info', formData, {}).then(function (response) {
         var post_data = response.data;
 
-        self.previewImage = post_data.post.image;
+        self.file = post_data.post.image_id;
         post_data.post.categories.forEach((val) => {
           self.value_category.push(val.category_id);
         });

@@ -103,7 +103,8 @@
               </CCol>
               <CCol col="12">
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="product_brand"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -191,6 +192,7 @@ export default {
       this.name = '';
       this.description = '';
       this.previewImage = null;
+      this.file = null;
 
       this.status_form = 0;
 
@@ -199,6 +201,7 @@ export default {
       this.name = item.title.title;
       this.description = item.title.summary;
       this.previewImage = item.image;
+      this.file = item.image_id;
 
       this.status_form = item.id;
 

@@ -128,7 +128,8 @@
               </CCol>
               <CCol col="12">
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="product_category"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -137,10 +138,25 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
-                @click="login()"
-                type="submit" ref="submit_form" size="sm" color="primary">
+
+            <CButton v-if="status_form==0"
+                     @click="login()"
+                     type="submit" ref="submit_form" size="sm" color="primary">
               ثبت دسته
+            </CButton>
+
+            <CButton v-if="status_form!=0"
+                     @click="login()"
+                     class="mr-1"
+                     size="sm" color="warning">
+              ویرایش دسته
+            </CButton>
+            <CButton v-if="status_form!=0"
+                     @click="cancel_form()"
+                     class="mr-1"
+
+                     size="sm" color="danger">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -202,10 +218,20 @@ export default {
   },
   methods: {
 
+    cancel_form() {
+      this.name = '';
+      this.description = '';
+      this.previewImage = null;
+      this.file = null;
+
+      this.status_form = 0;
+
+    },
     editDetails(item) {
       this.name = item.name;
       this.description = item.description;
       this.previewImage = item.image;
+      this.file = item.image_id;
 
       this.status_form = item.id;
 

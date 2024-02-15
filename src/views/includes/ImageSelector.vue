@@ -5,6 +5,7 @@
         <label>
           {{ label }}
         </label>
+<!--        <CIcon name="cil-list" @click.native="file_manager_modal=true"/>-->
         <CInputFile
             :label="$t('image')"
             custom
@@ -14,7 +15,7 @@
 
             v-on:change="handleFileUpload"
         />
-        <div v-on:click="open_file_selector()"
+        <div v-on:click="file_manager_modal=true"
         >
           <CImg height="100px"
                 width="100px"
@@ -26,42 +27,106 @@
       </div>
     </CCol>
 
+    <CModal
+        title="فایل منیجر"
+        color="info"
+        size="xl"
+
+        :show.sync="file_manager_modal"
+    >
+      <CRow v-on:dragenter="dragEnterHandlerFile">
+
+        <div id="drag_zone"
+             v-on:dragexit="dragExitHandlerFile"
+             v-on:dragleave="dragLeaveHandlerFile"
+             v-on:drop="dropHandlerFile"
+             v-on:dragover="dragOverHandlerFile">
+          <label>برای ارسال فایل را بکشید</label>
+        </div>
+        <CCol col="9"
+              style="height: 60vh;overflow: auto"
+        >
+          <CRow>
+            <CCol col="3"  v-for="item in media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
+              <CImg loading="lazy" :class="`m-1 border ${item.id==selected_media?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
+            </CCol>
+          </CRow>
+        </CCol>
+        <CCol col="3" class="b-r-1">
+          <div v-for="archive in archives"
+               @click="selected_archive=archive.id"
+               :class="`archive_div ${selected_archive==archive.id ?'active':''}`" :key="archive.id">
+            {{ archive.type }}
+            <CIcon name="cil-folder" />
+
+          </div>
+        </CCol>
+      </CRow>
+      <template #footer>
+        <CButton @click="file_manager_modal = false" color="dark">انتخاب</CButton>
+        <CButton @click="file_manager_modal = false" color="dark">انصراف</CButton>
+      </template>
+    </CModal>
+
 
   </div>
 </template>
 
 <script>
+import axios from "axios";
 
 export default {
   name: 'ImageSelector',
 
   inheritAttrs: false,
   components: {},
+
   props: {
-    baseUrl:String,
+    baseUrl: String,
     file: File,
     label: String,
+    media_id:Number,
+    default_archive: String,
     base64: String,
     previewImage: {type: [String], default: "/img/placeholder.png"}
   },
   data() {
     return {
-      preview: "/img/placeholder.png"
+      file_manager_modal: false,
+      media: [],
+      archives: [],
+      selected_archive: 0,
+      selected_media:0,
+      preview: "/img/placeholder.png",
     }
   },
   computed: {},
   watch: {
     'previewImage': function () {
       this.preview = this.previewImage
-
+    },
+    'media_id': function () {
+      this.selected_media = this.media_id
     }
   },
   mounted() {
+
     if (this.previewImage != null) {
-      this.preview = this.baseUrl+this.previewImage
+      this.preview = this.baseUrl + this.previewImage
     }
+    if(this.media_id!=null){
+      this.selected_media = this.media_id
+    }
+    this.get_medias()
+    this.paste_image_clicpboard()
   },
   methods: {
+    select_media(item){
+      this.selected_media = item.id
+      this.preview = this.get_image_link(item)
+      this.$emit('update:media_id', this.selected_media)
+
+    },
     handleFileUpload(files, e) {
       console.log("handle upload")
       var myfile = e.target.files[0];
@@ -86,9 +151,190 @@ export default {
 
       }
       reader.readAsDataURL(file);
+    },
+    get_medias() {
+      var self = this;
+      var formData = new FormData();
+      axios.post('/api/admin/site/media_archives', formData, {}).then(function (response) {
+
+        var content_cats = response.data;
+
+        // items = content_cats.orders;
+        self.media = content_cats.media
+        self.archives = content_cats.archives
+        if(self.default_archive!=null){
+          self.selected_archive =  self.archives.filter(x=>x.type==self.default_archive)[0].id
+        }else{
+          self.selected_archive = self.archives[0].id
+        }
+
+        // console.log("cats is "+items);
+        // self.description = '';
+        // localStorage.setItem("api_token", response.data.access_token);
+        // self.$router.push({ path: 'notes' });
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    get_image_link(item) {
+      let link = item.name;
+      const arch = this.archives.filter(x => x.id == item.archive_id)[0]
+      link = arch.path + link
+      return axios.defaults.baseURL + link
+    },
+
+    dropHandlerFile(ev) {
+      console.log('File(s) dropped')
+      var self = this
+
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault()
+
+      if (ev.dataTransfer.items) {
+        // Use DataTransferItemList interface to access the file(s)
+        [...ev.dataTransfer.items].forEach((item, i) => {
+          // If dropped items aren't files, reject them
+          if (item.kind === 'file') {
+            const file = item.getAsFile()
+            // var files = e.target.files || e.dataTransfer.files;
+              var reader = new FileReader()
+
+              console.log('file', file)
+              reader.onloadend = function () {
+                var obj = {file: reader.result, preview: reader.result, upload: 0, name: file.name}
+                self.upload_file(obj)
+              }
+              reader.readAsDataURL(file)
+              // this.tagArray.push(f[0].name)
+
+              // console.log("files", this.tagArray);
+
+
+          }
+        })
+      } else {
+        // Use DataTransfer interface to access the file(s)
+        [...ev.dataTransfer.files].forEach((file, i) => {
+          console.log(`… file[${i}].name = ${file.name}`)
+        })
+      }
+      document.getElementById('drag_zone').style.display = 'none'
+    },
+    dragOverHandlerFile(ev) {
+      var drop_has_file = 'none'
+      if (ev.dataTransfer.types) {
+        for (var i = 0; i < ev.dataTransfer.types.length; i++) {
+          if (ev.dataTransfer.types[i] == 'Files') {
+            drop_has_file = 'block'
+            console.log('File(s) in drop zone')
+          }
+        }
+      }
+      document.getElementById('drag_zone').style.display = drop_has_file
+
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault()
+    },
+    dragLeaveHandlerFile(ev) {
+      // document.getElementById("drag_zone").style.display="none"
+      console.log('File(s) in drop leave')
+      document.getElementById('drag_zone').style.display = 'none'
+
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault()
+    },
+    dragEnterHandlerFile(ev) {
+      // document.getElementById("drag_zone").style.display="none"
+      console.log('File(s) in drop enter')
+      document.getElementById('drag_zone').style.display = 'block'
+
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault()
+    },
+    dragExitHandlerFile(ev) {
+      console.log('File(s) in drop exit')
+
+      // Prevent default behavior (Prevent file from being opened)
+      ev.preventDefault()
+    },
+    paste_image_clicpboard() {
+      var self = this
+      addEventListener('paste', ev => {
+        for (const item of ev.clipboardData.items) { /// Clipboard may contain multiple elements of different type -- text, image, etc
+          if (item.type.startsWith('image/')) { /// We are only interested in clipboard data that is an image
+            /// Do something with the data, image available as `item.getAsFile()`
+            const file = item.getAsFile()
+            // var files = e.target.files || e.dataTransfer.files;
+            if (self.if_file_allowed(file.name)) {
+              var reader = new FileReader()
+
+              console.log('file', file)
+              reader.onloadend = function () {
+                var obj = {file: reader.result, preview: reader.result, upload: 0, name: file.name}
+                self.upload_file(obj)
+              }
+              reader.readAsDataURL(file)
+              // this.tagArray.push(f[0].name)
+
+              // console.log("files", this.tagArray);
+              self.tagFlag = true
+            }
+          }
+        }
+      })
+    },
+    upload_file(obj) {
+      let self = this;
+      const formData = new FormData()
+      let url= "/api/admin/site/upload_media";
+
+      formData.append('file', obj.file)
+      formData.append('archive',this.default_archive)
+
+      axios.post(url, formData, {}).then((res) => {
+        self.media.splice(0,0,res.data)
+      }).catch(function (error) {
+
+        console.log(error);
+      });
+
     }
+
   },
 
 
 }
 </script>
+<style>
+.archive_div {
+  //border: 1px solid darkgray;
+  border-radius: 4px;
+  padding: 5px;
+  margin: 3px;
+  text-align: left;
+  cursor: pointer;
+}
+.archive_div:hover {
+  //border: 1px solid darkgray;
+  background: rgba(51, 153, 255, 0.5);
+}
+.archive_div.active {
+color: white;
+  background: #39f;
+}
+#drag_zone{
+  position: absolute;
+  display: none;
+  margin-right: 3%;
+  margin-top: 2%;
+  width: 95%;
+  height: 90%;
+  background: #d9d9d9c4;
+  z-index: 10000;
+  text-align: center;
+  border-radius: 10px;
+}
+</style>
