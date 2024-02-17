@@ -103,8 +103,10 @@
                 />
               </CCol>
               <CCol col="12">
+
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="order_shipping"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -113,10 +115,20 @@
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
               ثبت
+            </CButton>
+            <CButton  v-if="status_form!=0"
+                @click="login()"
+                type="submit" ref="submit_form" size="sm" class="mx-1" color="primary">
+              ویرایش
+            </CButton>
+            <CButton  v-if="status_form!=0"
+                @click="cancel_form()"
+                type="submit" ref="submit_form" size="sm" class="mx-1" color="primary">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -140,7 +152,7 @@ export default {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
-      file: null,
+      file: [],
       price: '',
       previewImage: null,
       description: '',
@@ -180,8 +192,19 @@ export default {
       this.description = item.description;
       this.price = item.price;
       this.previewImage = item.image;
+      this.file = [item.image_id];
 
       this.status_form = item.id;
+
+    },
+    cancel_form() {
+      this.name = '';
+      this.description = '';
+      this.previewImage = null;
+      this.price = 0;
+
+      this.file = [];
+      this.status_form = 0;
 
     },
     get_categories() {
@@ -220,7 +243,7 @@ formData.append('cat_id', this.$route.params.cat_id)
 
       }
 
-      formData.append('image', this.file);
+      formData.append('image', this.file[0]);
 
       formData.append('name', this.name);
       formData.append('price', this.price);

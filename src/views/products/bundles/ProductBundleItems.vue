@@ -103,8 +103,10 @@ v-model="color"
                 />
               </CCol>
               <CCol col="12"  v-if="view_type==2">
+
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="product_bundle"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -142,7 +144,7 @@ export default {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
 
       name: '',
-      file: null,
+      file: [],
       color: '',
       view_type:0 ,
       view_types:[{label:'بدون نمایش',value:0},{label:'نمایش رنگ',value:1},{label:'نمایش تصویر',value:2}] ,
@@ -180,10 +182,10 @@ export default {
       this.name = item.title.title;
       this.view_type = parseInt(item.view_type);
       this.color = item.color;
-
+      this.file = item.image_id;
       this.status_form = item.id;
-
-    }, get_categories() {
+    },
+    get_categories() {
       var self = this;
       var formData = new FormData();
       formData.append("id", this.$route.params.bundle_id)
@@ -219,7 +221,7 @@ export default {
 
       }
 
-      formData.append('image', this.file);
+      formData.append('image', this.file[0]);
       formData.append('name', this.name);
       formData.append('view_type', this.view_type);
       formData.append('color', this.color);

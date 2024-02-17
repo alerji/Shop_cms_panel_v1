@@ -240,7 +240,7 @@ export default {
       summary: '',
       seo_summary: '',
       tags: '',
-      file: null,
+      file: [],
 
       previewImage: null,
       image: '',
@@ -315,7 +315,7 @@ export default {
       axios.post('/api/admin/blog/post_info', formData, {}).then(function (response) {
         var post_data = response.data;
 
-        self.file = post_data.post.image_id;
+        self.file = [post_data.post.image_id];
         post_data.post.categories.forEach((val) => {
           self.value_category.push(val.category_id);
         });
@@ -358,7 +358,7 @@ export default {
 
       }
 
-      formData.append('post_image', this.file)
+      formData.append('post_image', this.file[0])
       formData.append('cat_list', this.value_category)
       formData.append('tags', this.value_tags)
       formData.append('name', this.title)

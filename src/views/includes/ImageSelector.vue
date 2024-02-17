@@ -15,14 +15,20 @@
 
             v-on:change="handleFileUpload"
         />
-        <div v-on:click="file_manager_modal=true"
+        <div
         >
           <CImg height="100px"
                 width="100px"
+                @click.native="file_manager_modal=true"
+                class="border-dark"
                 v-model="preview"
                 :src="preview"
           />
-
+<div style="display: flex" v-if="multiple">
+  <div v-for="item in selected_media">
+    <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="45px" height="45px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
+  </div>
+</div>
         </div>
       </div>
     </CCol>
@@ -43,16 +49,44 @@
              v-on:dragover="dragOverHandlerFile">
           <label>برای ارسال فایل را بکشید</label>
         </div>
-        <CCol col="9"
+        <CCol col="2" class="b-l-1" v-if="media.length>0">
+          <CRow v-if="selected_media_data.id!=0">
+            <CCol col="12">
+              <CImg loading="lazy" :class="`m-1 border`" :src="preview" style="width: 100%;height: auto"/>
+            </CCol>
+            <CCol col="12">
+              نام فایل:
+              {{media.filter(x=>x.id==selected_media_data.id)[0].name}}
+              <hr>
+
+            </CCol>
+            <CCol col="12">
+              <CIcon name="cil-clone" style="cursor: pointer" @click.native="copy_link()"/>
+              <div >{{preview}}</div>
+              <input id="copy_link" v-show="false" v-model="preview"/>
+              <hr>
+
+            </CCol>
+
+            <CCol col="12">
+              سایز:
+              {{selected_media_data.width}}x{{selected_media_data.height}}
+              <hr>
+
+            </CCol>
+
+          </CRow>
+        </CCol>
+        <CCol col="8"
               style="height: 60vh;overflow: auto"
         >
           <CRow>
             <CCol col="3"  v-for="item in media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
-              <CImg loading="lazy" :class="`m-1 border ${item.id==selected_media?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
+              <CImg loading="lazy" :class="`m-1 border ${selected_media.includes(item.id)?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
             </CCol>
           </CRow>
         </CCol>
-        <CCol col="3" class="b-r-1">
+        <CCol col="2" class="b-r-1">
           <div v-for="archive in archives"
                @click="selected_archive=archive.id"
                :class="`archive_div ${selected_archive==archive.id ?'active':''}`" :key="archive.id">
@@ -61,6 +95,7 @@
 
           </div>
         </CCol>
+
       </CRow>
       <template #footer>
         <CButton @click="file_manager_modal = false" color="dark">انتخاب</CButton>
@@ -83,20 +118,22 @@ export default {
 
   props: {
     baseUrl: String,
-    file: File,
     label: String,
-    media_id:Number,
+    multiple: {type: [Boolean], default: false},
+    media_id:Array,
     default_archive: String,
     base64: String,
     previewImage: {type: [String], default: "/img/placeholder.png"}
   },
   data() {
     return {
+      file: null,
       file_manager_modal: false,
       media: [],
       archives: [],
       selected_archive: 0,
-      selected_media:0,
+      selected_media:[],
+      selected_media_data:{id:0,height:'',width:'',size:''},
       preview: "/img/placeholder.png",
     }
   },
@@ -121,10 +158,41 @@ export default {
     this.paste_image_clicpboard()
   },
   methods: {
+    copy_link(){
+      var copyText = document.getElementById("copy_link");
+      // Select the text field
+      copyText.select();
+      copyText.setSelectionRange(0, 99999); // For mobile devices
+      // Copy the text inside the text field
+      navigator.clipboard.writeText(copyText.value);
+
+      this.$toast.success("کپی شد!!!")
+    },
     select_media(item){
-      this.selected_media = item.id
+      var self = this;
+      if(this.multiple){
+        if(this.selected_media.includes(item.id)){
+          this.selected_media.splice(this.selected_media.findIndex(x=>x==item.id),1)
+        }else{
+          this.selected_media.push(item.id)
+        }
+      }else{
+        this.selected_media = [item.id]
+
+      }
+      console.log(this.selected_media)
+      this.selected_media_data.id = item.id
       this.preview = this.get_image_link(item)
-      this.$emit('update:media_id', this.selected_media)
+
+      const img = new Image();
+      img.onload = function() {
+        self.selected_media_data.height =this.height
+        self.selected_media_data.width = this.width
+
+      }
+
+      img.src = this.preview;
+        this.$emit('update:media_id', this.selected_media)
 
     },
     handleFileUpload(files, e) {
@@ -162,6 +230,7 @@ export default {
         // items = content_cats.orders;
         self.media = content_cats.media
         self.archives = content_cats.archives
+        self.archives.splice(0,0,{name:'All'})
         if(self.default_archive!=null){
           self.selected_archive =  self.archives.filter(x=>x.type==self.default_archive)[0].id
         }else{

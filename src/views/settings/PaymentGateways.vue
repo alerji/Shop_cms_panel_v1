@@ -102,7 +102,8 @@
 
               <CCol col="12">
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="gateways"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -138,7 +139,7 @@ export default {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
-      file: null,
+      file: [],
       merchant:'',
       multipy:1,
       status:1,
@@ -179,12 +180,14 @@ export default {
       this.description = item.description;
       this.price = item.price;
       this.previewImage = item.image;
+      this.file = [item.image_id];
       this.merchant = item.merchant_id;
       this.multipy = item.multipy;
       this.status = item.status;
       this.status_form = item.id;
 
     },
+
     get_categories() {
       var self = this;
 var formData = new FormData();
@@ -221,7 +224,7 @@ formData.append('cat_id', this.$route.params.cat_id)
 
       }
 
-      formData.append('image', this.file);
+      formData.append('image', this.file[0]);
 
       formData.append('name', this.name);
       formData.append('merchant', this.merchant);

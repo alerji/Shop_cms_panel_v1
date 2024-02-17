@@ -22,7 +22,7 @@ import {
     cibPaypal,
     cibGooglePay,
 
-    cibCcAmex, cilPlus, cilMinus, cilFolder
+    cibCcAmex, cilPlus, cilMinus, cilFolder, cilClone
 } from '@coreui/icons'
 import {
   cifUs,
@@ -178,6 +178,7 @@ export const iconsSet = Object.assign(
       cilPlus,
       cilTranslate,
       cilFolder,
+      cilClone,
       cilTrash,
     cibCcAmex
   }

@@ -113,7 +113,8 @@
               </CCol>
               <CCol col="12">
                 <ImageSelector label="تصویر"
-                               :file.sync="file"
+                               :media_id.sync="file"
+                               default_archive="blog_category"
                                :preview-image="previewImage"
                 />
               </CCol>
@@ -164,7 +165,7 @@ export default {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
-      file: null,
+      file: [],
       color: '',
       previewImage: null,
       description: '',
@@ -203,7 +204,7 @@ export default {
       this.name = item.name;
       this.description = item.description;
       this.previewImage = item.image;
-
+this.file = [item.image_id]
       this.status_form = item.id;
 
     },
@@ -211,6 +212,7 @@ export default {
       this.name = '';
       this.description = '';
       this.previewImage = null;
+      this.file = []
 
       this.status_form = 0;
 
@@ -252,7 +254,7 @@ formData.append('cat_id', this.$route.params.cat_id)
 
       }
 
-      formData.append('image', this.file);
+      formData.append('image', this.file[0]);
 
       formData.append('name', this.name);
       formData.append('cat', this.$route.params.cat_id);
