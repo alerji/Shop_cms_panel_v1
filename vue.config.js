@@ -1,4 +1,4 @@
-const version = '3.8.6' // set this however you want to.
+const version = process.env.VUE_APP_VERSION // set this however you want to.
 
 module.exports = {
   lintOnSave: false,

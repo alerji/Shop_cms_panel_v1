@@ -601,6 +601,7 @@ export default {
   },
   mounted() {
     this.get_dashboard_data();
+    this.get_digikala_product();
   },
   methods: {
 
@@ -610,6 +611,25 @@ export default {
       var formData = new FormData();
 
       axios.post('/api/admin/dashboard_data', formData, {}).then(function (response) {
+
+        var contents = response.data;
+
+        self.dashboard_data = contents;
+
+      })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+    get_digikala_product() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+
+      axios.get('https://api.digikala.com/v1/product/13961642/', {headers:{
+        'Access-Control-Allow-Origin':'https://www.digikala.com'
+        }}).then(function (response) {
 
         var contents = response.data;
 
