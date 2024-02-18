@@ -81,7 +81,7 @@
               style="height: 60vh;overflow: auto"
         >
           <CRow>
-            <CCol col="3"  v-for="item in media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
+            <CCol col="3"  v-for="item in selected_archive==0 ? media : media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
               <CImg loading="lazy" :class="`m-1 border ${selected_media.includes(item.id)?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
             </CCol>
           </CRow>
@@ -230,7 +230,7 @@ export default {
         // items = content_cats.orders;
         self.media = content_cats.media
         self.archives = content_cats.archives
-        self.archives.splice(0,0,{name:'All'})
+        self.archives.splice(0,0,{type:'All',id:0})
         if(self.default_archive!=null){
           self.selected_archive =  self.archives.filter(x=>x.type==self.default_archive)[0].id
         }else{
@@ -249,10 +249,16 @@ export default {
 
     },
     get_image_link(item) {
-      let link = item.name;
-      const arch = this.archives.filter(x => x.id == item.archive_id)[0]
-      link = arch.path + link
-      return axios.defaults.baseURL + link
+      var self = this
+      try {
+        let link = item.name;
+        const arch = this.archives.filter(x => x.id == item.archive_id)[0]
+        link = arch.path + link
+        return axios.defaults.baseURL + link
+      }catch (e) {
+        // self.get_medias()
+      }
+
     },
 
     dropHandlerFile(ev) {

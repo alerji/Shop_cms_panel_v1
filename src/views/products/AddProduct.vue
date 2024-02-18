@@ -6,7 +6,7 @@
           <CCardHeader>
             <strong v-if="status_form==0">ثبت محصول</strong>
             <strong v-if="status_form!=0">ویرایش محصول</strong>
-
+            <CButton color="info" @click="digikala_modal=true">افزودن از دیجی کالا</CButton>
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -66,7 +66,7 @@
 
                 <editorjs v-if="loaded_page"
                           editor_id="add_new_editor"
-key="add_new_editor"
+                          key="add_new_editor"
                           :first_content.sync="content_json"
                           :content_json.sync="content_json"
                           :content_text.sync="content_text"
@@ -75,20 +75,19 @@ key="add_new_editor"
 
               </CCol>
               <CCol col="12">
-              توضیحات کامل
+                توضیحات کامل
+                <editorjs v-if="loaded_page"
+                          editor_id="add_new_editor_full"
+                          key="add_new_editor_full"
 
-              <editorjs v-if="loaded_page"
-                        editor_id="add_new_editor_full"
-                        key="add_new_editor_full"
-
-                        :first_content.sync="content_json_full"
-                        :content_json.sync="content_json_full"
-                        :content_text.sync="content_text_full"
-                        :content_html.sync="content_html_full"
-              />
+                          :first_content.sync="content_json_full"
+                          :content_json.sync="content_json_full"
+                          :content_text.sync="content_text_full"
+                          :content_html.sync="content_html_full"
+                />
 
 
-            </CCol>
+              </CCol>
 
             </CRow>
             <hr>
@@ -96,7 +95,7 @@ key="add_new_editor"
             <CCol col="12">
               <CTextarea
                   v-model="seo_summary"
-rows="8"
+                  rows="8"
                   label="سئو توضیحات"
 
               />
@@ -165,7 +164,7 @@ rows="8"
                     type="datetime"
                     display-format="jYYYY/jMM/jDD HH:mm"
                     format="YYYY-MM-DD HH:mm"
-                inputFormat="YYYY-MM-DD HH:mm"
+                    inputFormat="YYYY-MM-DD HH:mm"
                     description="برای تخفیف همیشگی خالی بگذارید"
 
                 />
@@ -240,15 +239,21 @@ rows="8"
 
                 <label>گالری تصویر</label>
 
-                <vue-upload-multiple-image
-                    @upload-success="uploadImageSuccess"
-                    @before-remove="beforeRemove"
-                    @edit-image="editImage"
-                    :maxImage="10"
-                    :data-images="gallery"
+<!--                <vue-upload-multiple-image-->
+<!--                    @upload-success="uploadImageSuccess"-->
+<!--                    @before-remove="beforeRemove"-->
+<!--                    @edit-image="editImage"-->
+<!--                    :maxImage="10"-->
+<!--                    :data-images="gallery"-->
 
-                ></vue-upload-multiple-image>
-
+<!--                ></vue-upload-multiple-image>-->
+                <ImageSelector label="تصویر"
+                               v-if="show_gallery"
+                               :media_id.sync="gallery"
+                               :multiple="true"
+                               default_archive="products"
+                               :preview-image="previewImage"
+                />
               </CCol>
             </CRow>
 
@@ -256,7 +261,7 @@ rows="8"
         </CCard>
         <CCard>
           <CCardHeader>
-الگو ویژگی
+            الگو ویژگی
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -309,9 +314,9 @@ rows="8"
 
                         <td style="display: flex">
                           <CInput v-for=" lng in item.lang_values" :key="lng.lng.id"
-                              v-model="lng.value"
+                                  v-model="lng.value"
                                   style="width: 150px"
-                              :placeholder="lng.lng.name"
+                                  :placeholder="lng.lng.name"
 
                           />
                         </td>
@@ -352,7 +357,27 @@ rows="8"
 
     </CCardBody>
 
+    <CModal
+        :show.sync="digikala_modal"
+        :no-close-on-backdrop="false"
+        color="transparent"
+        border-color="primary"
+    >
 
+      <CRow>
+        <CCol>
+          <CInput v-model="digikala_link"
+                  label="لینک محصول در دیجیکالا"
+          />
+        </CCol>
+      </CRow>
+
+      <template #footer>
+        <CButton @click="digikala_modal = false,get_digikala_data()" color="dark">انتخاب</CButton>
+        <CButton @click="digikala_modal = false" color="dark">انصراف</CButton>
+
+      </template>
+    </CModal>
   </div>
 
 </template>
@@ -390,7 +415,7 @@ export default {
   data() {
 
     return {
-      loaded_page:false,
+      loaded_page: false,
       content_json: {},
       content_text: '',
       content_html: '',
@@ -399,6 +424,7 @@ export default {
       content_text_full: '',
       content_html_full: '',
 
+      previewImage: null,
       gallery: [],
       product_type: 1,
       value_label: null,
@@ -413,7 +439,7 @@ export default {
       property_items: [],
       language_items: [],
       currency_items: [],
-      selected_currency:0,
+      selected_currency: 0,
       property_group_items: [],
       product_property_values: [],
       fields_properties: [
@@ -459,11 +485,14 @@ export default {
       summary: '',
       seo_summary: '',
       product_price: '',
-      order_point:0,
+      order_point: 0,
       product_stock: '',
       product_off_price: '',
       product_off_price_date: '',
       tags: '',
+      digikala_modal: false,
+      show_gallery: true,
+      digikala_link: '',
       status_form: 0,
 
     }
@@ -486,6 +515,43 @@ export default {
     }
   },
   methods: {
+    get_digikala_data() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+      formData.append("url",this.digikala_link)
+      axios.post('/api/admin/product/import_digikala', formData,{}).then(function (response) {
+self.show_gallery = false
+self.loaded_page = false
+        var contents = response.data;
+        self.title = contents.data.product.title_fa
+        self.seo_title = contents.data.seo.title
+        self.content_json_full = { time: 1708248359501, blocks: [ { id: "DSM8JadA6h", type: "paragraph", data: { text: contents.data.product.expert_reviews.description, alignment: "right" } } ], version: "2.28.2" }
+        console.log("json",self.content_json_full)
+        self.content_json = { time: 1708248359501, blocks: [ { id: "DSM8JadA6h", type: "paragraph", data: { text: contents.data.product.expert_reviews.description, alignment: "right" } } ], version: "2.28.2" }
+        self.seo_summary = contents.data.seo.description
+        self.product_price = parseInt(contents.data.product.default_variant.price.rrp_price)/10
+
+
+        setTimeout(function (){
+          self.show_gallery = true
+
+        },1000)
+
+        setTimeout(function (){
+          self.loaded_page = true
+          contents.data.product.images.list.forEach(function (val){
+            self.gallery.push(val.image_id)
+          })
+        },700)
+
+      })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
+
     load_tags({action, searchQuery, callback}) {
 
       if (action === ASYNC_SEARCH) {
@@ -564,7 +630,7 @@ export default {
       var formData = new FormData();
       axios.post('/api/admin/site/get_currencies', formData, {}).then(function (response) {
         var content_cats = response.data;
-        self.currency_items = self.sort_array([],content_cats.data,"id","title");
+        self.currency_items = self.sort_array([], content_cats.data, "id", "title");
         self.selected_currency = content_cats.default_unit;
       })
           .catch(function (error) {
@@ -604,7 +670,7 @@ export default {
         if (self.$route.params.product_id != null) {
           self.status_form = self.$route.params.product_id;
           self.get_post_info();
-        }else{
+        } else {
           self.loaded_page = true
         }
       })
@@ -626,28 +692,28 @@ export default {
           self.property_group_items = content_cats.tags;
 
           self.property_group_items.forEach((val) => {
-            val.items_lang  = []
+            val.items_lang = []
 
             val.items.forEach((val_items) => {
               val_items.lang_values = []
-self.language_items.forEach(function (lng){
-  val_items.lang_values.push({value:'', lng: lng})
-})
+              self.language_items.forEach(function (lng) {
+                val_items.lang_values.push({value: '', lng: lng})
+              })
             });
           });
           self.property_group_items.forEach((val) => {
 
             val.items.forEach((val_items) => {
-                val_items.lang_values.forEach(function (lang_item){
+              val_items.lang_values.forEach(function (lang_item) {
 
-                  self.product_property_values.forEach((val_product) => {
-                    if (
-                        val_product.property_key_id == val_items.id &&
-                        val_product.lng == lang_item.lng.id
-                    ) {
-                      lang_item.value = val_product.title
-                    }
-                  });
+                self.product_property_values.forEach((val_product) => {
+                  if (
+                      val_product.property_key_id == val_items.id &&
+                      val_product.lng == lang_item.lng.id
+                  ) {
+                    lang_item.value = val_product.title
+                  }
+                });
 
               })
 
@@ -694,13 +760,13 @@ self.language_items.forEach(function (lng){
         self.seo_summary = post_data.post.title.meta_description;
         self.seo_title = post_data.post.title.seo_title;
         self.keyword = post_data.post.title.keyword;
-        if(post_data.post.brand){
+        if (post_data.post.brand) {
           self.value_brand = post_data.post.brand.brand_id;
         }
-        if(post_data.post.label){
+        if (post_data.post.label) {
           self.value_label = post_data.post.label.label_id;
         }
-        if (post_data.post.price_no!=null) {
+        if (post_data.post.price_no != null) {
           self.product_price = post_data.post.price_no.price;
           self.product_stock = post_data.post.price_no.stock;
           self.product_off_price = post_data.post.price_no.off_price;
@@ -736,12 +802,12 @@ self.language_items.forEach(function (lng){
 
       }
       for (var i = 0; i < this.product_images.length; i++) {
-        if( typeof this.product_images[i].name === "number"){
-          console.log("typeof this.product_images[i].name number",typeof this.product_images[i].name)
+        if (typeof this.product_images[i].name === "number") {
+          console.log("typeof this.product_images[i].name number", typeof this.product_images[i].name)
 
           formData.append('post_images[]', this.product_images[i].name)
-        }else{
-          console.log("typeof this.product_images[i].name string",typeof this.product_images[i].name)
+        } else {
+          console.log("typeof this.product_images[i].name string", typeof this.product_images[i].name)
 
           formData.append('post_images[]', this.product_images[i].path)
 
