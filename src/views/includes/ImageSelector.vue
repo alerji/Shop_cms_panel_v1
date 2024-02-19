@@ -49,14 +49,33 @@
              v-on:dragover="dragOverHandlerFile">
           <label>برای ارسال فایل را بکشید</label>
         </div>
-        <CCol col="2" class="b-l-1" v-if="media.length>0">
+        <CCol col="3" class="b-l-1" v-if="media.length>0">
           <CRow v-if="selected_media_data.id!=0">
             <CCol col="12">
-              <CImg loading="lazy" :class="`m-1 border`" :src="preview" style="width: 100%;height: auto"/>
+              <CImg loading="lazy" :class="`m-1 border`" :src="preview" style="width: 50%;height: auto"/>
             </CCol>
             <CCol col="12">
               نام فایل:
               {{media.filter(x=>x.id==selected_media_data.id)[0].name}}
+              <hr>
+
+            </CCol>
+            <CCol col="12">
+              <div style="display: inline-flex;" >
+
+                <CInput class="pb-0"
+                        label="alt"
+                        horizontal
+                        v-model="media.filter(x=>x.id==selected_media_data.id)[0].alt">
+
+                  <template #append>
+                    <CButton size="sm" ourlined color="success" @click="update_media_alt(media.filter(x=>x.id==selected_media_data.id)[0])">
+                      <CIcon name="cil-check"/>
+                    </CButton>
+                  </template>
+                </CInput>
+
+              </div>
               <hr>
 
             </CCol>
@@ -77,11 +96,17 @@
 
           </CRow>
         </CCol>
-        <CCol col="8"
+        <CCol col="7"
               style="height: 60vh;overflow: auto"
         >
+          <CInput class="pb-0"
+                  placeholder="جستجو"
+                  horizontal
+                  v-model="search">
+
+          </CInput>
           <CRow>
-            <CCol col="3"  v-for="item in selected_archive==0 ? media : media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
+            <CCol col="3"  v-for="item in selected_archive==0 ? media.filter(x=>x.name.includes(search)) : media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
               <CImg loading="lazy" :class="`m-1 border ${selected_media.includes(item.id)?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
             </CCol>
           </CRow>
@@ -127,6 +152,7 @@ export default {
   },
   data() {
     return {
+      search: "",
       file: null,
       file_manager_modal: false,
       media: [],
@@ -236,6 +262,28 @@ export default {
         }else{
           self.selected_archive = self.archives[0].id
         }
+
+        // console.log("cats is "+items);
+        // self.description = '';
+        // localStorage.setItem("api_token", response.data.access_token);
+        // self.$router.push({ path: 'notes' });
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    update_media_alt(item) {
+      var self = this;
+      var formData = new FormData();
+      formData.append("id",item.id);
+      formData.append("alt",item.alt);
+      axios.post('/api/admin/site/update_media_alt', formData, {}).then(function (response) {
+
+        var content_cats = response.data;
+
+        // items = content_cats.orders;
 
         // console.log("cats is "+items);
         // self.description = '';

@@ -114,7 +114,6 @@
               <CCol col="4">
                 <CInputCurrency
                     v-model="product_price"
-                    :horizontal="{label: 'col-sm-4', input: 'col-sm-8'}"
 
                     description="برای گزینه تماس بگیرید قیمت را صفر وارد کنید"
                     label="قیمت محصول"
@@ -125,7 +124,6 @@
               <CCol col="4">
                 <CInputCurrency
                     v-model="product_stock"
-                    :horizontal="{label: 'col-sm-4', input: 'col-sm-8'}"
 
                     label="موجودی محصول"
 
@@ -135,7 +133,6 @@
               <CCol col="4">
                 <CSelect
                     label="ارز"
-                    :horizontal="{label: 'col-sm-4', input: 'col-sm-8'}"
 
                     :options="currency_items"
                     :value.sync="selected_currency"/>
@@ -145,23 +142,23 @@
                 <CInput
                     v-model="order_point"
                     label="نقطه سفارش"
-                    horizontal
+
                 />
               </CCol>
               <CCol col="4">
                 <CInputCurrency
                     v-model="product_off_price"
                     label="قیمت ویژه(تخفیف)"
-                    horizontal
 
                 />
 
               </CCol>
               <CCol col="4">
+                <div>محدودیت زمان تخفیف</div>
                 <date-picker
                     v-model="product_off_price_date"
-                    label="محدودیت زمان تخفیف"
                     type="datetime"
+
                     display-format="jYYYY/jMM/jDD HH:mm"
                     format="YYYY-MM-DD HH:mm"
                     inputFormat="YYYY-MM-DD HH:mm"

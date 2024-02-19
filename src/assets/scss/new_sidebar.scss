@@ -77,3 +77,6 @@ dropdown.c-show .c-sidebar-nav-link, .c-sidebar .c-sidebar-nav-dropdown.c-show .
   background: #8351ec;
   border-radius: 9px;
 }
+.c-sidebar .c-sidebar-nav-link.c-active  path{
+  fill: white;
+}
