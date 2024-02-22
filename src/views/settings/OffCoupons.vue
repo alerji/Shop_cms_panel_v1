@@ -166,10 +166,21 @@ description="0 به معنی عدم محدودیت است"
 
           </CCardBody>
           <CCardFooter>
-            <CButton
+            <CButton v-if="status_form==0"
                 @click="login()"
                 type="submit" ref="submit_form" size="sm" color="primary">
               ثبت
+            </CButton>
+            <CButton v-if="status_form!=0"
+                @click="login()"
+                     class="mx-1"
+                type="submit" ref="submit_form" size="sm" color="warning">
+              ویرایش
+            </CButton>
+            <CButton v-if="status_form!=0"
+                @click="reset_form()"
+                type="submit" ref="submit_form" size="sm" color="warning">
+              انصراف
             </CButton>
           </CCardFooter>
         </CCard>
@@ -302,8 +313,23 @@ export default {
 
         },200)
       })
-      this.status_form = 0;
       this.status_form = item.id;
+
+    },
+    reset_form() {
+      var self = this;
+
+      this.name = "";
+      this.code = "";
+      this.amount = "";
+      this.max_amount = "0";
+      this.max_usage = "0";
+
+      this.description = "";
+
+
+
+      this.status_form = 0;
 
     },
     get_categories() {

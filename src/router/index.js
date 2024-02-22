@@ -267,6 +267,15 @@ function configRoutes() {
                                 requiresRole: "add_product"
                             }
                         }, {
+                            path: 'clone/:clone_product_id',
+                            name: 'ثبت محصول',
+                            props: true,
+                            component: AddProduct,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_product"
+                            }
+                        }, {
                             path: 'bundle_price/:product_id',
                             name: 'قیمت خصوصیتی',
                             props: true,

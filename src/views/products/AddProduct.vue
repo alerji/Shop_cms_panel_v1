@@ -6,7 +6,7 @@
           <CCardHeader>
             <strong v-if="status_form==0">ثبت محصول</strong>
             <strong v-if="status_form!=0">ویرایش محصول</strong>
-            <CButton color="info" @click="digikala_modal=true">افزودن از دیجی کالا</CButton>
+            <CButton color="info" @click="digikala_modal=true">افزودن از سایت دیگر</CButton>
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -236,14 +236,14 @@
 
                 <label>گالری تصویر</label>
 
-<!--                <vue-upload-multiple-image-->
-<!--                    @upload-success="uploadImageSuccess"-->
-<!--                    @before-remove="beforeRemove"-->
-<!--                    @edit-image="editImage"-->
-<!--                    :maxImage="10"-->
-<!--                    :data-images="gallery"-->
+                <!--                <vue-upload-multiple-image-->
+                <!--                    @upload-success="uploadImageSuccess"-->
+                <!--                    @before-remove="beforeRemove"-->
+                <!--                    @edit-image="editImage"-->
+                <!--                    :maxImage="10"-->
+                <!--                    :data-images="gallery"-->
 
-<!--                ></vue-upload-multiple-image>-->
+                <!--                ></vue-upload-multiple-image>-->
                 <ImageSelector label="تصویر"
                                v-if="show_gallery"
                                :media_id.sync="gallery"
@@ -362,10 +362,25 @@
     >
 
       <CRow>
-        <CCol>
-          <CInput v-model="digikala_link"
-                  label="لینک محصول در دیجیکالا"
+        <CCol col="12">
+          <CSelect :value.sync="digikala_modal_selected_type"
+                   :options="digikala_modal_types"
+                   label="سایت مبدا"
           />
+        </CCol>
+        <CCol col="12">
+          <CInput v-model="digikala_link"
+                  label="لینک محصول"
+          />
+        </CCol>
+        <CCol col="12" style="display: inline-flex;align-self: center; gap: 10px;">
+          <CSwitch
+              color="success"
+              shape="pill"
+              :checked.sync="digikala_modal_download_image"
+          />
+          <label>دانلود تصاویر</label>
+
         </CCol>
       </CRow>
 
@@ -488,6 +503,9 @@ export default {
       product_off_price_date: '',
       tags: '',
       digikala_modal: false,
+      digikala_modal_types: [{label: 'دیجیکالا', value: 1}, {label: 'وردپرس', value: 2}],
+      digikala_modal_selected_type: 1,
+      digikala_modal_download_image: true,
       show_gallery: true,
       digikala_link: '',
       status_form: 0,
@@ -516,31 +534,101 @@ export default {
       var self = this;
       // console.log("route id "+this.$route.params.cat_id);
       var formData = new FormData();
-      formData.append("url",this.digikala_link)
-      axios.post('/api/admin/product/import_digikala', formData,{}).then(function (response) {
-self.show_gallery = false
-self.loaded_page = false
+      formData.append("url", this.digikala_link)
+      formData.append("download_image", this.digikala_modal_download_image)
+      let url = '/api/admin/product/import_digikala'
+      if (this.digikala_modal_selected_type == 2) {
+        url = '/api/admin/product/import_wordpress'
+      }
+      axios.post(url, formData, {}).then(function (response) {
+        self.show_gallery = false
+        self.loaded_page = false
         var contents = response.data;
-        self.title = contents.data.product.title_fa
-        self.seo_title = contents.data.seo.title
-        self.content_json_full = { time: 1708248359501, blocks: [ { id: "DSM8JadA6h", type: "paragraph", data: { text: contents.data.product.expert_reviews.description, alignment: "right" } } ], version: "2.28.2" }
-        console.log("json",self.content_json_full)
-        self.content_json = { time: 1708248359501, blocks: [ { id: "DSM8JadA6h", type: "paragraph", data: { text: contents.data.product.expert_reviews.description, alignment: "right" } } ], version: "2.28.2" }
-        self.seo_summary = contents.data.seo.description
-        self.product_price = parseInt(contents.data.product.default_variant.price.rrp_price)/10
+        if(self.digikala_modal_selected_type==1){
+          self.title = contents.data.product.title_fa
+          self.seo_title = contents.data.seo.title
+          self.content_json_full = {time: 1708248359501,
+            blocks: [{
+              id: "DSM8JadA6h",
+              type: "paragraph",
+              data: {text: contents.data.product.expert_reviews.description, alignment: "right"}
+            }],
+            version: "2.28.2"
+          }
+          console.log("json", self.content_json_full)
+          self.content_json = {time: 1708248359501,
+            blocks: [{
+              id: "DSM8JadA6h",
+              type: "paragraph",
+              data: {text: contents.data.product.expert_reviews.description, alignment: "right"}
+            }],
+            version: "2.28.2"
+          }
+          self.seo_summary = contents.data.seo.description
+          self.product_price = parseInt(contents.data.product.default_variant.price.rrp_price) / 10
+          setTimeout(function () {
+            self.show_gallery = true
+
+          }, 1000)
 
 
-        setTimeout(function (){
-          self.show_gallery = true
+          try{
+            setTimeout(function () {
+              self.loaded_page = true
+              contents.data.product.images.list.forEach(function (val) {
+                self.gallery.push(val.image_id)
+              })
+            }, 700)
+          }catch (e) {
 
-        },1000)
+          }
+        }
+        if(self.digikala_modal_selected_type==2){
+          var txt = document.createElement("textarea");
+          txt.innerHTML = contents.name;
+          self.title = txt.value
+          self.seo_title = txt.value
 
-        setTimeout(function (){
-          self.loaded_page = true
-          contents.data.product.images.list.forEach(function (val){
-            self.gallery.push(val.image_id)
-          })
-        },700)
+          txt.innerHTML = contents.description;
+          self.content_json_full = {time: 1708248359501,
+            blocks: [{
+              id: "DSM8JadA6h",
+              type: "paragraph",
+              data: {text: txt.value, alignment: "right"}
+            }],
+            version: "2.28.2"
+          }
+          self.seo_summary = txt.value.replace(/<[^>]*>?/gm, '');
+
+
+          txt.innerHTML = contents.short_description;
+          self.content_json = {time: 1708248359501,
+            blocks: [{
+              id: "DSM8JadA6h",
+              type: "paragraph",
+              data: {text: txt.value, alignment: "right"}
+            }],
+            version: "2.28.2"
+          }
+          setTimeout(function () {
+            self.show_gallery = true
+
+          }, 1000)
+try{
+  setTimeout(function () {
+    self.loaded_page = true
+    contents.images.forEach(function (val) {
+      self.gallery.push(val.image_id)
+    })
+  }, 700)
+}catch (e) {
+
+}
+
+        }
+
+
+
 
       })
           .catch(function (error) {
@@ -667,6 +755,9 @@ self.loaded_page = false
         if (self.$route.params.product_id != null) {
           self.status_form = self.$route.params.product_id;
           self.get_post_info();
+        } else if (self.$route.params.clone_product_id != null) {
+          self.status_form = self.$route.params.clone_product_id;
+          self.get_post_info();
         } else {
           self.loaded_page = true
         }
@@ -777,7 +868,9 @@ self.loaded_page = false
           self.product_images.push({path: val2.image_id, default: 1})
         });
         self.loaded_page = true
-
+        if (self.$route.params.clone_product_id != null) {
+          self.status_form = 0
+        }
       }).catch(function (error) {
         console.log(error);
       });

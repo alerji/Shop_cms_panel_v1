@@ -141,6 +141,16 @@
                     <CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
+                      color="primary"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="editDetailsClone(item,index)"
+                  >
+                    <CIcon name="cil-clone" size="sm"/>
+                  </CButton>
+                  <CButton
                       color="danger"
                       variant="outline"
                       square
@@ -268,6 +278,10 @@ export default {
     },
     editDetails(item, index) {
       this.$router.push({path: "/dashboard/products/edit/" + item.id});
+
+    },
+    editDetailsClone(item, index) {
+      this.$router.push({path: "/dashboard/products/clone/" + item.id});
 
     },
     go_bundle_price(item, index) {
