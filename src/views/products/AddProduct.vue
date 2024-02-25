@@ -196,8 +196,8 @@
                   <treeselect
                       v-model="value_category"
                       :multiple="true"
+                      :flat="true"
                       :normalizer="normalizer_category"
-
                       :options="options_category"
                       placeholder="دسته بندی محصول را انتخاب کنید"
                   />
@@ -234,17 +234,7 @@
               </CCol>
               <CCol col="4">
 
-                <label>گالری تصویر</label>
-
-                <!--                <vue-upload-multiple-image-->
-                <!--                    @upload-success="uploadImageSuccess"-->
-                <!--                    @before-remove="beforeRemove"-->
-                <!--                    @edit-image="editImage"-->
-                <!--                    :maxImage="10"-->
-                <!--                    :data-images="gallery"-->
-
-                <!--                ></vue-upload-multiple-image>-->
-                <ImageSelector label="تصویر"
+                <ImageSelector label="گالری تصویر"
                                v-if="show_gallery"
                                :media_id.sync="gallery"
                                :multiple="true"
@@ -445,7 +435,6 @@ export default {
       options_brand: [],
       value_category: [],
       value_tags: [],
-      product_images: [],
       related_products: [],
       selected_property: 0,
       property_items: [],
@@ -644,7 +633,7 @@ try{
           let options;
           var formData = new FormData();
           formData.append('search', searchQuery);
-          axios.post('/api/admin/product/search_product_tags', formData, {}).then(function (response) {
+          axios.post('/api/admin/product/search_product_tags', formData, {show_pros:false}).then(function (response) {
             options = response.data;
             callback(null, options);
           })
@@ -656,20 +645,6 @@ try{
       }
     },
 
-    uploadImageSuccess(formData, index, fileList) {
-
-      this.product_images = fileList;// Upload image api
-
-    },
-    beforeRemove(index, done, fileList) {
-      var r = confirm("remove image");
-
-      this.product_images = fileList;
-      if (r == true) {
-        done()
-      } else {
-      }
-    },
     editImage(formData, index, fileList) {
       console.log('edit data', formData, index, fileList)
     },
@@ -863,9 +838,7 @@ try{
           self.product_off_price_date = post_data.post.price_no.off_expire;
         }
         post_data.post.gallery.forEach((val2) => {
-          var item_obj = {path: val2.image, name: val2.image_id}
-          self.gallery.push(item_obj);
-          self.product_images.push({path: val2.image_id, default: 1})
+          self.gallery.push(val2.image_id);
         });
         self.loaded_page = true
         if (self.$route.params.clone_product_id != null) {
@@ -891,17 +864,10 @@ try{
         formData.append('product_id', this.status_form)
 
       }
-      for (var i = 0; i < this.product_images.length; i++) {
-        if (typeof this.product_images[i].name === "number") {
-          console.log("typeof this.product_images[i].name number", typeof this.product_images[i].name)
+      for (var i = 0; i < this.gallery.length; i++) {
 
-          formData.append('post_images[]', this.product_images[i].name)
-        } else {
-          console.log("typeof this.product_images[i].name string", typeof this.product_images[i].name)
+          formData.append('post_images[]', this.gallery[i])
 
-          formData.append('post_images[]', this.product_images[i].path)
-
-        }
       }
       formData.append('property_group_items', JSON.stringify(this.property_group_items));
       formData.append('product_type', this.product_type);
@@ -939,6 +905,9 @@ try{
           self.order_point = 0;
           self.product_off_price_date = '';
           self.selected_property = '0';
+          if(res.data.error==0){
+            self.$router.push({path:"/dashboard/products/edit/" + res.data.id})
+          }
         }
 
       }).catch(function (error) {

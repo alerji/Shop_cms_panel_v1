@@ -44,8 +44,10 @@ import 'vueditor/dist/style/vueditor.min.css'
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 axios.interceptors.request.use((config) => {
   // trigger 'loading=true' event here
-
+if(config.show_pros==null){
   bus.$emit("show_spinner", 'true');
+
+}
 
   return config;
 }, (error) => {

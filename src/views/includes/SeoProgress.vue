@@ -5,7 +5,8 @@
               <div class="seo-progress-back">
                 <div class="seo-progress-bar" :style="`width:${bar_width}%;background:${bar_color};`"></div>
               </div>
-              <label style="width: 20px">{{string.length}}</label>
+              <label style="width: 35px">{{string.length}}</label>
+              <label style="width: fit-content">({{min_perfect}} - {{ max_perfect }})</label>
             </div>
 
         </div>
@@ -71,7 +72,7 @@
   height: 5px;
   border-radius: 5px;
   background: white;
-  width: 80%;
+  width: 70%;
 
 }
 .seo-progress-bar{
