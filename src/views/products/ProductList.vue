@@ -170,6 +170,16 @@
                   >
                     <CIcon name="cil-dollar" size="sm"/>
                   </CButton>
+                  <CButton
+                      color="info"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="go_comments(item)"
+                  >
+                    <CIcon name="cil-comment-bubble" size="sm"/>
+                  </CButton>
                   <!--                  <CButton-->
                   <!--                      color="primary"-->
                   <!--                      variant="outline"-->
@@ -286,7 +296,9 @@ export default {
     },
     go_bundle_price(item, index) {
       this.$router.push({path: "/dashboard/products/bundle_price/" + item.id});
-
+    },
+    go_comments(item, index) {
+      this.$router.push({path: "/dashboard/products/comments/" + item.id});
     },
     go_show_product(item) {
       window.open(process.env.VUE_APP_BASE_URL + "products/" + item.slug, "_blank");

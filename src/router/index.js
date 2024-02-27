@@ -312,6 +312,15 @@ function configRoutes() {
                                 requiresRole: "product_comments"
                             }
                         },{
+                            path: 'comments/:product_id',
+                            name: 'دیدگاه محصول',
+                            props: true,
+                            component: ProductCommentsList,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "product_comments"
+                            }
+                        },{
                             path: 'property-templates',
                             name: 'الگو ویژگی محصولات',
                             props: true,

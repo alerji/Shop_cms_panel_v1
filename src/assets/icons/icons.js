@@ -19,6 +19,7 @@ import {
     cibCcMastercard,
     cibCcVisa,
     cibStripe,
+    cilCommentBubble,
     cibPaypal,
     cibGooglePay,
 
@@ -176,6 +177,7 @@ export const iconsSet = Object.assign(
     cibGooglePay,
     cilReload,
       cilPlus,
+      cilCommentBubble,
       cilTranslate,
       cilFolder,
       cilClone,
