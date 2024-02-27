@@ -34,7 +34,7 @@
               </template>
               <template #کاربر="{item}">
                 <td>
-                  <p class="text-muted" v-if="item.user!=null">{{ item.user.name }}</p>
+                  <p class="text-muted" >{{ item.name }}</p>
                 </td>
               </template>
 
@@ -107,7 +107,7 @@
               </template>
               <template #کاربر="{item}">
                 <td>
-                  <p class="text-muted" v-if="item.user!=null">{{ item.user.name }}</p>
+                  <p class="text-muted" >{{ item.name }}</p>
                 </td>
               </template>
 
@@ -180,7 +180,7 @@
               </template>
               <template #کاربر="{item}">
                 <td>
-                  <p class="text-muted" v-if="item.user!=null">{{ item.user.name }}</p>
+                  <p class="text-muted" >{{ item.name }}</p>
                 </td>
               </template>
 
@@ -422,15 +422,10 @@ export default {
 
         // items = content_cats.orders;
 
-        self.items_active = contents.comments_active.map((item, id) => {
-          return {...item, id}
-        });
-        self.items_deactive = contents.comments_deactive.map((item, id) => {
-          return {...item, id}
-        });
-        self.items_deleted = contents.comments_deleted.map((item, id) => {
-          return {...item, id}
-        });
+        self.items_active = contents.comments_active
+        self.items_deactive = contents.comments_deactive
+        self.items_deleted = contents.comments_deleted
+
         if (contents.product != null) {
           self.product_title = contents.product.title.title
         }
@@ -451,7 +446,6 @@ export default {
       formData.append('comment_status', status);
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res);
 
         self.get_comments();
 
