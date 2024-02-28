@@ -182,7 +182,6 @@ export default {
       formData.append('product_bundle_prices', JSON.stringify(this.product_bundle_prices));
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res)
 
 
         if (res.data.error == 0) {

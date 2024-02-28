@@ -289,7 +289,6 @@
                 url = "/api/admin/product/delete";
                 formData.append('id', this.status_form);
                 axios.post(url, formData, {}).then((res) => {
-                    console.log(res);
                     if (res.data.error == 1) {
                         this.$root.modal_component.show_danger_modal('خطا', res.data.msg);
 

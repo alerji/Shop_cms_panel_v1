@@ -292,7 +292,6 @@ formData.append("slider_id", this.$route.params.slider_id)
                 formData.append('text_position', this.selectedPosition);
                 // formData.append('description', this.description)
                 axios.post(url, formData, {}).then((res) => {
-                    console.log(res)
 
 
                     self.link = '';
@@ -341,7 +340,6 @@ formData.append("slider_id", this.$route.params.slider_id)
 
                 axios.post(url, formData, {
                 }).then((res) => {
-                    console.log(res);
                     if(res.data.error==1){
                         this.$root.modal_component.show_danger_modal('خطا',res.data.msg);
 

@@ -891,7 +891,6 @@ try{
       formData.append('selected_currency', this.selected_currency);
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res)
         self.$root.modal_component.show_api_response_modals(res);
         if (self.status_form == 0) {
           self.name = '';

@@ -315,7 +315,6 @@ export default {
 
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res);
 
         self.status_form = 0;
 
@@ -348,7 +347,6 @@ export default {
       formData.append('row_id', this.status_form);
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res);
         if (res.data.error == 1) {
           this.$root.modal_component.show_danger_modal('خطا', res.data.msg);
 
@@ -416,7 +414,6 @@ export default {
       formData.append('is_mobile', this.$route.params.menu_id)
       // formData.append('description', this.description)
       axios.post(url, formData, {}).then((res) => {
-        console.log(res);
 
 
         // if(this.status_form==0){

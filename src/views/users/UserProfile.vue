@@ -390,7 +390,6 @@
                 formData.append('roles', self.role_checkbox_items);
 
                 axios.post(url, formData, {}).then((res) => {
-                    console.log(res)
 
 
                     if (res.data.error == 1) {

@@ -246,8 +246,8 @@ var formData = new FormData();
       formData.append('name', this.name);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
-        console.log(res)
 
+        self.$root.modal_component.show_api_response_modals(res);
 
         if (res.data.error == 0) {
           url = "/api/admin/category";

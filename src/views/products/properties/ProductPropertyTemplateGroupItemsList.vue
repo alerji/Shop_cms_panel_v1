@@ -224,7 +224,6 @@ export default {
       formData.append('id', this.status_form);
 
       axios.post(url, formData, {}).then((res) => {
-        console.log(res);
         self.$root.modal_component.show_api_response_modals(res);
 
         self.status_form = 0;

@@ -355,7 +355,6 @@
 
                 axios.post(url, formData, {
                 }).then((res) => {
-                    console.log(res);
 
                         self.get_comments();
 
