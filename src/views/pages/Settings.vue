@@ -148,7 +148,15 @@ export default {
         // console.log("cats is "+items);
 
         var content_cats = response.data;
+        content_cats.languages.forEach(function (lang){
+          if(content_cats.configs.titles.filter(x=>x.lng==lang.id).length==0){
+            var obj = {}
+             Object.assign(obj,content_cats.configs.title)
+            obj.lng = lang.id;
+            content_cats.configs.titles.push(obj)
+          }
 
+        })
         self.site_config = content_cats.configs
         self.currencies = self.sort_array([], content_cats.currencies, "id", "title")
         self.languages = content_cats.languages
