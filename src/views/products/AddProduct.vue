@@ -815,7 +815,7 @@ try{
 
         self.code = post_data.post.code;
         self.product_type = post_data.post.type;
-        self.favorite_url = post_data.post.favorite_url;
+        self.favorite_url = post_data.post.title.slug;
 
         self.title = post_data.post.title.title;
         self.content_json = post_data.post.title.short_description;

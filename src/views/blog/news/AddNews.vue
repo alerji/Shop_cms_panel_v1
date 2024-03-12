@@ -327,7 +327,7 @@ export default {
         //  self.options_=post_data.post.tags;
         // self.value_keywords=post_data.post.keywords;
         self.title = post_data.post.title.title;
-        self.favorite_url = post_data.post.favorite_url;
+        self.favorite_url = post_data.post.title.slug;
         self.content_json = JSON.parse(post_data.post.title.description);
 
         self.seo_summary = post_data.post.title.short_description;

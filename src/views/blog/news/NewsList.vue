@@ -20,7 +20,7 @@
             :items="items_active"
             :fields="fields"
             striped
-
+column-filter
             :items-per-page="20"
             hover
             sorter
