@@ -6,7 +6,7 @@
           <CCard class="p-4">
             <CCardBody>
               <CForm v-on:keyup.enter="login()">
-                <img  width="120px" height="auto" src="/img/panel_icon.png"/>
+                <img  width="100px" height="auto" src="/img/panel_icon.png"/>
                 <h4 class="mt-3">{{ $t('login') }}</h4>
                 <CInput
                     :placeholder="$t('userName')"
@@ -75,6 +75,7 @@
 <script>
 import axios from "axios";
 import Modals from "../includes/Modals";
+import Vue from "vue";
 
 export default {
   name: 'Login',
@@ -114,7 +115,11 @@ export default {
       axios.post(url, formData).then((res) => {
 
         if(res.data.error==1){
-          this.$refs.modal.show_danger_modal('خطا',res.data.msg);
+          Vue.$toast.open({
+            message: res.data.msg,
+            type: 'error',
+            // all of other options may go here
+          });
 
         }else{
 

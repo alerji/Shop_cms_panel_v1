@@ -36,10 +36,21 @@
                 <CInput
                     v-model="favorite_url"
                     label="لینک نوشته"
-
                     placeholder="لینک"
                 />
+              </CCol>
+              <CCol col="4">
+                <div><br></div>
+                <date-picker
+                    v-model="publish_date"
+                    label="تاریخ انتشار"
+                    type="datetime"
+                    format="YYYY-MM-DD HH:mm:ss"
+                    input-format="YYYY-MM-DD HH:mm:ss"
+                    alt-format="YYYY-MM-DD HH:mm:ss"
+                    display-format="jYYYY/jMM/jDD HH:mm:ss"
 
+                />
               </CCol>
             </CRow>
             <CRow>
@@ -48,13 +59,13 @@
             <CRow>
 
               <CCol col="12">
-<editorjs v-if="loaded_page"
-          editor_id="add_new_editor"
-    :first_content.sync="content_json"
-    :content_json.sync="content_json"
-    :content_text.sync="content_text"
-    :content_html.sync="content_html"
-/>
+                <editorjs v-if="loaded_page"
+                          editor_id="add_new_editor"
+                          :first_content.sync="content_json"
+                          :content_json.sync="content_json"
+                          :content_text.sync="content_text"
+                          :content_html.sync="content_html"
+                />
 
               </CCol>
 
@@ -136,7 +147,7 @@
             </CButton>
           </CCardHeader>
           <CCardBody>
-            <CRow >
+            <CRow>
               <CCol>
                 <ReadabilitySeoRate
                     :content.sync="content_text"
@@ -188,7 +199,7 @@ export default {
 
     return {
       editor: null,
-      loaded_page:false,
+      loaded_page: false,
       content_json: {},
       content_text: '',
       content_html: '',
@@ -235,6 +246,7 @@ export default {
       editorData: '',
       title: '',
       favorite_url: '',
+      publish_date: '',
       seo_title: '',
       keyword: '',
       summary: '',
@@ -256,8 +268,8 @@ export default {
     if (this.$route.params.post_id != null) {
       this.status_form = this.$route.params.post_id;
       this.get_post_info();
-    }else{
-      this.loaded_page= true
+    } else {
+      this.loaded_page = true
     }
   },
   watch: {
@@ -275,17 +287,7 @@ export default {
   },
   methods: {
 
-    editDetails(item) {
-      // this.$set(this.items[item.id], '_toggled', !item._toggled)
-      this.name = this.items[item.id].name
-      this.color = this.items[item.id].color
-      this.description = this.items[item.id].description
-      this.previewImage = this.items[item.id].image
-      this.status_form = this.items[item.id].cat_id;
-      // this.$nextTick(() => {
-      //     this.collapseDuration = 0
-      // })
-    },
+
     get_categories() {
       var self = this;
       var formData = new FormData();
@@ -316,6 +318,7 @@ export default {
         var post_data = response.data;
 
         self.file = [post_data.post.image_id];
+        self.previewImage = post_data.post.image;
         post_data.post.categories.forEach((val) => {
           self.value_category.push(val.category_id);
         });
@@ -328,12 +331,13 @@ export default {
         // self.value_keywords=post_data.post.keywords;
         self.title = post_data.post.title.title;
         self.favorite_url = post_data.post.title.slug;
+        self.publish_date = post_data.post.publish_date;
         self.content_json = JSON.parse(post_data.post.title.description);
 
         self.seo_summary = post_data.post.title.short_description;
         self.seo_title = post_data.post.title.seo_title;
         self.keyword = post_data.post.title.keyword;
-        self.loaded_page= true
+        self.loaded_page = true
 
         // localStorage.setItem("api_token", response.data.access_token);
         // self.$router.push({ path: 'notes' });
@@ -363,6 +367,7 @@ export default {
       formData.append('tags', this.value_tags)
       formData.append('name', this.title)
       formData.append('url', this.favorite_url)
+      formData.append('publish_date', this.publish_date)
       formData.append('text', JSON.stringify(this.content_json))
       formData.append('meta_desc', this.seo_summary)
       formData.append('meta_title', this.seo_title)
