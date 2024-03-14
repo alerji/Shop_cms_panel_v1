@@ -375,7 +375,7 @@ export default {
 
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);
-        if (self.status_form == 0) {
+        if (self.status_form == 0 && res.data.error==0) {
           self.name = '';
           self.mobile = '';
           self.email = '';
@@ -384,8 +384,8 @@ export default {
           self.selected_group = '0';
           self.permissions = [];
         }
-
       }).catch(function (error) {
+        self.$root.modal_component.show_api_response_modals({data:{error:1,msg:'خطا در ثبت'}});
 
         console.log(error);
       });
