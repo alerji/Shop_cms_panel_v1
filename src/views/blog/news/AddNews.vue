@@ -383,6 +383,7 @@ export default {
           self.password = '';
           self.selected_group = '0';
           self.permissions = [];
+          self.$router.go(-1)
         }
       }).catch(function (error) {
         self.$root.modal_component.show_api_response_modals({data:{error:1,msg:'خطا در ثبت'}});
