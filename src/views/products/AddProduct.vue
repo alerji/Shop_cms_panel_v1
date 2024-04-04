@@ -907,6 +907,8 @@ try{
           if(res.data.error==0){
             self.$router.push({path:"/dashboard/products/edit/" + res.data.id})
           }
+        }else{
+          self.get_post_info()
         }
 
       }).catch(function (error) {
