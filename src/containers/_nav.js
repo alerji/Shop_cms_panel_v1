@@ -107,6 +107,12 @@ export default [
                         , role: 'add_order'
 
                     },
+                    {
+                        name: 'سبد خرید رها شده',
+                        to: '/dashboard/orders/user_carts'
+                        , role: 'add_order'
+
+                    },
 
                 ]
             },
