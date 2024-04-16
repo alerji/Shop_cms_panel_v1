@@ -802,10 +802,11 @@ try{
       formData.append("product_id", self.status_form)
       axios.post('/api/admin/product/get_product_info', formData, {}).then(function (response) {
         var post_data = response.data;
-
+        self.value_category=[]
         post_data.post.categories.forEach((val) => {
           self.value_category.push(val.category_id);
         });
+        self.value_tags = []
         post_data.post.tags.forEach((val) => {
           self.value_tags.push(val.tag.title.title);
         });
@@ -837,6 +838,7 @@ try{
           self.selected_currency = post_data.post.price_no.currency_id;
           self.product_off_price_date = post_data.post.price_no.off_expire;
         }
+        self.gallery=[]
         post_data.post.gallery.forEach((val2) => {
           self.gallery.push(val2.image_id);
         });

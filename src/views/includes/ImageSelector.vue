@@ -25,8 +25,12 @@
                 :src="preview"
           />
 <div style="display: flex" v-if="multiple">
-  <div v-for="item in selected_media">
-    <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="45px" height="45px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
+  <div v-for="(item,index) in selected_media">
+    <div style="border: 1px solid grey" class="position-relative">
+      <CIcon name="cil-trash" class="text-danger position-absolute" @click.native="selected_media.splice(index,1)"/>
+      <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="45px" height="45px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
+
+    </div>
   </div>
 </div>
         </div>
@@ -96,21 +100,36 @@
 
           </CRow>
         </CCol>
-        <CCol col="7"
+
+        <CCol col="7" id="file_manager_content"
               style="height: 60vh;overflow: auto"
         >
-          <CInput class="pb-0"
-                  placeholder="جستجو"
-                  horizontal
-                  v-model="search">
+         <div style="position: relative">
+           <div style="display: flex;position:sticky;top: 0;z-index: 10;background: white">
+             <CInput class="pb-0 mb-0"
+                     placeholder="جستجو"
+                     horizontal
+                     v-model="search">
 
-          </CInput>
-          <CRow>
-            <CCol col="3"  v-for="item in selected_archive==0 ? media.filter(x=>x.name.includes(search)) : media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
-              <CImg loading="lazy" :class="`m-1 border ${selected_media.includes(item.id)?' border-info':''}`" :src="get_image_link(item)" style="width: 100%;height: auto"/>
-            </CCol>
-          </CRow>
+             </CInput>
+             <CButton color="secondary" @click="scrol_top()" size="sm">بازگشت به بالا</CButton>
+
+           </div>
+
+           <CRow>
+             <CCol col="3"  v-for="item in selected_archive==0 ? media.filter(x=>x.name.includes(search)) : media.filter(x=>x.archive_id==selected_archive)" @click="select_media(item)">
+               <div :class="`m-1 position-relative border ${selected_media.includes(item.id)?' border-info':''}`">
+                 <CImg loading="lazy"  :src="get_image_link(item)" style="width: 100%;height: auto"/>
+                 <CIcon name="cil-check" class="position-absolute bg-success" style="left: 0;color:white" v-if="selected_media.includes(item.id) && selected_media[0]==item.id "/>
+                 <CIcon name="cil-check" class="position-absolute bg-primary" style="left: 0;color:white" v-if="selected_media.includes(item.id) &&  selected_media[0]!=item.id"/>
+               </div>
+             </CCol>
+           </CRow>
+
+         </div>
+
         </CCol>
+
         <CCol col="2" class="b-r-1">
           <div v-for="archive in archives"
                @click="selected_archive=archive.id"
@@ -170,6 +189,22 @@ export default {
     },
     'media_id': function () {
       this.selected_media = this.media_id
+    },
+    'file_manager_modal': function () {
+      console.log("modal opened")
+      if(this.file_manager_modal && this.selected_media.length>0){
+        console.log("modal opened 2")
+
+        var find =document.getElementById('file_manager_content').querySelector('.border-info');
+
+        if(find!=null){
+          console.log("modal opened3")
+setTimeout(function (){
+  find.scrollIntoView();
+
+},300)
+        }
+      }
     }
   },
   mounted() {
@@ -184,6 +219,9 @@ export default {
     this.paste_image_clicpboard()
   },
   methods: {
+    scrol_top(){
+      document.getElementById('file_manager_content').scrollTo(0,0)
+    },
     copy_link(){
       var copyText = document.getElementById("copy_link");
       // Select the text field
