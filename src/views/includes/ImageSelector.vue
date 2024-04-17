@@ -26,9 +26,9 @@
           />
 <div style="display: flex" v-if="multiple">
   <div v-for="(item,index) in selected_media">
-    <div style="border: 1px solid grey" class="position-relative">
+    <div style="border: 1px solid grey" class="position-relative ml-1 mt-1">
       <CIcon name="cil-trash" class="text-danger position-absolute" @click.native="selected_media.splice(index,1)"/>
-      <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="45px" height="45px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
+      <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="65px" height="65px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
 
     </div>
   </div>
@@ -52,6 +52,7 @@
              v-on:drop="dropHandlerFile"
              v-on:dragover="dragOverHandlerFile">
           <label>برای ارسال فایل را بکشید</label>
+          <div style="background: grey" @click="dragLeaveHandlerFile">انصراف</div>
         </div>
         <CCol col="3" class="b-l-1" v-if="media.length>0">
           <CRow v-if="selected_media_data.id!=0">
