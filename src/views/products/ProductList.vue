@@ -99,6 +99,10 @@
                       <CIcon name="cil-check"/>
                     </CButton>
                   </div>
+                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                    <CInputCurrency class="pb-0" v-model="item.prices[0].off_price"/>
+
+                  </div>
 
                 </td>
 
@@ -327,6 +331,7 @@ export default {
       var formData = new FormData();
       formData.append("product_id", item.id)
       formData.append("price", item.prices[0].price.replace(/,/g, ''))
+      formData.append("off_price", item.prices[0].off_price.replace(/,/g, ''))
       axios.post(url, formData, {}).then(function (response) {
         // self.$root.modal_component.show_api_response_modals(response);
 
