@@ -11,7 +11,7 @@
         @click="$store.commit('toggleSidebarDesktop')"
     />
     <CHeaderBrand class="mx-auto d-lg-none" to="/">
-      <CIcon name="logo" height="48" alt="Logo"/>
+<!--      <CIcon name="logo" height="48" alt="Logo"/>-->
     </CHeaderBrand>
     <CHeaderNav class="d-md-down-none ml-auto">
       <CHeaderNavItem class="px-3">
@@ -31,7 +31,7 @@
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderNav class="mr-4 " style="position: absolute;left: 0">
-      <CHeaderNavItem class="d-md-down-none mx-2">
+      <CHeaderNavItem class=" mx-2">
         <CHeaderNavLink>
           <CDropdown
               inNav

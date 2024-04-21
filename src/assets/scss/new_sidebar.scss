@@ -5,10 +5,17 @@
 }
 .c-sidebar.c-sidebar-fixed{
   background: white;
-  margin: 10px!important;
+  //margin: 10px!important;
   border-radius: 14px;
   color: #526484;
   box-shadow: 0 0 25px -12px rgba(31, 43, 58, 0.15);
+}
+
+@media (min-width: 992px) {
+  .c-sidebar.c-sidebar-fixed{
+    margin: 10px!important;
+
+  }
 }
 .c-sidebar .c-sidebar-nav-link:hover, .c-sidebar .c-sidebar-nav-dropdown-toggle:hover {
   color: #8351ec;
