@@ -79,6 +79,15 @@
                   >
                     <CIcon name="cil-trash" size="sm"/>
                   </CButton>
+                  <CButton
+                      color="primary"
+                      variant="outline"
+                      square
+                      size="sm"
+                      @click="reply_comment_modal = true , reply_comment_id = item.id"
+                  >
+                    <CIcon name="cil-share" size="sm"/>
+                  </CButton>
                 </td>
               </template>
 
@@ -287,6 +296,31 @@
       </template>
     </CModal>
 
+    <CModal
+        :show.sync="reply_comment_modal"
+        :no-close-on-backdrop="false"
+        color="transparent"
+        size="lg"
+        border-color="primary"
+    >
+
+      <CRow>
+        <CCol col="12">
+          <CTextarea  v-model="reply_comment_text"
+                  label="متن پاسخ"
+          />
+        </CCol>
+
+      </CRow>
+
+      <template #footer>
+        <CButton @click="insert_reply_comment()" color="dark">پاسخ به کامنت
+        </CButton>
+        <CButton @click="reply_comment_modal = false" color="dark">انصراف</CButton>
+
+      </template>
+    </CModal>
+
   </div>
 
 </template>
@@ -317,6 +351,9 @@ export default {
   },
   data() {
     return {
+      reply_comment_id:0,
+      reply_comment_modal:false,
+      reply_comment_text:'',
       import_comment_modal: false,
       site_link: '',
       import_comments: [],
@@ -400,6 +437,26 @@ export default {
 
       axios.post('/api/admin/product/insert_imported_comment', formData, {}).then(function (response) {
         self.import_comment_modal = false
+        self.get_comments()
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    insert_reply_comment() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      let formData = new FormData();
+      var json = [];
+
+      formData.append("comment_text", this.reply_comment_text)
+      formData.append("comment_id", this.reply_comment_id)
+
+      axios.post('/api/admin/product/insert_reply_comment', formData, {}).then(function (response) {
+        self.reply_comment_modal = false
         self.get_comments()
 
       })
