@@ -137,7 +137,9 @@
                         <CRow>
                             <CCol col="4">
                               <ImageSelector label="تصویر"
-                                             :file.sync="file"
+                                             default_archive="sliders"
+                                             :media_id.sync="file"
+
                                              :preview-image="previewImage"
                               />
                             </CCol>
