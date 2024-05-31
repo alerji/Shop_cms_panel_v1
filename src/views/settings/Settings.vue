@@ -36,18 +36,20 @@
                 </CRow>
                 <CRow>
                   <CCol col="6">
+
                     <ImageSelector label="لوگو"
-                                   :file.sync="logo_file"
+                                   :media_id.sync="logo_file"
+                                   default_archive="site"
                                    :preview-image="site_config.logo"
                     />
-
                   </CCol>
                   <CCol col="6">
+
                     <ImageSelector label="ایکون مرورگر (favicon)"
-                                   :file.sync="favicon_file"
+                                   :media_id.sync="favicon_file"
+                                   default_archive="site"
                                    :preview-image="site_config.favicon"
                     />
-
                   </CCol>
                 </CRow>
                 <hr>

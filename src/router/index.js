@@ -65,7 +65,7 @@ const ProductPropertyTemplateGroupItemList = () => import('@/views/products/prop
 
 
 // Views - Notifications
-const Settings = () => import('@/views/pages/Settings');
+const Settings = () => import('@/views/settings/Settings');
 
 // Views - Pages
 const Page404 = () => import('@/views/pages/Page404');
