@@ -20,6 +20,7 @@ import ProductBundlePrice from "@/views/products/ProductBundlePrice.vue";
 import TemplateSettings from "@/views/settings/TemplateSettings";
 import CustomerList from "@/views/orders/CustomerList.vue";
 import UserCarts from "../views/orders/UserCarts";
+import UserStockAlert from "../views/orders/UserStockAlert";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -651,6 +652,15 @@ function configRoutes() {
                             name: 'سبد های خرید رها شده',
                             props: true,
                             component: UserCarts,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_order"
+                            }
+                        },{
+                            path: 'user_stock_alert',
+                            name: 'اطلاع از موجودی',
+                            props: true,
+                            component: UserStockAlert,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_order"

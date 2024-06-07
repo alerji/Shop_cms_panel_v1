@@ -91,7 +91,8 @@
                     <div class="progress-group-header">
                       <CIcon name="cil-user" class="progress-group-icon"/>
                       <span class="title">{{ gateway.title }}</span>
-                      <span class="ml-auto font-weight-bold"> {{ get_currency(gateway.payments_sum_pay_price) }} </span>
+                      <span class="ml-auto font-weight-bold" v-if="gateway.payments_sum_pay_price!=null"> {{ get_currency(gateway.payments_sum_pay_price) }} </span>
+                      <span class="ml-auto font-weight-bold" v-else>0 </span>
                     </div>
                     <div class="progress-group-bars">
                       <CProgress
@@ -107,7 +108,7 @@
                 کالاهای کم موجود انبار
                 <hr class="mt-0">
                 <ul class="horizontal-bars type-2">
-                  <div class="progress-group" v-for="product in dashboard_data.order_point_products">
+                  <div class="progress-group" v-for="product in dashboard_data.order_point_products.slice(0,5)">
                     <div class="progress-group-header">
                       <CIcon name="cil-user" class="progress-group-icon"/>
                       <span class="title">{{ product.product.title.title }}</span>

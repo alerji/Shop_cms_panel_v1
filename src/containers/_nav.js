@@ -113,6 +113,12 @@ export default [
                         , role: 'add_order'
 
                     },
+                    {
+                        name: 'اطلاع از موجود شدن',
+                        to: '/dashboard/orders/user_stock_alert'
+                        , role: 'add_order'
+
+                    },
 
                 ]
             },
