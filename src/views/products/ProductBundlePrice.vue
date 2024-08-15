@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol col="10">
+      <CCol col="12 col-sm-10">
         <CCard>
           <CCardHeader>
             <strong>لیست قیمت خصوصیتی</strong>
@@ -12,8 +12,8 @@
             </CButton>
           </CCardHeader>
           <CCardBody>
-            <CRow class="m-0" v-for="(bundle_price,index) in product_bundle_prices">
-              <CCol style="padding: 1px;" v-for="type in product_bundles">
+            <CRow class="m-0 border" v-for="(bundle_price,index) in product_bundle_prices">
+              <CCol col="6 col-sm-3" style="padding: 1px;" v-for="type in product_bundles">
                 <CSelect
                     :options="bundles.filter(x=>x.id==type)[0].items"
                     placeholder="انتخاب کنید"
@@ -21,19 +21,19 @@
                     :value.sync="bundle_price.bundles[type]"
                 />
               </CCol>
-              <CCol style="padding: 1px;" >
+              <CCol col="6 col-sm-3" style="padding: 1px;" >
                 <CInputCurrency
                     label="قیمت"
                     v-model="bundle_price.price"
                 />
               </CCol>
-              <CCol style="padding: 1px;" >
+              <CCol col="6 col-sm-3" style="padding: 1px;" >
                 <CInputCurrency
                     label="قیمت ویژه"
                     v-model="bundle_price.off_price"
                 />
               </CCol>
-              <CCol style="padding: 1px;" >
+              <CCol col="6 col-sm-3" style="padding: 1px;" >
                 <div class="form-group">
 <label>تاریخ قیمت</label>
                   <date-picker
@@ -43,13 +43,13 @@
                   />
                 </div>
               </CCol>
-              <CCol col="1" style="padding: 1px;" >
+              <CCol col="3 col-sm-1" style="padding: 1px;" >
                 <CInputCurrency
                     label="موجودی"
                     v-model="bundle_price.stock"
                 />
               </CCol>
-              <CCol col="1" style="padding: 1px;" >
+              <CCol  col="3 col-sm-1" style="padding: 1px;" >
                 <CButton
                     color="danger"
                     size="sm"
@@ -71,7 +71,7 @@
           </CCardFooter>
         </CCard>
       </CCol>
-      <CCol col="2">
+      <CCol col="12 col-sm-2">
         <CCard>
           <CCardHeader>
             <strong>خصوصیات مرتبط</strong>

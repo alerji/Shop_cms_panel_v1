@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol col="8">
+      <CCol col="12 col-sm-8">
         <CCard>
           <CCardHeader>
             لیست آیتم ویژگی
@@ -62,7 +62,7 @@
 
         </CCard>
       </CCol>
-      <CCol col="4">
+      <CCol col="12 col-sm-4">
         <CCard>
           <CCardHeader>
             <strong>ثبت ایتم ویژگی محصولات</strong>

@@ -23,10 +23,10 @@
 
       <CCardBody class="">
         <CRow>
-          <CCol><label>شماره سفارش : {{ order_info.id }}</label></CCol>
-          <CCol><label>مشتری : {{ order_info.user.name }}</label></CCol>
-          <CCol><label>موبایل : {{ order_info.user.phone }}</label></CCol>
-          <CCol><label>تاریخ ثبت : {{ get_date_time(order_info.created_at) }}</label></CCol>
+          <CCol col="6 col-sm-3"><label>شماره سفارش : {{ order_info.id }}</label></CCol>
+          <CCol col="6 col-sm-3"><label>مشتری : {{ order_info.user.name }}</label></CCol>
+          <CCol col="6 col-sm-3"><label>موبایل : {{ order_info.user.phone }}</label></CCol>
+          <CCol col="6 col-sm-3"><label>تاریخ ثبت : {{ get_date_time(order_info.created_at) }}</label></CCol>
         </CRow>
       </CCardBody>
       <hr>

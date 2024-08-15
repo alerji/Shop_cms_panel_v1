@@ -93,13 +93,15 @@
               <template #price="{item}">
 
                 <td>
-                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                  <div style="display: inline-flex;min-width: 130px" v-if="item.prices.length>0">
                     <CInputCurrency class="pb-0" v-model="item.prices[0].price"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_price(item)">
                       <CIcon name="cil-check"/>
                     </CButton>
                   </div>
-                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                  قیمت بعد از تخفیف
+
+                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length>0">
                     <CInputCurrency class="pb-0" v-model="item.prices[0].off_price"/>
 
                   </div>
@@ -111,7 +113,7 @@
               <template #stock="{item}">
 
                 <td>
-                  <div style="display: inline-flex;" v-if="item.prices.length>0">
+                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length>0">
                     <CInputCurrency class="pb-0" v-model="item.prices[0].stock"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_stock(item)">
                       <CIcon name="cil-check"/>
@@ -246,7 +248,7 @@ export default {
         {key: 'image', label: 'تصویر', _style: 'width:7%'},
         {key: 'name', label: 'عنوان', _style: 'width:25%'},
         {key: 'code', label: 'کد', _style: 'width:7%'},
-        {key: 'type', label: 'نوع', _style: 'width:7%;'},
+        // {key: 'type', label: 'نوع', _style: 'width:7%;'},
         {key: 'price', label: "قیمت", _style: 'width:13%;'},
         {key: 'stock', label: "موجودی", _style: 'width:7%;'},
         {key: 'is_featured', label: "★", _style: 'width:5%;'},

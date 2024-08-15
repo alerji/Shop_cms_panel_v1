@@ -10,7 +10,7 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     v-model="title"
 
@@ -19,14 +19,14 @@
                     vertical
                 />
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     v-model="code"
                     label="کد محصول"
                     placeholder="کد"
                 />
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     v-model="seo_title"
                     label="متا عنوان"
@@ -34,18 +34,18 @@
                 <SeoProgress :min_perfect="50" :max_perfect="60" :string="seo_title"/>
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     v-model="keyword"
                     label="کلید واژه"
                 />
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     label="آدرس جایگزین"
                     v-model="favorite_url"/>
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CSelect
                     :options="[{label:'محصول فیزیکی',value:1},{label:'محصول دانلودی',value:2}]"
                     :value.sync="product_type"
@@ -60,7 +60,10 @@
 
             </CRow>
             <CRow>
-              توضیحات کوتاه
+              <CCol col="12">
+                توضیحات کوتاه
+
+              </CCol>
 
               <CCol col="12">
 
@@ -111,7 +114,7 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_price"
 
@@ -121,7 +124,7 @@
                 />
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_stock"
 
@@ -130,7 +133,7 @@
                 />
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CSelect
                     label="ارز"
 
@@ -138,14 +141,14 @@
                     :value.sync="selected_currency"/>
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInput
                     v-model="order_point"
                     label="نقطه سفارش"
 
                 />
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_off_price"
                     label="قیمت ویژه(تخفیف)"
@@ -153,7 +156,7 @@
                 />
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <div>محدودیت زمان تخفیف</div>
                 <date-picker
                     v-model="product_off_price_date"
@@ -177,7 +180,7 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
 
                 <treeselect
                     v-model="value_tags"
@@ -191,7 +194,7 @@
 
               </CCol>
 
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <div class="control_wrapper">
                   <treeselect
                       v-model="value_category"
@@ -205,7 +208,7 @@
                 </div>
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <div class="control_wrapper">
                   <treeselect
                       v-model="value_brand"
@@ -219,7 +222,7 @@
                 </div>
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <div class="control_wrapper">
                   <treeselect
                       v-model="value_label"
@@ -232,7 +235,7 @@
                 </div>
 
               </CCol>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
 
                 <ImageSelector label="گالری تصویر"
                                v-if="show_gallery"
@@ -252,7 +255,7 @@
           </CCardHeader>
           <CCardBody>
             <CRow>
-              <CCol col="4">
+              <CCol col="6 col-sm-4">
                 <CSelect
                     label="الگو ویژگی"
                     :options="property_items"
