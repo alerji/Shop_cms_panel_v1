@@ -21,13 +21,13 @@
                     :value.sync="bundle_price.bundles[type]"
                 />
               </CCol>
-              <CCol col="6 col-sm-3" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;" >
                 <CInputCurrency
                     label="قیمت"
                     v-model="bundle_price.price"
                 />
               </CCol>
-              <CCol col="6 col-sm-3" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;" >
                 <CInputCurrency
                     label="قیمت ویژه"
                     v-model="bundle_price.off_price"
@@ -48,6 +48,14 @@
                     label="موجودی"
                     v-model="bundle_price.stock"
                 />
+              </CCol>
+              <CCol col="3 col-sm-3" style="padding: 1px;" >
+                <div style="display: flex;flex-flow: wrap;">
+                  <div  v-for="image in gallery" :key="image.image_id"  @click="select_image(bundle_price,image,index)">
+                    <img :src="image.image" width="45px" height="45px"
+                         :style="`margin:1px; ${bundle_price.image_id == image.image_id ? ' border:1px solid blue; ':''}`"/>
+                  </div>
+                </div>
               </CCol>
               <CCol  col="3 col-sm-1" style="padding: 1px;" >
                 <CButton
@@ -106,13 +114,14 @@
 import axios from "axios";
 
 import {bus} from '../../main';
-
+import Vue from 'vue'
 
 export default {
   name: 'Login',
   data() {
     return {
       confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
+      gallery: [],
       bundles: [],
       product_bundle_prices: [],
       product_bundles: [],
@@ -131,7 +140,10 @@ export default {
     });
   }, watch: {},
   methods: {
-
+select_image(bundle_price,image,index){
+  Vue.set(this.product_bundle_prices[index],"image_id",image.image_id)
+  // bundle_price.image_id = image.image_id
+},
     editDetails(item) {
       this.name = item.title.title;
       this.description = item.title.summary;
@@ -148,6 +160,7 @@ export default {
 
         var content_cats = response.data;
         self.bundles = content_cats.bundles
+        self.gallery = content_cats.gallery
         self.product_bundle_prices = []
         self.product_bundles = content_cats.product_bundles
         content_cats.product_bundle_prices.forEach(function (val){
