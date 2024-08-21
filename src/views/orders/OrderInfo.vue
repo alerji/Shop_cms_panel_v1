@@ -18,10 +18,61 @@
               color="info">
             کد مرسوله
           </CButton>
+          <CButton
+              @click="print()"
+              color="success"
+              class="mx-1">
+            پرینت اطلاعات
+          </CButton>
         </strong>
       </CCardHeader>
 
       <CCardBody class="">
+        <div id="print_order_area" style="display:none;width: 10cm;height: 8cm">
+          <CRow>
+            <CCol col="6"><label>نام خریدار : {{ order_info.user.name }}</label></CCol>
+            <CCol col="6"><label>تاریخ ثبت : {{ get_date_time(order_info.created_at) }}</label></CCol>
+            <CCol col="6"><label>تلفن خریدار : {{ order_info.user.phone }}</label></CCol>
+            <CCol col="6"><label>شماره سفارش : {{ order_info.id }}</label></CCol>
+            <CCol col="12">
+              <div>آدرس و کد پستی :</div>
+              <div>
+                <label>{{ order_info.address.province }},{{ order_info.address.city }},{{ order_info.address.address }}</label>
+
+                <div class="mx-3"> کد پستی: {{ order_info.address.post_code }}</div>
+                <label class="mx-3"> نام گیرنده: {{ order_info.address.receiver }}</label>
+                <label class="mx-3"> موبایل گیرنده: {{ order_info.address.mobile }}</label>
+              </div>
+            </CCol>
+            <CCol col="12">
+              <table
+                  style="width: 100%"
+              >
+                <thead>
+                <tr>
+                  <td>نام کالا</td>
+                  <td>مشخصات</td>
+                  <td>تعداد</td>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="item in order_info.products">
+                  <td>{{ item.title }}</td>
+                  <td v-if="item.price_rel!=null">
+                    <p v-for="bundle in item.price_rel.bundles">
+                      {{ bundle.bundle_item.title.title }}
+                    </p>
+                  </td>
+                  <td v-else></td>
+                  <td>{{ item.count }}</td>
+                </tr>
+                </tbody>
+
+              </table>
+
+            </CCol>
+          </CRow>
+        </div>
         <CRow>
           <CCol col="6 col-sm-3"><label>شماره سفارش : {{ order_info.id }}</label></CCol>
           <CCol col="6 col-sm-3"><label>مشتری : {{ order_info.user.name }}</label></CCol>
@@ -290,7 +341,20 @@ export default {
   },
   watch: {},
   methods: {
+    print() {
+    const data = document.getElementById('print_order_area').innerHTML
 
+      var mywindow = window.open('', 'my div', 'height=400,width=600');
+      mywindow.document.write('<html dir="rtl"><head><title>print</title>');
+      /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+      mywindow.document.write('</head><body >');
+      mywindow.document.write(data);
+      mywindow.document.write('</body></html>');
+
+      mywindow.print();
+      mywindow.close();
+
+    },
     get_news() {
       var self = this;
       // console.log("route id "+this.$route.params.cat_id);
