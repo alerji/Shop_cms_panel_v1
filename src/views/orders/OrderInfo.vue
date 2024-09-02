@@ -30,18 +30,16 @@
       <CCardBody class="">
         <div id="print_order_area" style="display:none;width: 10cm;height: 8cm">
           <CRow>
-            <CCol col="6"><label>نام خریدار : {{ order_info.user.name }}</label></CCol>
-            <CCol col="6"><label>تاریخ ثبت : {{ get_date_time(order_info.created_at) }}</label></CCol>
-            <CCol col="6"><label>تلفن خریدار : {{ order_info.user.phone }}</label></CCol>
-            <CCol col="6"><label>شماره سفارش : {{ order_info.id }}</label></CCol>
-            <CCol col="12">
-              <div>آدرس و کد پستی :</div>
-              <div>
-                <label>{{ order_info.address.province }},{{ order_info.address.city }},{{ order_info.address.address }}</label>
+            <CCol col="6"><label style="font-size:14px">گیرنده : {{ order_info.user.name }}</label></CCol>
+            <CCol col="6"><label style="font-size:14px">ت. فاکتور : {{ get_date_time(order_info.created_at) }}</label></CCol>
+            <CCol col="6"><label style="font-size:14px">تلفن خریدار : {{ order_info.user.phone }}</label></CCol>
+            <CCol col="6"><label style="font-size:14px">ش فاکتور : {{ order_info.id }}</label></CCol>
+            <CCol col="12"  style="font-size:14px">
+              <div  style="font-size:14px">نشانی و کد پستی :</div>
+              <div  style="font-size:14px">
+                <label style="font-size:14px">{{ order_info.address.province }},{{ order_info.address.city }},{{ order_info.address.address }}</label>
 
-                <div class="mx-3"> کد پستی: {{ order_info.address.post_code }}</div>
-                <label class="mx-3"> نام گیرنده: {{ order_info.address.receiver }}</label>
-                <label class="mx-3"> موبایل گیرنده: {{ order_info.address.mobile }}</label>
+                <div class="mx-3" style="font-size:14px">{{ order_info.address.post_code }}</div>
               </div>
             </CCol>
             <CCol col="12">
@@ -342,17 +340,17 @@ export default {
   watch: {},
   methods: {
     print() {
-    const data = document.getElementById('print_order_area').innerHTML
-
-      var mywindow = window.open('', 'my div', 'height=400,width=600');
-      mywindow.document.write('<html dir="rtl"><head><title>print</title>');
-      /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-      mywindow.document.write('</head><body >');
-      mywindow.document.write(data);
-      mywindow.document.write('</body></html>');
-
-      mywindow.print();
-      mywindow.close();
+    // const data = document.getElementById('print_order_area').innerHTML
+      this.print_element("print_order_area","print")
+      // var mywindow = window.open('', 'my div', 'height=400,width=600');
+      // mywindow.document.write('<html dir="rtl"><head><title>print</title>');
+      // /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
+      // mywindow.document.write('</head><body >');
+      // mywindow.document.write(data);
+      // mywindow.document.write('</body></html>');
+      //
+      // mywindow.print();
+      // mywindow.close();
 
     },
     get_news() {

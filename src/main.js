@@ -39,6 +39,21 @@ import moment from 'moment-jalaali'
 import 'vueditor/dist/style/vueditor.min.css'
 
 
+import VueHtmlToPaper from './CustomElements/html_paper_print_index';
+const options = {
+  name: '_blank',
+  specs: [
+    'fullscreen=yes',
+    'titlebar=yes',
+    'scrollbars=yes',
+  ],
+  styles: [
+    '/css/bootstrap.min.css',
+    '/css/print.css?ver=' + process.env.VUE_APP_VERSION,
+  ]
+}
+
+Vue.use(VueHtmlToPaper, options);
 // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
@@ -156,6 +171,9 @@ Vue.mixin({
           })
          return (amount*100)/total;
 
+        },
+        print_element(element, title) {
+          this.$htmlToPaper(element, title);
         },
         get_date(date) {
           var date_format = "YYYY-MM-DD";
