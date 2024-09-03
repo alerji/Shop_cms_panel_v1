@@ -46,11 +46,26 @@ const VueHtmlToPaper = {
             if (i18n.locale == 'fa') {
                 win.document.write(`
          <html dir="rtl" > 
-         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--         <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
           <head>
             <title>${title}</title>
             <style>
-     
+      @media print{
+         @page { 
+                size: 10cm 8cm;
+        
+            }
+          
+     }
+ /*       @media print{*/
+ /*     body {*/
+ /*-webkit-transform: rotate(-90deg); */
+ /*    -moz-transform:rotate(-90deg);*/
+ /*    filter:progid:DXImageTransform.Microsoft.BasicImage(rotation=3);*/
+ /*        }*/
+ /*   */
+ /*    }*/
+
              @media print {
   th{
   font-size: 12px;
@@ -68,13 +83,14 @@ const VueHtmlToPaper = {
 }
             </style>
           </head>
-          <body style="min-width: 20px!important;">
+          <body style=";min-width: 20px!important;">
             ${element.innerHTML}
           </body>
         </html>
       `);
 
-            } else {
+            }
+            else {
                 var htmmml = `
         <html > 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
