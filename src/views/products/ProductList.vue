@@ -167,6 +167,17 @@
                     <CIcon name="cil-trash" size="sm"/>
                   </CButton>
                   <CButton
+                      :color="item.status==1?'danger':'success'"
+                      variant="outline"
+                      square
+                      class="m-1"
+                      size="sm"
+                      @click="deactive_product(item)"
+                  >
+                    <CIcon v-if="item.status==1" name="cil-low-vision" size="sm"/>
+                    <CIcon v-if="item.status==2" name="eye" size="sm"/>
+                  </CButton>
+                  <CButton
                       color="info"
                       variant="outline"
                       square
@@ -256,9 +267,8 @@ export default {
 
       ],
       filters: [
-        {label: 'منتشر شده', value: 1},
-        {label: 'منتشر نشده', value: 2},
-        {label: 'حذف شده', value: 3}
+        {label: 'محصولات فعال', value: 1},
+        {label: 'محصولات غیر فعال', value: 2},
       ],
       details: [],
       collapseDuration: 0,
@@ -424,6 +434,35 @@ export default {
 
 
       formData.append('post_id', this.status_form);
+
+      axios.post(url, formData, {}).then((response) => {
+        self.$root.modal_component.show_api_response_modals(response);
+
+        self.status_form = 0;
+
+        self.get_data();
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+// this.get_categories();
+      // this.$router.push({ path: '/posts/'});
+    },
+    deactive_product(item) {
+
+
+      let self = this;
+      const formData = new FormData()
+      let url;
+      url = "/api/admin/product/deactive_product";
+      if (item.status == 2) {
+        url = "/api/admin/product/active_product";
+      }
+
+      formData.append('post_id', item.id);
 
       axios.post(url, formData, {}).then((response) => {
         self.$root.modal_component.show_api_response_modals(response);

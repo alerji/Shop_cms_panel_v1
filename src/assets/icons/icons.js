@@ -79,6 +79,7 @@ import {
   cilUserFemale,
   cilUserFollow,
   cilReload,
+    cilLowVision,
     cilCart,
     cilTrash,
     cilAddressBook,
@@ -183,6 +184,7 @@ export const iconsSet = Object.assign(
       cilFolder,
       cilClone,
       cilTrash,
+      cilLowVision,
     cibCcAmex
   }
 )

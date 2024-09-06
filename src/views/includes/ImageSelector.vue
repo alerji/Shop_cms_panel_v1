@@ -54,7 +54,7 @@
           <label>برای ارسال فایل را بکشید</label>
           <div style="background: grey" @click="dragLeaveHandlerFile">انصراف</div>
         </div>
-        <CCol col="3" class="b-l-1" v-if="media.length>0">
+        <CCol col="12 col-sm-3" class=" b-l-1" v-if="media.length>0">
           <CRow v-if="selected_media_data.id!=0">
             <CCol col="12">
               <CImg loading="lazy" :class="`m-1 border`" :src="preview" style="width: 50%;height: auto"/>
@@ -102,7 +102,7 @@
           </CRow>
         </CCol>
 
-        <CCol col="7" id="file_manager_content"
+        <CCol col="12 col-sm-7" id="file_manager_content"
               style="height: 60vh;overflow: auto"
         >
          <div style="position: relative">
@@ -131,7 +131,7 @@
 
         </CCol>
 
-        <CCol col="2" class="b-r-1">
+        <CCol col="12 col-sm-2" class="b-r-1 d-none d-lg-block">
           <div v-for="archive in archives"
                @click="selected_archive=archive.id"
                :class="`archive_div ${selected_archive==archive.id ?'active':''}`" :key="archive.id">
@@ -143,8 +143,8 @@
 
       </CRow>
       <template #footer>
-        <CButton @click="file_manager_modal = false" color="dark">انتخاب</CButton>
-        <CButton @click="file_manager_modal = false" color="dark">انصراف</CButton>
+        <CButton @click="open_file_selector()" color="dark">انتخاب فایل</CButton>
+        <CButton @click="file_manager_modal = false" color="dark">تایید</CButton>
       </template>
     </CModal>
 
@@ -262,16 +262,26 @@ setTimeout(function (){
     },
     handleFileUpload(files, e) {
       console.log("handle upload")
+      var self = this
       var myfile = e.target.files[0];
       if (myfile == null) {
         return
       }
-      this.preview = URL.createObjectURL(myfile);
 
-      // e.target.value = '';
-      // e.target.files = '';
-      this.$emit('update:file', myfile)
-      this.encodeImageFileAsURL(myfile)
+      var reader = new FileReader()
+
+      console.log('file', myfile)
+      reader.onloadend = function () {
+        var obj = {file: reader.result, preview: reader.result, upload: 0, name: myfile.name}
+        self.upload_file(obj)
+      }
+      reader.readAsDataURL(myfile)
+      // this.tagArray.push(f[0].name)
+
+      // console.log("files", this.tagArray);
+
+
+
     },
     open_file_selector() {
       this.$refs.file_selector.$el.getElementsByTagName('input')[0].click()
