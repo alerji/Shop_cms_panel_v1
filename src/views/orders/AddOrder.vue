@@ -1,314 +1,443 @@
 <template>
 
-    <div class="product-list">
-        <CCard>
-            <CCardHeader>
-                <CRow>
-                    <CCol>
-                        <strong>
-                            افزودن سفارش
-                        </strong>
-                    </CCol>
-                    <CCol class="text-left">
-                        <strong>
-                            {{order_info.status_title}}
-                        </strong>
-                    </CCol>
-                </CRow>
+  <div class="product-list">
+    <CCard>
+      <CCardHeader>
+        <CRow>
+          <CCol>
+            <strong>
+              افزودن سفارش
+            </strong>
+          </CCol>
+          <CCol class="text-left">
+            <strong>
+            </strong>
+          </CCol>
+        </CRow>
 
 
-            </CCardHeader>
+      </CCardHeader>
 
-            <CCardBody class="">
+      <CCardBody class="">
 
-                <CRow>
-                    <CCol>
-                      محصولات
-                      <treeselect
-                          v-model="products"
-                          :multiple="true"
-                          :async="true"
-                          :load-options="load_products"
-                          placeholder="محصولات فاکتور"
-                          :normalizer="normalizer_products"
-                      />
-                    </CCol>
-                    <CCol>
-                      <CInput
-                        label="نام مشتری"
-                        v-model="user_name"
-                        />
-                    </CCol>
-                    <CCol>
-                      <CInput
-                        label="موبایل مشتری"
-                        v-model="user_mobile"
-                        />
-                    </CCol>
-                    <CCol>
-                      <CSelect
-                          :options="status_items"
+        <CRow>
 
-                          :value.sync="selected_status"
-                          label="انتخاب وضعیت"
-                      />
-                    </CCol>
+          <CCol>
+            <CInput
+                label="نام مشتری"
+                v-model="user_name"
+            />
+          </CCol>
+          <CCol>
+            <CInput
+                label="موبایل مشتری"
+                v-model="user_mobile"
+            />
+          </CCol>
+          <CCol>
+            <CSelect
+                :options="status_items"
 
-                </CRow>
-              <CButton @click="add_order()" outlined color="primary">افزودن سفارش</CButton>
-            </CCardBody>
+                :value.sync="selected_status"
+                label="انتخاب وضعیت"
+            />
+          </CCol>
 
-        </CCard>
+        </CRow>
+        <hr>
+        <CRow>
+          <CCol col="12">
+            آدرس سفارش
+          </CCol>
+          <CCol col="3">
+            <CSelect
+                :options="provinces"
+                :value.sync="selected_province"
+                label="استان"
+            />
+          </CCol>
+          <CCol col="3">
+            <CSelect
+                :options="cities"
+                :value.sync="selected_city"
+                label="شهر"
+            />
+          </CCol>
+          <CCol col="3">
+            <CInput
+                label="کد پستی"
+                v-model="post_code"/>
+          </CCol>
+          <CCol col="12">
+            <CTextarea
+                label="آدرس"
+                v-model="address"/>
+          </CCol>
+        </CRow>
+        <hr>
 
-    </div>
+        <CDataTableFixed
+            :items="product_items"
+            :fields="product_fields"
+            striped
+            height="300px"
+            hover
+            sorter
+
+        >
+          <template #row="{item,index}">
+            <td>
+              <p class="text-muted">{{ index + 1 }}</p>
+            </td>
+          </template>
+
+          <template #product_name="{item,index}">
+            <td v-if="index==0">
+              <treeselect
+                  :multiple="false"
+                  :async="true"
+                  @select="select_product"
+                  append-to-body
+                  :load-options="load_products"
+                  placeholder="جستجو محصول"
+                  :normalizer="normalizer_products"
+              />
+            </td>
+            <td v-else>
+              <p class="text-muted">{{ item.product_name }}</p>
+            </td>
+          </template>
+
+
+          <template #product_qty="{item,index}">
+            <td v-if="index==0">
+              <CInputCurrency
+                  v-model="item.product_qty"/>
+            </td>
+            <td v-else>
+              <p class="text-muted">{{ item.product_qty }}</p>
+            </td>
+          </template>
+          <template #product_price="{item,index}">
+
+            <td>
+              <p class="text-muted">{{ item.product_price }}</p>
+            </td>
+          </template>
+          <template #product_off_price="{item,index}">
+
+            <td>
+              <p class="text-muted">{{ item.product_off_price }}</p>
+            </td>
+          </template>
+          <template #total_price="{item}">
+            <td>
+              <p class="text-muted" v-if="item.product_qty!=null">
+                {{ get_currency(parseInt(item.product_off_price) * parseInt(item.product_qty)) }}</p>
+            </td>
+          </template>
+
+
+          <template #operation="{item,index}">
+            <td class="py-2">
+
+              <CButton v-if="index==0"
+                       color="primary"
+                       variant="outline"
+                       square
+                       class="mr-1"
+
+                       size="sm"
+                       @click="add_product()"
+              >
+                <CIcon name="cil-plus" size="sm"/>
+              </CButton>
+              <CButton v-else
+                       color="danger"
+                       variant="outline"
+                       square
+                       class="mr-1"
+
+                       size="sm"
+                       @click="product_items.splice(index,0)"
+              >
+                <CIcon name="cil-trash" size="sm"/>
+              </CButton>
+            </td>
+          </template>
+
+
+        </CDataTableFixed>
+        <CButton @click="add_order()" outlined color="primary">افزودن سفارش</CButton>
+      </CCardBody>
+
+    </CCard>
+
+  </div>
 
 </template>
 
 <script>
-    import axios from "axios";
-    import {bus} from "../../main";
-    import Treeselect from '@riophae/vue-treeselect'
-    // import the styles
-    import '@riophae/vue-treeselect/dist/vue-treeselect.css'
+import axios from "axios";
+import {bus} from "../../main";
+import Treeselect from '@riophae/vue-treeselect'
+// import the styles
+import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 
-    import {ASYNC_SEARCH} from "@riophae/vue-treeselect";
+import {ASYNC_SEARCH} from "@riophae/vue-treeselect";
 
-    const simulateAsyncOperation = fn => {
-      setTimeout(fn, 200)
-    }
-
-
-    export default {
-        name: 'Login',
-        components: {
-          Treeselect
-            // Use the <ckeditor> component in this view.
-            // ckeditor: CKEditor.component
-        },
-        data() {
-            return {
-              user_name:'',
-              user_mobile:'',
-                delete_tag: new Date() + "_delete_confirm",
-                edit_row: null,
-                edit_flag: false,
-                edit_product_weight: '',
-                name: '',
-
-              fields: [
-                {key: 'row',label: '#', _style: 'width:10%'},
-                    {key: 'product', label: 'کالا', _style: 'width:10%;'},
-
-                    {key: 'price', label: 'مبلغ', _style: 'width:10%'},
-                    {key: 'off', label: 'تخفیف', _style: 'width:10%;'},
-                    {key: 'total_price', label: 'مبلغ کل', _style: 'width:10%;'},
-                    {key: 'pre_definds', label: 'اضافات', _style: 'width:10%;'},
-
-                ],
-
-                product_weight: null,
-                items_tags: [],
-                items_tags_title: null,
-                items_tags_id: 1,
-                edit_items_tags_id: 0,
-                product_weight_id: 1,
-                edit_product_weight_id: 0,
-                productId: null,
-                file: '',
-                car_refer_description: '',
-                color: '',
-                order_info: {},
-                weightModal: false,
-                previewImage: '',
-                description: '',
-                weights: null,
-
-                status_items: [],
-                selected_status: 0,
-
-                refer_status_items: [],
-                selected_refer_status: 0,
-
-                selected_refer_car: 0,
-                car_items: [],
+const simulateAsyncOperation = fn => {
+  setTimeout(fn, 200)
+}
 
 
-                items_active: [],
-                items_process: [],
-                items_in_way: [],
-                items_sent: [],
-                details: [],
-                collapseDuration: 0,
-                status_form: 0,
-              products: [],
-              normalizer_products(node) {
-                return {
-                  id: node.id,
-                  label: node.product_title,
-                }
-              },
-              load_products({action, searchQuery, callback}) {
+export default {
+  name: 'Login',
+  components: {
+    Treeselect
+    // Use the <ckeditor> component in this view.
+    // ckeditor: CKEditor.component
+  },
+  data() {
+    return {
+      user_name: '',
+      user_mobile: '',
+      delete_tag: new Date() + "_delete_confirm",
+      name: '',
+      product_items: [{}],
+      product_fields: [
+        {key: 'row', label: '#', _style: 'width:3%'},
+        {key: 'product_name', label: 'کالا', _style: 'width:10%;'},
 
-                if (action === ASYNC_SEARCH) {
-                  simulateAsyncOperation(() => {
-                    let options;
-                    var formData = new FormData();
-                    formData.append('search',searchQuery);
-                    axios.post('/api/admin/search-products', formData,{}).then(function (response) {
-                      options = response.data;
-                      callback(null, options);
-                      // localStorage.setItem("api_token", response.data.access_token);
-                      // self.$router.push({ path: 'notes' });
-                    })
-                        .catch(function (error) {
-
-                          console.log(error);
-                        });
+        {key: 'product_qty', label: 'تعداد', _style: 'width:5%'},
+        {key: 'product_price', label: 'مبلغ', _style: 'width:10%'},
+        {key: 'product_off_price', label: 'قیمت بعد تخفیف', _style: 'width:10%;'},
+        {key: 'total_price', label: 'مبلغ کل', _style: 'width:10%;'},
+        {key: 'operation', label: 'عملیات', _style: 'width:5%;'},
 
 
-                    //  const options = this.get_keywords(searchQuery);
-                    // const options = [1, 2, 3, 4, 5].map(i => ({
-                    //     id: `${searchQuery}-${i}`,
-                    //     name: `${searchQuery}-${i}`,
-                    // }))
+      ],
 
-                  })
-                }
-              },
-            }
-        },
-        mounted() {
-            this.get_status_list();
-            bus.$on(this.delete_tag, (data) => {
-                // alert(data);
-                if (data == 'true') {
-                    this.delete_item();
-                } else {
-                    this.status_form = 0;
-                }
-            });
-        },
-        watch: {
-            '$route.params.cat_id': function (id) {
-                this.get_categories();
-            },
-            'items_tags_id': function (val) {
-                console.log("val ", val)
-                this.product_weight_id = val;
-            },
+      product_id: null,
+      product_name: null,
+      product_price_id: null,
+      product_price: null,
+      product_qty: null,
+      product_off_price: null,
 
-        },
-        methods: {
-            get_style(color) {
-                return {
-                    myStyle: {
-                        backgroundColor: color
-                    }
-                }
-            },
-            editDetails(item, index) {
-                // this.$set(this.items[item.id], '_toggled', !item._toggled)
-                this.$router.push({path: "/dashboard/products/edit/" + item.post_id});
+      status_items: [],
+      selected_status: 0,
 
-            },
-            go_show_product(item) {
-                window.open(process.env.VUE_APP_BASE_URL + "products/" + item.slug, "_blank");
-            },
-            add_order() {
-                var self = this;
-                // console.log("route id "+this.$route.params.cat_id);
-                var formData = new FormData();
-                formData.append("id", this.$route.params.order_id);
-                formData.append("token", localStorage.getItem("token"));
-                formData.append("user_name", this.user_name);
-                formData.append("user_mobile", this.user_mobile);
-                formData.append("status_id", this.selected_status);
-                formData.append("products", JSON.stringify(this.products));
-
-
-                axios.post('/api/admin/add_order', formData, {}).then(function (response) {
-
-                    var contents = response.data;
-
-                    self.order_info = contents.data;
-                    self.order_info.products = contents.products;
-                  if (response.data.error == 1) {
-                    this.$root.modal_component.show_danger_modal('خطا', response.data.msg);
-
-                  } else {
-                    this.$root.modal_component.show_success_modal('تایید', response.data.msg);
-
-                  }
-                    // self.description = '';
-                    // localStorage.setItem("api_token", response.data.access_token);
-                    // self.$router.push({ path: 'notes' });
-                })
-                    .catch(function (error) {
-                      this.$root.modal_component.show_danger_modal('خطا', "خطا از سرور");
-
-                      console.log(error);
-                    });
-
-            },
-
-            get_status_list() {
-                var self = this;
-                // console.log("route id "+this.$route.params.cat_id);
-                var formData = new FormData();
-
-                axios.post('/api/admin/get_order_status', formData, {}).then(function (response) {
-
-                    var contents = response.data;
-
-                    self.status_items = contents.data;
-                    self.selected_status = self.status_items[0].value;
-                    // self.description = '';
-                    // localStorage.setItem("api_token", response.data.access_token);
-                    // self.$router.push({ path: 'notes' });
-                })
-                    .catch(function (error) {
-
-                        console.log(error);
-                    });
-
-            },
-            goRegister() {
-                this.$router.push({path: 'register'});
-            }, goAddNews() {
-
-                this.$router.push({path: '/dashboard/products/create'});
-            },
-            delete_dialog(item) {
-                this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], this.delete_tag);
-                this.status_form = item.post_id;
-            },
-            delete_item() {
-                let self = this;
-                const formData = new FormData()
-                let url;
-                url = "/api/admin/product/delete";
-                formData.append('id', this.status_form);
-                axios.post(url, formData, {}).then((res) => {
-                    if (res.data.error == 1) {
-                        this.$root.modal_component.show_danger_modal('خطا', res.data.msg);
-
-                    } else {
-                        this.$root.modal_component.show_success_modal('تایید', res.data.msg);
-
-                    }
-                    self.status_form = 0;
-
-                    self.get_news();
-
-
-                })
-                    .catch(function (error) {
-
-                        console.log(error);
-                    });
-            },
+      cities: [],
+      selected_city: 0,
+      provinces: [],
+      selected_province: 8,
+      address: '',
+      post_code: '',
+      normalizer_products(node) {
+        return {
+          id: node.id,
+          label: node.name,
         }
+      },
+      load_products({action, searchQuery, callback}) {
+
+        if (action === ASYNC_SEARCH) {
+          simulateAsyncOperation(() => {
+            let options;
+            var formData = new FormData();
+            formData.append('search', searchQuery);
+            axios.post('/api/admin/product/search-products', formData, {show_pros: false}).then(function (response) {
+              options = response.data;
+              callback(null, options);
+              // localStorage.setItem("api_token", response.data.access_token);
+              // self.$router.push({ path: 'notes' });
+            })
+                .catch(function (error) {
+
+                  console.log(error);
+                });
+
+          })
+        }
+      },
     }
+  },
+  mounted() {
+    this.get_provinces();
+    this.get_status_list();
+
+  },
+  watch: {
+    'selected_province': function () {
+      this.get_cities()
+    }
+  },
+  methods: {
+    add_product() {
+      if (this.product_items[0].product_off_price == null) {
+        return false
+      }
+      if (this.product_items[0].product_qty == null || this.product_items[0].product_qty == 0 || this.product_items[0].product_qty == "") {
+        return false
+      }
+      this.product_items.splice(0, 0, {})
+    },
+    select_product(node) {
+      console.log("select product", node)
+      this.product_items[0].product_id = node.id;
+      this.product_items[0].product_name = node.name;
+      this.product_items[0].product_price = node.price;
+      if (node.off_price == 0) {
+        this.product_items[0].product_off_price = node.price;
+      } else {
+        this.product_items[0].product_off_price = node.off_price;
+      }
+      this.product_items[0].product_price_id = node.price_id;
+    },
+    add_order() {
+      var self = this;
+      if(this.product_items.length==1){
+        self.$root.modal_component.show_danger_modal('خطا', "حداقل یک محصول اضافه کنید");
+        return false
+      }
+      if(this.user_name=="" || this.user_mobile==""){
+        self.$root.modal_component.show_danger_modal('خطا', "نام و شماره مشتری را وارد کنید");
+        return false
+      }
+      if(this.post_code=="" || this.address==""){
+        self.$root.modal_component.show_danger_modal('خطا', "کد پستی و آدرس را وارد کنید");
+        return false
+      }
+
+
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+      formData.append("id", this.$route.params.order_id);
+      formData.append("token", localStorage.getItem("token"));
+      formData.append("user_name", this.user_name);
+      formData.append("user_mobile", this.user_mobile);
+      formData.append("status_id", this.selected_status);
+      formData.append("products", JSON.stringify(this.product_items));
+      formData.append("city", this.selected_city);
+      formData.append("province", this.selected_province);
+      formData.append("address", this.address);
+      formData.append("post_code", this.post_code);
+
+
+
+
+
+      axios.post('/api/admin/order/add_order_from_admin', formData, {}).then(function (response) {
+
+        var contents = response.data;
+
+        if (response.data.error == 1) {
+          self.$root.modal_component.show_danger_modal('خطا', response.data.msg);
+        } else {
+          self.$root.modal_component.show_success_modal('تایید', response.data.msg);
+          self.$router.push({path: '/dashboard/orders/info/' + response.data.order_id})
+
+        }
+        // self.description = '';
+        // localStorage.setItem("api_token", response.data.access_token);
+        // self.$router.push({ path: 'notes' });
+      })
+          .catch(function (error) {
+            this.$root.modal_component.show_danger_modal('خطا', "خطا از سرور");
+
+            console.log(error);
+          });
+
+    },
+
+    get_status_list() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+
+      axios.post('/api/admin/order/get_order_status', formData, {}).then(function (response) {
+
+        var contents = response.data;
+
+        contents.orders.forEach(function (val) {
+          self.status_items.push(
+              {label: val.title.title, value: val.id}
+          )
+        })
+
+        self.selected_status = self.status_items[0].value;
+        // self.description = '';
+        // localStorage.setItem("api_token", response.data.access_token);
+        // self.$router.push({ path: 'notes' });
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    get_cities() {
+      var self = this;
+
+
+      const formData = new FormData();
+      var url = "/api/market/get_cities";
+
+      formData.append('id', this.selected_province);
+
+      axios.post(url, formData, {}).then(function (response) {
+
+            response.data.data.forEach(function (val) {
+          self.cities.push(
+              {label: val.title, value: val.id}
+          )
+        })
+          if (self.selected_province != 8) {
+            self.selected_city = response.data.data[0].id
+          } else {
+            self.selected_city = 300
+          }
+
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    get_provinces() {
+      var self = this;
+
+
+      const formData = new FormData();
+      var url = "/api/market/get_shipping";
+
+      formData.append('id', this.selected_province);
+
+      axios.post(url, formData, {}).then(function (response) {
+
+        response.data.provinces.forEach(function (val) {
+          self.provinces.push(
+              {label: val.title, value: val.id}
+          )
+        })
+        self.selected_province = 8
+        self.get_cities()
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+
+  }
+}
 
 
 </script>
