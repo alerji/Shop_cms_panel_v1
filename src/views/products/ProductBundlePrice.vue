@@ -28,6 +28,12 @@
                 />
               </CCol>
               <CCol col="6 col-sm-2" style="padding: 1px;" >
+                <CInput
+                    label="کد"
+                    v-model="bundle_price.code"
+                />
+              </CCol>
+              <CCol col="6 col-sm-2" style="padding: 1px;" >
                 <CInputCurrency
                     label="قیمت ویژه"
                     v-model="bundle_price.off_price"

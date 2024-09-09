@@ -137,6 +137,7 @@
           </template>
           <template #bundles="{item,index}">
             <td v-if="item.price_rel!=null">
+              <p>{{item.price_rel.code}}</p>
               <p v-for="bundle in item.price_rel.bundles">
                 {{ bundle.bundle_item.title.title }}
               </p>
