@@ -56,7 +56,6 @@ const options = {
 Vue.use(VueHtmlToPaper, options);
 // axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
-axios.defaults.baseURL = process.env.VUE_APP_BASE_URL;
 axios.interceptors.request.use((config) => {
   // trigger 'loading=true' event here
 if(config.show_pros==null){
@@ -319,15 +318,33 @@ Vue.mixin({
     }
 );
 
-export const bus = new Vue();
-new Vue({
-  el: '#app',
-  router,
-  store,
-  icons,
-  i18n,
-  template: '<App/>',
-  components: {
-    App
-  }
+var self = this;
+fetch('/x_config.json?ver=' + process.env.VUE_APP_VERSION).then(res => res.json()).then(config => {
+
+  localStorage.setItem("web_address", config.web_address);
+  localStorage.setItem("api_address", config.api_address);
+  axios.defaults.baseURL = config.api_address;
+
+  // axios.defaults.withCredentials = true;
+  create_vue()
+
 })
+
+
+export const bus = new Vue();
+
+
+function create_vue() {
+
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    icons,
+    i18n,
+    template: '<App/>',
+    components: {
+      App
+    }
+  })
+}

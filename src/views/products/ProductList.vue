@@ -317,7 +317,7 @@ export default {
       this.$router.push({path: "/dashboard/products/comments/" + item.id});
     },
     go_show_product(item) {
-      window.open(process.env.VUE_APP_BASE_URL + "products/" + item.slug, "_blank");
+      window.open(localStorage.getItem("web_address") + "products/" + item.slug, "_blank");
     },
     upload_excel() {
       var url = '/api/admin/product/update_product_excel';

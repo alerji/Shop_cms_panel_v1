@@ -10,6 +10,10 @@ module.exports = {
     }
   },
   chainWebpack: config => {
+    config.plugin('copy').tap(([options]) => {
+      options[0].ignore.push('x_config.json')
+      return [options]
+    })
     config.output
         .filename(`js/[name].[hash:8].${version}.js`)
         .chunkFilename(`js/[name].[hash:8].${version}.js`)

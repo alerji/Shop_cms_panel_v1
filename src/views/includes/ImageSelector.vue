@@ -24,10 +24,11 @@
                 v-model="preview"
                 :src="preview"
           />
-<div style="display: flex" v-if="multiple">
+<div style="display: flex;width: 100%;
+    flex-flow: wrap;" v-if="multiple">
   <div v-for="(item,index) in selected_media">
-    <div style="border: 1px solid grey" class="position-relative ml-1 mt-1">
-      <CIcon name="cil-trash" class="text-danger position-absolute" @click.native="selected_media.splice(index,1)"/>
+    <div style="border: 1px solid grey;    border-radius: 5px;    margin: 4px;" class="position-relative ml-1 mt-1">
+      <CIcon name="cil-trash" class="text-danger bg-white p-1 rounded position-absolute" size="lg" @click.native="selected_media.splice(index,1)"/>
       <CImg :src="get_image_link(media.filter(x=>x.id==item)[0])" width="65px" height="65px" @click.native="preview=get_image_link(media.filter(x=>x.id==item)[0])"/>
 
     </div>

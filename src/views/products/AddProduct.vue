@@ -235,7 +235,7 @@
                 </div>
 
               </CCol>
-              <CCol col="6 col-sm-4">
+              <CCol col="12 col-sm-6">
 
                 <ImageSelector label="گالری تصویر"
                                v-if="show_gallery"

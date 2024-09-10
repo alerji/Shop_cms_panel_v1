@@ -172,7 +172,51 @@
       </CCardBody>
 
     </CCard>
+<CCard >
+  <CCardHeader>
+    وضعیت های پرداخت
+  </CCardHeader>
+  <CCardBody>
 
+    <CDataTableFixed
+        :items="order_info.payment_info"
+        :fields="fields_payments"
+
+        :items-per-page="20"
+        hover
+        sorter
+        pagination
+    >
+      <template #gateway="{item}">
+        <td>
+          <p class="text-muted">{{ item.gateway.title }}</p>
+        </td>
+      </template>
+
+
+
+
+      <template #updated_at="{item}">
+        <td>
+          <p class="text-muted">{{ get_date_time(item.updated_at) }}</p>
+        </td>
+      </template>
+      <template #status="{item}">
+        <td>
+          <p class="text-muted" v-if="item.status==0">پرداخت نشده</p>
+          <p class="text-muted" v-if="item.status==1">پرداخت شده</p>
+        </td>
+      </template>
+
+      <template #pay_price="{item}">
+        <td>
+          <p class="text-muted">{{ get_currency(item.pay_price) }}</p>
+        </td>
+      </template>
+    </CDataTableFixed>
+
+  </CCardBody>
+</CCard>
     <CCard>
       <CCardHeader>
         <strong>
@@ -295,6 +339,17 @@ export default {
 
         {key: 'user', label: 'ثبت کننده', _style: 'width:10%'},
         {key: 'date', label: 'تاریخ ثبت', _style: 'width:10%;'},
+
+      ],
+      fields_payments: [
+        {key: 'pay_code', label: 'شماره پرداخت', _style: 'width:10%;'},
+
+        {key: 'gateway', label: 'درگاه', _style: 'width:10%'},
+        {key: 'status', label: 'وضعیت', _style: 'width:10%'},
+        {key: 'pay_price', label: 'مبلغ', _style: 'width:10%'},
+        {key: 'reference_number', label: 'رفرنس', _style: 'width:10%'},
+        {key: 'card_number', label: 'شماره کارت', _style: 'width:10%'},
+        {key: 'updated_at', label: 'تاریخ ثبت', _style: 'width:10%;'},
 
       ],
 

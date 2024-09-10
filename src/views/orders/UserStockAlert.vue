@@ -89,7 +89,6 @@ items_status:[],
             }
         },
         mounted() {
-            console.log("process is "+process.env.VUE_APP_BASE_URL);
 
           this.get_news();
 
@@ -108,7 +107,7 @@ items_status:[],
 
             },
             go_show_product(item) {
-                window.open(process.env.VUE_APP_BASE_URL+"products/"+item.slug,"_blank");
+                window.open(localStorage.getItem("web_address")+"products/"+item.slug,"_blank");
 
             },
             get_news() {
