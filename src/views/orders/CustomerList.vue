@@ -14,6 +14,7 @@
                   class="mb-0 table-outline"
                   hover
                   striped
+                  column-filter
 
                   :items="items"
                   :fields="fields"
