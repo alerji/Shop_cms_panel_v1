@@ -132,6 +132,7 @@
                                default_archive="product_category"
                                :preview-image="previewImage"
                 />
+
               </CCol>
             </CRow>
 

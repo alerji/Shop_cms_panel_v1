@@ -15,7 +15,7 @@
                         <CDataTableFixed
                                 :items="items.filter(x=>x.statuses[0].id==status.id)"
                                 :fields="fields"
-
+                                column-filter
                                 :items-per-page="20"
                                 hover
                                 sorter
@@ -40,7 +40,7 @@
 
                             <template #user_mobile="{item}">
                                 <td>
-                                    <p class="text-muted">{{(item.user.phone)}}</p>
+                                    <p class="text-muted">{{(item.user_mobile)}}</p>
                                 </td>
                             </template>
 
@@ -180,11 +180,11 @@ if (this.$route.params.customer_id){
 
                     var contents = response.data;
 
-                    var data_filter = contents.data.map((item, row_id) => {
-                        return {...item, row_id}
-                    });
+                    contents.data.forEach(function (val){
+                      val.user_mobile = val.user.phone
+                    })
 
-                    self.items = data_filter;
+                    self.items = contents.data;
 
                 })
                     .catch(function (error) {
