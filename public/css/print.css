@@ -17659,3 +17659,9 @@ th div{
 .table strong {
 font-size: 16px!important;
 }
+@media print{
+    @page {
+        size: 10cm 8cm;
+
+    }
+}
