@@ -4,9 +4,30 @@
       <CCol col="12">
         <CCard>
           <CCardHeader>
-            <strong v-if="status_form==0">ثبت محصول</strong>
-            <strong v-if="status_form!=0">ویرایش محصول</strong>
-            <CButton color="info" @click="digikala_modal=true">افزودن از سایت دیگر</CButton>
+            <div>
+              <strong v-if="status_form==0">ثبت محصول</strong>
+              <strong v-if="status_form!=0">ویرایش محصول</strong>
+            </div>
+            <div>
+              <CButton v-if="status_form==0" @click="login()" type="submit" ref="submit_form" size="sm"
+                       color="primary">
+                <CIcon name="cil-check-circle"/>
+                افزودن محصول
+              </CButton>
+              <CButton v-if="status_form!=0" @click="login()" type="submit" ref="submit_form" size="sm"
+                       color="primary">
+                <CIcon name="cil-check-circle"/>
+                بروزرسانی
+              </CButton>
+              <CButton color="info" class="mr-1" @click="digikala_modal=true">افزودن از سایت دیگر</CButton>
+              <CButton color="info" class="mr-1" size="sm"  @click="go_to_product()">
+               <CIcon size="sm" name="eye"/>
+              </CButton>
+              <CButton color="info" class="mr-1" size="sm"  @click="copy_product_link()">
+                <CIcon size="sm" name="cil-clone"/>
+              </CButton>
+            </div>
+
           </CCardHeader>
           <CCardBody>
             <CRow>
@@ -328,12 +349,12 @@
             <CButton v-if="status_form==0" @click="login()" type="submit" ref="submit_form" size="sm"
                      color="primary">
               <CIcon name="cil-check-circle"/>
-              ثبت محصول
+              افزودن محصول
             </CButton>
             <CButton v-if="status_form!=0" @click="login()" type="submit" ref="submit_form" size="sm"
                      color="primary">
               <CIcon name="cil-check-circle"/>
-              ویرایش محصول
+              بروزرسانی
             </CButton>
           </CCardFooter>
 
@@ -522,6 +543,36 @@ export default {
     }
   },
   methods: {
+    go_to_product() {
+      window.open(localStorage.getItem("site_url")+"/product/"+this.favorite_url)
+    },
+    copy_product_link() {
+      var textArea = document.createElement("textarea");
+      textArea.value = localStorage.getItem("site_url")+"/product/"+this.favorite_url;
+
+      // Avoid scrolling to bottom
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+
+
+        // Select the text field
+      textArea.select();
+      textArea.setSelectionRange(0, 99999); // For mobile devices
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(textArea.value);
+      this.$toast.open({
+        message: "کپی شد!!!",
+        type: 'success',
+        // all of other options may go here
+      });
+      document.body.removeChild(textArea);
+
+    },
     get_digikala_data() {
       var self = this;
       // console.log("route id "+this.$route.params.cat_id);

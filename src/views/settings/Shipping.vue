@@ -19,7 +19,7 @@
                 pagination
             >
 
-              <template #نام="{item}">
+              <template #title="{item}">
 
                 <td>
                   <p class="text-muted">{{ item.title }}</p>
@@ -28,7 +28,7 @@
 
               </template>
 
-              <template #تصویر="{item}">
+              <template #image="{item}">
 
 
                 <td>
@@ -37,18 +37,24 @@
 
               </template>
 
-              <template #قیمت="{item}">
+              <template #price="{item}">
                 <td>
                   <p class="text-muted">{{ get_currency(item.price) }}</p>
                 </td>
               </template>
-              <template #توضیحات="{item}">
+              <template #status="{item}">
+                <td>
+                  <p v-if="item.status==1" class="text-muted">فعال</p>
+                  <p v-if="item.status==0" class="text-muted">غیر فعال</p>
+                </td>
+              </template>
+              <template #summary="{item}">
                 <td>
                   <p class="text-muted">{{ item.description }}</p>
                 </td>
               </template>
 
-              <template #عملیات="{item,index}">
+              <template #operation="{item,index}">
                 <td class="py-2">
                   <CButton
                       color="primary"
@@ -100,6 +106,14 @@
                 <CInputCurrency
                     v-model="price"
                     label="قیمت"
+                />
+              </CCol>
+              <CCol>
+                <CSelect
+                    :options="[{label:'فعال',value:1},{label:'غیرفعال',value:0}]"
+
+                    :value.sync="selected_status"
+                    label="انتخاب وضعیت"
                 />
               </CCol>
               <CCol col="12">
@@ -154,15 +168,17 @@ export default {
       name: '',
       file: [],
       price: '',
+      selected_status: 1,
       previewImage: null,
       description: '',
       items: [],
       fields: [
-        {key: 'تصویر', _style: 'width:10%;'},
-        {key: 'نام', _style: 'width:20%'},
-        {key: 'قیمت', _style: 'width:10%'},
-        {key: 'توضیحات', _style: 'width:20%'},
-        {key: 'عملیات', _style: 'width:15%;'},
+        {label: 'تصویر',key: 'image', _style: 'width:10%;'},
+        {label: 'نام',key: 'title', _style: 'width:20%'},
+        {label: 'قیمت',key: 'price', _style: 'width:10%'},
+        {label: 'وضعیت',key: 'status', _style: 'width:10%'},
+        {label: 'توضیحات',key: 'summary', _style: 'width:20%'},
+        {label: 'عملیات',key: 'operation', _style: 'width:15%;'},
 
       ],
 
@@ -191,6 +207,7 @@ export default {
       this.name = item.title;
       this.description = item.description;
       this.price = item.price;
+      this.selected_status = item.status;
       this.previewImage = item.image;
       this.file = [item.image_id];
 
@@ -240,13 +257,13 @@ formData.append('cat_id', this.$route.params.cat_id)
       } else {
         url = "/api/admin/order/update_shipping";
         formData.append('id', this.status_form)
-
       }
 
       formData.append('image', this.file[0]);
 
       formData.append('name', this.name);
       formData.append('price', this.price);
+      formData.append('status', this.selected_status);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
 
