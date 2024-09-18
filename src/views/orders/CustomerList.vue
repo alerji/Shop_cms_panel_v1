@@ -26,6 +26,11 @@
                     <p>{{ get_date_time(item.created_at) }}</p>
                   </td>
                 </template>
+                <template #credit="{item}">
+                  <td>
+                    <p>{{ item.credit? get_currency(item.credit.balance) : '0' }} تومان</p>
+                  </td>
+                </template>
                 <template #operation="{item,index}">
                   <td class="py-2">
                     <CButton
@@ -89,6 +94,7 @@
                   {key: 'created_at', label: 'تاریخ ثبت نام', _classes: 'text-center'},
                   {key: 'phone', label: 'شماره همراه', _classes: 'text-center'},
                   {key: 'orders_count', label: 'تعداد سفارش', _classes: 'text-center'},
+                  {key: 'credit', label: 'کیف پول', _classes: 'text-center'},
                   {key: 'operation', label: 'عملیات'},
                 ],
 items_status:[],
