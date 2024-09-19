@@ -14,6 +14,7 @@
             @change="tableFilterChange($event.target.value, 'change')"
             :value="tableFilterState"
         >
+
       </div>
 
       <div
@@ -51,6 +52,7 @@
         <tr v-if="header">
           <template v-for="(name, index) in columnNames">
             <th
+                :colspan="fields[index].colspan ?fields[index].colspan : 1"
                 @click="changeSort(rawColumnNames[index], index)"
                 :class="[headerClass(index), sortingIconStyles]"
                 :style="headerStyles(index)"
@@ -72,7 +74,22 @@
                 />
               </slot>
             </th>
+
           </template>
+          <th v-if="checkbox"
+              :colspan="1"
+              :class="[headerClass(1), sortingIconStyles]"
+              :style="headerStyles(1)+';width:5%'"
+              key="checkbox_1"
+          >
+
+            <div>
+              <input type="checkbox" v-model="checkbox_all"
+              />
+            </div>
+
+          </th>
+
         </tr>
 
         <tr v-if="columnFilter" class="table-sm">
@@ -89,6 +106,16 @@
               </slot>
             </th>
           </template>
+          <th v-if="checkbox"
+              :class="headerClass(0)"
+          >
+
+            <div>
+
+            </div>
+
+          </th>
+
         </tr>
         </thead>
 
@@ -121,6 +148,14 @@
                 {{ String(item[colName]) }}
               </td>
             </template>
+            <td
+                key="checkbox_data"
+                v-if="checkbox"
+            >
+              <input type="checkbox" ref="permissions[]" v-model="checkbox_init_ids"
+                     :value="item[checkbox_key]"/>
+            </td>
+
           </tr>
           <tr
               v-if="$scopedSlots.details"
@@ -233,7 +268,10 @@ export default {
   },
   props: {
     sticky_zero: {type: Boolean, default: false},
-
+    export_excel: {type: Boolean, default: false},
+    checkbox: {type: Boolean, default: false},
+    checkbox_key: {type: String, default: ""},
+    checkbox_ids: Array,
     items: Array,
     fields: Array,
     itemsPerPage: {
@@ -250,12 +288,7 @@ export default {
     size: String,
     height: String,
     dark: Boolean,
-    striped: {
-      type: Boolean,
-      default: () => {
-        return true
-      }
-    },
+    striped: Boolean,
     fixed: Boolean,
     hover: Boolean,
     border: Boolean,
@@ -289,19 +322,35 @@ export default {
         column: null,
         asc: true
       },
+      checkbox_init_ids: [],
+
+      checkbox_all: false,
       page: this.activePage || 1,
       perPageItems: this.itemsPerPage,
       passedItems: this.items || []
     }
   },
-  mounted() {
-    var local_page = localStorage.getItem("paginate" + window.location.pathname);
-    if (local_page != null && local_page != "") {
-      this.page = parseInt(localStorage.getItem("paginate" + window.location.pathname));
-    }
-
-  },
   watch: {
+    'checkbox_init_ids':function (){
+      this.$emit('update:checkbox_ids', this.checkbox_init_ids)
+
+    },
+    'checkbox_ids':function (){
+      this.checkbox_init_ids = this.checkbox_ids;
+    },
+    'checkbox_all': function () {
+      var self = this
+      if (this.checkbox_all == true) {
+        self.checkbox_init_ids = []
+
+        // console.log("currentItems checkbox", self.currentItems,this.columnFiltered);
+        self.columnFiltered.forEach(function (val) {
+          self.checkbox_init_ids.push(val[self.checkbox_key])
+        })
+      } else {
+        self.checkbox_init_ids = []
+      }
+    },
     itemsPerPage(val) {
       this.perPageItems = val
     },
@@ -344,9 +393,6 @@ export default {
         }
         this.$emit('filtered-items-change', val)
       }
-    },
-    page: function () {
-      localStorage.setItem("paginate" + window.location.pathname, this.page);
     }
   },
   computed: {
@@ -495,22 +541,22 @@ export default {
     },
     tableFilterData() {
       return {
-        label: this.tableFilter.label || 'جستجو:',
-        placeholder: this.tableFilter.placeholder || 'تایپ کنید...'
+        label: this.tableFilter.label || 'Filter:',
+        placeholder: this.tableFilter.placeholder || 'type string...'
       }
     },
     paginationSelect() {
       return {
-        label: this.itemsPerPageSelect.label || 'تعداد در صفحه:',
+        label: this.itemsPerPageSelect.label || 'Items per page:',
         values: this.itemsPerPageSelect.values || [5, 10, 20, 50]
       }
     },
     noItemsText() {
       const customValues = this.noItemsView || {}
       if (this.passedItems.length) {
-        return customValues.noResults || 'مورد جستجو شده وجود ندارد'
+        return customValues.noResults || 'No filtering results'
       }
-      return customValues.noItems || 'موردی وجود ندارد'
+      return customValues.noItems || 'No items'
     }
   },
   methods: {

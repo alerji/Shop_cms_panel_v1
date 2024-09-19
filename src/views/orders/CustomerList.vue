@@ -10,12 +10,37 @@
             </CCardHeader>
 
             <CCardBody class="">
+              <CRow v-if="checkbox_items.length>0">
+                <CCol>
+                  {{checkbox_items.length}} مشتری انتخاب شده
+                </CCol>
+                <CCol>
+                  <CInput horizontal
+                      label="مبلغ" v-model="credit_price"/>
+
+                </CCol>
+                <CCol>
+
+                  <CButton color="info" class="mx-1"
+                           @click="increase_credit()">افزایش اعتبار</CButton>
+                  <CButton color="warning"
+                           @click="decrease_credit()">کاهش اعتبار</CButton>
+                </CCol>
+                <CCol>
+
+                </CCol>
+              </CRow>
+
               <CDataTableFixed
                   class="mb-0 table-outline"
                   hover
                   striped
                   column-filter
-
+:checkbox="true"
+:pagination="true"
+                  :items-per-page="20"
+                  :checkbox_ids.sync="checkbox_items"
+                  checkbox_key="id"
                   :items="items"
                   :fields="fields"
                   head-color="light"
@@ -69,6 +94,7 @@
         },
         data() {
             return {
+              credit_price:"0",
                 delete_tag:new Date()+"_delete_confirm",
                 edit_row: null,
                 edit_flag: false,
@@ -99,6 +125,7 @@
                 ],
 items_status:[],
                 items: [],
+checkbox_items:[],
 
                 details: [],
                 collapseDuration: 0,
@@ -118,6 +145,34 @@ items_status:[],
 
         },
         methods: {
+          increase_credit() {
+            var self = this;
+            var formData = new FormData();
+            formData.append("price", this.credit_price);
+            formData.append("user_id", JSON.stringify(this.checkbox_items));
+
+            axios.post('/api/admin/user/update_credit_bulk',formData, {}).then(function (response) {
+              self.checkbox_items = []
+              self.get_news();
+            }).catch(function (error) {
+              console.log(error);
+            });
+
+          },
+          decrease_credit() {
+            var self = this;
+            var formData = new FormData();
+            formData.append("price", this.credit_price*-1);
+            formData.append("user_id", JSON.stringify(this.checkbox_items));
+
+            axios.post('/api/admin/user/update_credit_bulk',formData, {}).then(function (response) {
+              self.checkbox_items = []
+              self.get_news();
+            }).catch(function (error) {
+              console.log(error);
+            });
+
+          },
 
             editDetails(item,index) {
                 this.$router.push({path:"/dashboard/products/edit/"+item.post_id});
