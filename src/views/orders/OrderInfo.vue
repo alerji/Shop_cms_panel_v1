@@ -87,9 +87,21 @@
           <CCol><label>نوع ارسال : {{ order_info.shipping_title }}</label></CCol>
           <CCol><label>هزینه ارسال : {{ get_currency(order_info.shipping_price) }}</label></CCol>
         </CRow>
+        <hr>
         <CRow>
-          <CCol>
+          <CCol col="6">
             <div>آدرس :</div>
+
+          </CCol>
+          <CCol col="6">
+            <CButton
+                @click="edit_address_modal=true"
+                color="success"
+                class="mx-1">
+              ویرایش آدرس
+            </CButton>
+          </CCol>
+          <CCol>
             <div>
               <label class="mx-3">استان: {{ order_info.address.province }}</label>
               <label class="mx-3">شهر: {{ order_info.address.city }}</label>
@@ -296,6 +308,54 @@
         <CButton @click="add_tracking_post()" color="success">تایید</CButton>
       </template>
     </CModal>
+    <CModal
+        title="ویرایش آدرس"
+        color="info"
+        :show.sync="edit_address_modal"
+    >
+      <CRow>
+        <CCol col="6">
+          <CSelect
+              :options="provinces"
+              :value.sync="order_info.address.province_id"
+              label="استان"
+          />
+        </CCol>
+        <CCol col="6">
+          <CSelect
+              :options="cities"
+              :value.sync="order_info.address.city_id"
+              label="شهر"
+          />
+        </CCol>
+        <CCol col="6">
+          <CInput
+              label="کد پستی"
+              v-model="order_info.address.post_code"/>
+        </CCol>
+        <CCol col="6">
+          <CInput
+              label="گیرنده"
+              v-model="order_info.address.receiver"/>
+        </CCol>
+        <CCol col="6">
+          <CInput
+              label="موبایل"
+              v-model="order_info.address.mobile"/>
+        </CCol>
+        <CCol col="12">
+          <CTextarea
+              label="آدرس"
+              v-model="order_info.address.address"/>
+        </CCol>
+
+
+      </CRow>
+      <template #footer>
+        <CButton @click="edit_address_modal = false" color="danger">انصراف</CButton>
+        <CButton @click="edit_address()" color="success">ویرایش آدرس</CButton>
+      </template>
+    </CModal>
 
   </div>
 
@@ -317,8 +377,10 @@ export default {
       delete_tag: new Date() + "_delete_confirm",
       tracking_post_modal: false,
       tracking_post: '',
-      edit_row: null,
-      edit_flag: false,
+
+      edit_address_modal: false,
+      provinces:[],
+      cities:[],
       edit_product_weight: '',
       name: '',
       fields_products: [
@@ -386,7 +448,8 @@ export default {
     }
   },
   mounted() {
-    this.get_status_list();
+    this.get_provinces();
+
     bus.$on(this.delete_tag, (data) => {
       // alert(data);
       if (data == 'true') {
@@ -396,7 +459,11 @@ export default {
       }
     });
   },
-  watch: {},
+  watch: {
+    'order_info.address.province_id': function () {
+      this.get_cities()
+    }
+  },
   methods: {
     print() {
     // const data = document.getElementById('print_order_area').innerHTML
@@ -423,6 +490,36 @@ export default {
         var contents = response.data;
 
         self.order_info = contents.data;
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    edit_address() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+      formData.append("id", this.order_info.address.id);
+      formData.append("address", this.order_info.address.address);
+      formData.append("province", this.order_info.address.province_id);
+      formData.append("city", this.order_info.address.city_id);
+      formData.append("receiver", this.order_info.address.receiver);
+      formData.append("mobile", this.order_info.address.mobile);
+      formData.append("post_code", this.order_info.address.post_code);
+      axios.post('/api/admin/user/edit_user_address', formData, {}).then(function (response) {
+        self.edit_address_modal= false
+        if (response.data.error == 1) {
+          self.$root.modal_component.show_danger_modal('خطا', response.data.msg);
+
+        } else {
+          self.$root.modal_component.show_success_modal('تایید', response.data.msg);
+
+        }
+    self.get_news();
 
 
       })
@@ -480,6 +577,60 @@ export default {
         // self.description = '';
         // localStorage.setItem("api_token", response.data.access_token);
         // self.$router.push({ path: 'notes' });
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    get_provinces() {
+      var self = this;
+
+
+      const formData = new FormData();
+      var url = "/api/market/get_shipping";
+
+      formData.append('id', this.selected_province);
+
+      axios.post(url, formData, {}).then(function (response) {
+
+        response.data.provinces.forEach(function (val) {
+          self.provinces.push(
+              {label: val.title, value: val.id}
+          )
+        })
+        self.get_status_list();
+
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    get_cities() {
+      var self = this;
+
+
+      const formData = new FormData();
+      var url = "/api/market/get_cities";
+
+      formData.append('id', this.order_info.address.province_id);
+
+      axios.post(url, formData, {}).then(function (response) {
+        self.cities = [{label:'انتخاب کنید',value:0}]
+        response.data.data.forEach(function (val) {
+          self.cities.push(
+              {label: val.title, value: val.id}
+          )
+        })
+
+          // self.order_info.address.city_id = response.data.data[0].id
+
+
+
       })
           .catch(function (error) {
 

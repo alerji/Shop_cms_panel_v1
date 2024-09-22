@@ -387,7 +387,7 @@ export default {
       formData.append('id', this.selected_province);
 
       axios.post(url, formData, {}).then(function (response) {
-
+        self.cities = []
             response.data.data.forEach(function (val) {
           self.cities.push(
               {label: val.title, value: val.id}
