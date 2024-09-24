@@ -60,7 +60,7 @@
               </template>
               <template #user="{item}">
                 <td>
-                  <p class="text-muted">{{ (item.user.name) }}</p>
+                  <p class="text-muted">{{ (item.user) }}</p>
                 </td>
               </template>
 
@@ -144,7 +144,7 @@ export default {
         {key: 'date', label: 'تاریخ ثبت', _style: 'width:10%;'},
 
         {key: 'user', label: 'مشتری', _style: 'width:10%'},
-        {key: 'user_mobile', label: 'مشتری', _style: 'width:10%'},
+        {key: 'user_mobile', label: 'موبایل', _style: 'width:10%'},
         {key: 'total_price', label: 'مبلغ', _style: 'width:10%;'},
         {key: 'operation', label: 'عملیات', _style: 'width:10%;'},
 
@@ -226,6 +226,7 @@ export default {
 
         contents.data.forEach(function (val) {
           val.user_mobile = val.user.phone
+          val.user = val.user.name
         })
 
         self.items = contents.data;
