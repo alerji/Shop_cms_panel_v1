@@ -36,10 +36,33 @@
       <CCardBody>
         <CTabs>
           <CTab v-for="filter in filters" :title="filter.label">
+            <CRow v-if="checkbox_ids.length>0">
+              <CCol col="6 col-sm-3">
+                <CSelect
+                  :options="bulk_edit_items"
+                  :value.sync="selected_bulk_edit"
+                  />
+              </CCol>
+              <CCol col="6 col-sm-3">
+                <CInputCurrency
+                    placeholder="مقدار"
+                    v-model="bulk_edit_value"
+                />
+              </CCol>
+              <CCol col="6 col-sm-3">
+<CButton
+color="primary"
+@click="bulk_edit()"
+>اعمال تغییرات</CButton>
+              </CCol>
+            </CRow>
             <CDataTableFixed
                 :items="items.filter(x=>x.status==filter.value)"
                 :fields="fields"
                 column-filter
+                :checkbox="true"
+                :checkbox_ids.sync="checkbox_ids"
+                checkbox_key="id"
                 :items-per-page="20"
                 hover
                 sorter
@@ -245,8 +268,19 @@ export default {
   },
   data() {
     return {
+      bulk_edit_items:[
+        {label:'انتخاب کنید',value:''},
+        {label:'افزایش قیمت (مبلغ)',value:'increase_price'},
+        {label:'افزایش قیمت (درصد)',value:'increase_percent'},
+        {label:'کاهش قیمت (مبلغ)',value:'decrease_price'},
+        {label:'کاهش قیمت (درصد)',value:'decrease_percent'},
+        {label:'اعمال تخفیف (مبلغ)',value:'off_price'},
+        {label:'اعمال تخفیف (درصد)',value:'off_percent'},
+      ],
+      selected_bulk_edit:'',
+      bulk_edit_value:'',
       confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
-
+      checkbox_ids:[],
       name: '',
       file: '',
       color: '',
@@ -325,6 +359,25 @@ export default {
 
       var formData = new FormData();
       formData.append("file", this.excel_file)
+      axios.post(url, formData, {}).then(function (response) {
+        self.$root.modal_component.show_api_response_modals(response);
+        self.get_data()
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+    bulk_edit() {
+      var url = '/api/admin/product/bulk_edit_products';
+      var self = this
+
+      var formData = new FormData();
+      formData.append("op", this.selected_bulk_edit)
+      formData.append("value", this.bulk_edit_value)
+      formData.append("ids", this.checkbox_ids)
       axios.post(url, formData, {}).then(function (response) {
         self.$root.modal_component.show_api_response_modals(response);
         self.get_data()
