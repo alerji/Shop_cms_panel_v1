@@ -221,8 +221,8 @@
       </template>
       <template #status="{item}">
         <td>
-          <p class="text-muted" v-if="item.status==0">پرداخت نشده</p>
-          <p class="text-muted" v-if="item.status==1">پرداخت شده</p>
+          <p class="text-danger" v-if="item.status==0">پرداخت نشده</p>
+          <p class="text-success" v-if="item.status==1">پرداخت شده</p>
         </td>
       </template>
 
@@ -472,20 +472,10 @@ export default {
   },
   methods: {
     print() {
-    // const data = document.getElementById('print_order_area').innerHTML
       this.print_element("print_order_area","print")
-      // var mywindow = window.open('', 'my div', 'height=400,width=600');
-      // mywindow.document.write('<html dir="rtl"><head><title>print</title>');
-      // /*optional stylesheet*/ //mywindow.document.write('<link rel="stylesheet" href="main.css" type="text/css" />');
-      // mywindow.document.write('</head><body >');
-      // mywindow.document.write(data);
-      // mywindow.document.write('</body></html>');
-      //
-      // mywindow.print();
-      // mywindow.close();
 
     },
-    get_news() {
+    get_order_info() {
       var self = this;
       // console.log("route id "+this.$route.params.cat_id);
       var formData = new FormData();
@@ -496,6 +486,26 @@ export default {
         var contents = response.data;
 
         self.order_info = contents.data;
+       if(self.order_info.credit!=null){
+        let payed_price=0;
+        if(self.order_info.payment_info.filter(x=>x.status==1).length>0){
+          payed_price = self.order_info.payment_info.filter(x=>x.status==1)[0].pay_price
+        }
+         let obj = {
+           pay_code:self.order_info.credit.id,
+           gateway:{},
+           status:1,
+           pay_price:(self.order_info.credit.price *-1) - payed_price,
+           reference_number:'',
+           card_number:'',
+           updated_at:self.order_info.credit.updated_at
+         }
+        obj.gateway.title = 'کیف پول'
+         if(obj.pay_price!=0){
+           self.order_info.payment_info.push(obj)
+
+         }
+       }
 
 
       })
@@ -525,7 +535,7 @@ export default {
           self.$root.modal_component.show_success_modal('تایید', response.data.msg);
 
         }
-    self.get_news();
+    self.get_order_info();
 
 
       })
@@ -550,7 +560,7 @@ export default {
           self.$root.modal_component.show_success_modal('تایید', response.data.msg);
 
         }
-        self.get_news();
+        self.get_order_info();
 
         // self.description = '';
         // localStorage.setItem("api_token", response.data.access_token);
@@ -578,7 +588,7 @@ export default {
           self.$root.modal_component.show_success_modal('تایید', response.data.msg);
 
         }
-        self.get_news();
+        self.get_order_info();
 
         // self.description = '';
         // localStorage.setItem("api_token", response.data.access_token);
@@ -661,7 +671,7 @@ export default {
         })
 
         self.selected_status = self.status_items[0].value;
-        self.get_news();
+        self.get_order_info();
 
       })
           .catch(function (error) {
