@@ -101,6 +101,7 @@
                 />
 
               </CCol>
+
               <CCol col="12">
                 <ImageSelector label="تصویر"
                                :media_id.sync="file"

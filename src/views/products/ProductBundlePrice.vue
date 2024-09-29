@@ -202,6 +202,7 @@ select_image(bundle_price,image,index){
 
       axios.post(url, formData, {}).then((res) => {
 
+        self.$root.modal_component.show_api_response_modals(res);
 
         if (res.data.error == 0) {
 

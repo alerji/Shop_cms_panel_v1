@@ -4,18 +4,19 @@
     <CCard>
       <CCardHeader>
         <CRow>
-          <CCol>
-            <strong>
+          <CCol col="6">
+            <strong v-if="order_id==0">
               افزودن سفارش
             </strong>
+            <strong v-if="order_id!=0">
+              ویرایش سفارش
+            </strong>
           </CCol>
-          <CCol class="text-left">
+          <CCol col="6" class="text-left">
             <strong>
             </strong>
           </CCol>
         </CRow>
-
-
       </CCardHeader>
 
       <CCardBody class="">
@@ -25,18 +26,22 @@
           <CCol>
             <CInput
                 label="نام مشتری"
+                :disabled="order_id!=0"
                 v-model="user_name"
             />
           </CCol>
           <CCol>
             <CInput
                 label="موبایل مشتری"
+                :disabled="order_id!=0"
+
                 v-model="user_mobile"
             />
           </CCol>
           <CCol>
             <CSelect
                 :options="status_items"
+                v-if="order_id==0"
 
                 :value.sync="selected_status"
                 label="انتخاب وضعیت"
@@ -45,7 +50,9 @@
 
         </CRow>
         <hr>
-        <CRow>
+        <CRow
+            v-if="order_id==0"
+        >
           <CCol col="12">
             آدرس سفارش
           </CCol>
@@ -159,7 +166,7 @@
                        class="mr-1"
 
                        size="sm"
-                       @click="product_items.splice(index,0)"
+                       @click="product_items.splice(index,1)"
               >
                 <CIcon name="cil-trash" size="sm"/>
               </CButton>
@@ -168,7 +175,8 @@
 
 
         </CDataTableFixed>
-        <CButton @click="add_order()" outlined color="primary">افزودن سفارش</CButton>
+        <CButton @click="add_order()" v-if="order_id==0" outlined color="primary">افزودن سفارش</CButton>
+        <CButton @click="add_order()" v-if="order_id!=0" outlined color="primary">ویرایش سفارش</CButton>
       </CCardBody>
 
     </CCard>
@@ -200,6 +208,9 @@ export default {
   },
   data() {
     return {
+      order_id: 0,
+      order_info: {},
+
       user_name: '',
       user_mobile: '',
       delete_tag: new Date() + "_delete_confirm",
@@ -207,12 +218,12 @@ export default {
       product_items: [{}],
       product_fields: [
         {key: 'row', label: '#', _style: 'width:3%'},
-        {key: 'product_name', label: 'کالا', _style: 'width:10%;'},
+        {key: 'product_name', label: 'کالا', _style: 'width:20%;'},
 
         {key: 'product_qty', label: 'تعداد', _style: 'width:5%'},
-        {key: 'product_price', label: 'مبلغ', _style: 'width:10%'},
-        {key: 'product_off_price', label: 'قیمت بعد تخفیف', _style: 'width:10%;'},
-        {key: 'total_price', label: 'مبلغ کل', _style: 'width:10%;'},
+        {key: 'product_price', label: 'مبلغ', _style: 'width:7%'},
+        {key: 'product_off_price', label: 'قیمت بعد تخفیف', _style: 'width:7%;'},
+        {key: 'total_price', label: 'مبلغ کل', _style: 'width:7%;'},
         {key: 'operation', label: 'عملیات', _style: 'width:5%;'},
 
 
@@ -227,6 +238,7 @@ export default {
 
       status_items: [],
       selected_status: 0,
+
 
       cities: [],
       selected_city: 0,
@@ -266,7 +278,10 @@ export default {
   mounted() {
     this.get_provinces();
     this.get_status_list();
-
+    if (this.$route.params.order_id != null) {
+      this.order_id = this.$route.params.order_id
+      this.get_order_info();
+    }
   },
   watch: {
     'selected_province': function () {
@@ -274,6 +289,46 @@ export default {
     }
   },
   methods: {
+    get_order_info() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+      formData.append("id", this.$route.params.order_id);
+      formData.append("token", localStorage.getItem("token"));
+      axios.post('/api/admin/order/get_order', formData, {}).then(function (response) {
+
+        var contents = response.data;
+
+        self.order_info = contents.data;
+        self.user_name = self.order_info.user.name
+        self.user_mobile = self.order_info.user.phone
+        self.order_info.products.forEach(function (val) {
+          let obj = {
+            product_name: val.title,
+            product_qty: val.count,
+            product_id: val.price_rel.product_id,
+            product_price: val.price_rel.price,
+            product_off_price: val.price,
+            product_price_id : val.price_rel.id,
+
+          }
+          if (val.price_rel.bundles.length > 0) {
+            val.price_rel.bundles.forEach(function (bundle) {
+              obj.product_name += (" " + bundle.bundle_item.title.title)
+            })
+          }
+          self.product_items.push(obj)
+
+        })
+
+      })
+          .catch(function (error) {
+
+            console.log(error);
+          });
+
+    },
+
     add_product() {
       if (this.product_items[0].product_off_price == null) {
         return false
@@ -297,19 +352,20 @@ export default {
     },
     add_order() {
       var self = this;
-      if(this.product_items.length==1){
+      if (this.product_items.length == 1) {
         self.$root.modal_component.show_danger_modal('خطا', "حداقل یک محصول اضافه کنید");
         return false
       }
-      if(this.user_name=="" || this.user_mobile==""){
+      if (this.user_name == "" || this.user_mobile == "") {
         self.$root.modal_component.show_danger_modal('خطا', "نام و شماره مشتری را وارد کنید");
         return false
       }
-      if(this.post_code=="" || this.address==""){
-        self.$root.modal_component.show_danger_modal('خطا', "کد پستی و آدرس را وارد کنید");
-        return false
+      if(this.order_id==0){
+        if (this.post_code == "" || this.address == "") {
+          self.$root.modal_component.show_danger_modal('خطا', "کد پستی و آدرس را وارد کنید");
+          return false
+        }
       }
-
 
       // console.log("route id "+this.$route.params.cat_id);
       var formData = new FormData();
@@ -324,11 +380,13 @@ export default {
       formData.append("address", this.address);
       formData.append("post_code", this.post_code);
 
+      var url = '/api/admin/order/add_order_from_admin'
+      if (this.order_id != 0) {
+        url = '/api/admin/order/edit_order_from_admin'
+        formData.append("order_id", this.order_id);
 
-
-
-
-      axios.post('/api/admin/order/add_order_from_admin', formData, {}).then(function (response) {
+      }
+      axios.post(url, formData, {}).then(function (response) {
 
         var contents = response.data;
 
@@ -388,17 +446,16 @@ export default {
 
       axios.post(url, formData, {}).then(function (response) {
         self.cities = []
-            response.data.data.forEach(function (val) {
+        response.data.data.forEach(function (val) {
           self.cities.push(
               {label: val.title, value: val.id}
           )
         })
-          if (self.selected_province != 8) {
-            self.selected_city = response.data.data[0].id
-          } else {
-            self.selected_city = 300
-          }
-
+        if (self.selected_province != 8) {
+          self.selected_city = response.data.data[0].id
+        } else {
+          self.selected_city = 300
+        }
 
 
       })

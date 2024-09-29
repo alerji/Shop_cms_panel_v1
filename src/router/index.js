@@ -638,6 +638,15 @@ function configRoutes() {
                                 requiresAuth: true,
                                 requiresRole: "add_order"
                             }
+                        }, {
+                            path: 'edit-order/:order_id',
+                            name: 'ویرایش سفارش',
+                            props: true,
+                            component: AddOrder,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_order"
+                            }
                         },{
                             path: 'customers',
                             name: 'لیست مشتریان',

@@ -104,6 +104,13 @@
                 />
               </CCol>
               <CCol col="12">
+                <CInput
+                    v-model="priority"
+
+                    label="اولویت"
+                />
+              </CCol>
+              <CCol col="12">
                 <div class="control_wrapper">
                   <treeselect
                       v-model="value_category"
@@ -176,6 +183,7 @@ export default {
   data() {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+      priority: '1',
 
       name: '',
       file: '',
@@ -187,6 +195,8 @@ export default {
         {key: 'row',label: '#', _style: 'width:3%'},
         {key: 'نام', _style: 'width:20%'},
         {key: 'code',label:'کد', _style: 'width:10%'},
+        {key: 'priority',label: 'اولویت', _style: 'width:20%'},
+
         {key: 'عملیات', _style: 'width:30%;'},
       ],
       options_category: [],
@@ -222,6 +232,7 @@ export default {
       var self = this;
       this.name = item.title.title;
       this.code = item.code;
+      this.priority = item.priority;
       this.value_category = []
       item.categories.forEach(function (val){
         self.value_category.push(val.category_id)
@@ -233,6 +244,7 @@ export default {
       var self = this;
       this.name = ''
       this.code =''
+      this.priority ='1'
       this.value_category = []
 
       this.status_form = 0
@@ -292,6 +304,7 @@ export default {
 
       formData.append('name', this.name);
       formData.append('code', this.code);
+      formData.append('priority', this.priority);
       formData.append('cat_list', this.value_category);
 
       axios.post(url, formData, {}).then((res) => {
@@ -300,6 +313,7 @@ export default {
         self.status_form = 0;
         self.name = '';
         self.code = '';
+        self.priority = '1';
         self.value_category = [];
         self.get_data();
 

@@ -24,6 +24,12 @@
               class="mx-1">
             پرینت اطلاعات
           </CButton>
+          <CButton
+              @click="$router.push({path:'/dashboard/orders/edit-order/'+order_info.id})"
+              color="warning"
+              class="mx-1">
+            ویرایش سفارش
+          </CButton>
         </strong>
       </CCardHeader>
 

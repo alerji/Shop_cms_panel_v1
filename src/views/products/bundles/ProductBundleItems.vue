@@ -86,6 +86,13 @@
                     label="نام ایتم"
                 />
               </CCol>
+              <CCol col="12">
+                <CInput
+                    v-model="code"
+
+                    label="کد ایتم"
+                />
+              </CCol>
 
               <CCol col="12">
                 <CSelect
@@ -146,6 +153,7 @@ export default {
       name: '',
       file: [],
       color: '',
+      code: '',
       view_type:0 ,
       view_types:[{label:'بدون نمایش',value:0},{label:'نمایش رنگ',value:1},{label:'نمایش تصویر',value:2}] ,
       previewImage: null,
@@ -180,6 +188,7 @@ export default {
 
     editDetails(item) {
       this.name = item.title.title;
+      this.code = item.code;
       this.view_type = parseInt(item.view_type);
       this.color = item.color;
       this.file = item.image_id;
@@ -223,6 +232,7 @@ export default {
 
       formData.append('image', this.file[0]);
       formData.append('name', this.name);
+      formData.append('code', this.code);
       formData.append('view_type', this.view_type);
       formData.append('color', this.color);
       formData.append('bundle_id', this.$route.params.bundle_id);
@@ -233,6 +243,7 @@ export default {
 
         self.status_form = 0;
         self.name = '';
+        self.code = '';
 
         self.get_categories();
 

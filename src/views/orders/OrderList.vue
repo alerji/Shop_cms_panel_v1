@@ -143,6 +143,7 @@ export default {
         {key: 'row', label: '#', _style: 'width:3%'},
         {key: 'date', label: 'تاریخ ثبت', _style: 'width:10%;'},
 
+        {key: 'id', label: 'شماره سفارش', _style: 'width:10%'},
         {key: 'user', label: 'مشتری', _style: 'width:10%'},
         {key: 'user_mobile', label: 'موبایل', _style: 'width:10%'},
         {key: 'total_price', label: 'مبلغ', _style: 'width:10%;'},
