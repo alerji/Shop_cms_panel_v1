@@ -174,6 +174,31 @@ export default [
             },
 
             //**************************8 //**************************8
+            {
+                name: "گزارشات",
+
+                _name: 'CSidebarNavDropdown',
+                route: '/dashboard/reports',
+                icon: 'cil-calculator',
+
+                items: [
+                    {
+                        name: "گزارش فروش زمانی",
+                        to: '/dashboard/reports/report-date',
+                        role: 'add_product'
+                    },{
+                        name: "گزارش فروش مناطق",
+                        to: '/dashboard/reports/province',
+                        role: 'add_product'
+                    },{
+                        name: "گزارش فروش کالاها",
+                        to: '/dashboard/reports/products',
+                        role: 'add_product'
+                    },
+                ]
+            },
+
+            //**************************8 //**************************8
 
             {
 

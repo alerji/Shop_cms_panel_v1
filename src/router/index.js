@@ -21,6 +21,7 @@ import TemplateSettings from "@/views/settings/TemplateSettings";
 import CustomerList from "@/views/orders/CustomerList.vue";
 import UserCarts from "../views/orders/UserCarts";
 import UserStockAlert from "../views/orders/UserStockAlert";
+import ReportDate from "@/views/reports/ReportDate.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -719,6 +720,46 @@ function configRoutes() {
                             }
                         },
 
+                    ]
+                },
+   //*************************************************
+                {
+                    path: 'report',
+                    name: 'گزارشات',
+                    props: true,
+                    component: {render (c){return c('router-view')}},
+                    meta: {
+                        requiresAuth: true,
+                    },
+                    children:[
+                        {
+                            path: 'report-date',
+                            name: 'گزارش بازه زمانی',
+                            props: true,
+                            component: ReportDate,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        }, {
+                            path: 'province',
+                            name: 'گزارش استان ها',
+                            props: true,
+                            component: ReportDate,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        }, {
+                            path: 'products',
+                            name: 'گزارش کالا ها',
+                            props: true,
+                            component: ReportDate,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        },
                     ]
                 },
 
