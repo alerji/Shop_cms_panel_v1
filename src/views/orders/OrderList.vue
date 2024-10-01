@@ -241,7 +241,6 @@ export default {
 
     },
     goRegister(item) {
-      console.log("item clicked", item)
       this.$router.push({path: '/dashboard/orders/info/' + item.id});
     },
     goAddNews() {

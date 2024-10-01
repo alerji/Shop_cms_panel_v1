@@ -21,6 +21,7 @@ import {
     cibStripe,
     cilCommentBubble,
     cibPaypal,
+    cilZoom,
     cibGooglePay,
 
     cibCcAmex, cilPlus, cilMinus, cilFolder, cilClone, cilShare
@@ -184,6 +185,7 @@ export const iconsSet = Object.assign(
       cilFolder,
       cilClone,
       cilTrash,
+      cilZoom,
       cilLowVision,
     cibCcAmex
   }

@@ -22,6 +22,7 @@ import CustomerList from "@/views/orders/CustomerList.vue";
 import UserCarts from "../views/orders/UserCarts";
 import UserStockAlert from "../views/orders/UserStockAlert";
 import ReportDate from "@/views/reports/ReportDate.vue";
+import ReportProducts from "@/views/reports/ReportProducts.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -724,7 +725,7 @@ function configRoutes() {
                 },
    //*************************************************
                 {
-                    path: 'report',
+                    path: 'reports',
                     name: 'گزارشات',
                     props: true,
                     component: {render (c){return c('router-view')}},
@@ -754,7 +755,7 @@ function configRoutes() {
                             path: 'products',
                             name: 'گزارش کالا ها',
                             props: true,
-                            component: ReportDate,
+                            component: ReportProducts,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_page"

@@ -4,7 +4,7 @@
     <CCard>
       <CCardHeader>
         <strong>
-          گزارش فروش بازه زمانی
+          گزارش فروش کالا ها
         </strong>
 
       </CCardHeader>
@@ -24,20 +24,15 @@
           </CCol>
         </CRow>
         <CRow>
+
           <CCol col="6 col-sm-3">
-            <CWidgetDropdown color="primary" :header="get_currency(calculate_items(items,'total_price'))"
-                             text="مبلغ کل">
+            <CWidgetDropdown color="primary" :header="get_currency(items.length)" text="تعداد محصول">
             </CWidgetDropdown>
 
           </CCol>
           <CCol col="6 col-sm-3">
-            <CWidgetDropdown color="primary" :header="get_currency(items.length)" text="تعداد فاکتور">
-            </CWidgetDropdown>
-
-          </CCol>
-          <CCol col="6 col-sm-3">
-            <CWidgetDropdown color="primary" :header="get_currency(calculate_items(items,'products_count'))"
-                             text="تعداد کالا ها">
+            <CWidgetDropdown color="primary" :header="get_currency(calculate_items(items,'product_count'))"
+                             text="جمع کل کالا ها">
 
             </CWidgetDropdown>
 
@@ -48,6 +43,7 @@
             class="mb-0 table-outline"
             hover
             striped
+            sorter
             column-filter
             :pagination="true"
             :items-per-page="100"
@@ -55,7 +51,11 @@
             :fields="fields"
             head-color="light"
         >
-          <template #created_at="{item}">
+          <template #row_id="{item,index}">
+            <td>
+              <p>{{ index+1 }}</p>
+            </td>
+          </template><template #created_at="{item}">
             <td>
               <p>{{ get_date_time(item.created_at) }}</p>
             </td>
@@ -102,10 +102,9 @@ export default {
       start_date: '',
       end_date: '',
       fields: [
-        {key: 'id', label: '#', _classes: 'text-center'},
-        {key: 'total_price', label: 'مبلغ'},
-        {key: 'created_at', label: 'تاریخ', _classes: 'text-center'},
-        {key: 'products_count', label: 'تعداد کالا', _classes: 'text-center'},
+        {key: 'row_id', label: '#', _classes: 'text-center'},
+        {key: 'title', label: 'کالا'},
+        {key: 'product_count', label: 'تعداد', _classes: 'text-center'},
         {key: 'operation', label: 'عملیات'},
       ],
       items: [],
@@ -128,7 +127,7 @@ export default {
       var form_data = new FormData();
       form_data.append("start_date", this.start_date);
       form_data.append("end_date", this.end_date);
-      axios.post('/api/admin/report/date_report', form_data, {}).then(function (response) {
+      axios.post('/api/admin/report/product_report', form_data, {}).then(function (response) {
 
         self.items = response.data;
 

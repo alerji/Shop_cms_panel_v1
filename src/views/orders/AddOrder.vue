@@ -82,7 +82,6 @@
           </CCol>
         </CRow>
         <hr>
-
         <CDataTableFixed
             :items="product_items"
             :fields="product_fields"
@@ -248,7 +247,7 @@ export default {
       post_code: '',
       normalizer_products(node) {
         return {
-          id: node.id,
+          id: node.price_id,
           label: node.name,
         }
       },
