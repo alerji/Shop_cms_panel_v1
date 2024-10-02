@@ -23,6 +23,7 @@ import UserCarts from "../views/orders/UserCarts";
 import UserStockAlert from "../views/orders/UserStockAlert";
 import ReportDate from "@/views/reports/ReportDate.vue";
 import ReportProducts from "@/views/reports/ReportProducts.vue";
+import ReportProductsCardex from "@/views/reports/ReportProductsCardex.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -756,6 +757,15 @@ function configRoutes() {
                             name: 'گزارش کالا ها',
                             props: true,
                             component: ReportProducts,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        }, {
+                            path: 'products/:id',
+                            name: 'گزارش کالا ها',
+                            props: true,
+                            component: ReportProductsCardex,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_page"

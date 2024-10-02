@@ -468,6 +468,11 @@ export default {
   watch: {
     'order_info.address.province_id': function () {
       this.get_cities()
+    },
+    '$route.params.order_id': function () {
+      this.get_provinces();
+
+      // this.get_order_info()
     }
   },
   methods: {

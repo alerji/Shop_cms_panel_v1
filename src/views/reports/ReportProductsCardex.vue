@@ -4,7 +4,7 @@
     <CCard>
       <CCardHeader>
         <strong>
-          گزارش فروش کالا ها
+          گزارش فروش کالا
         </strong>
 
       </CCardHeader>
@@ -61,14 +61,10 @@
               <p>{{ get_date_time(item.created_at) }}</p>
             </td>
           </template>
-          <template #title="{item}">
-            <td>
-              <p>{{ item.title+" "+item.bundle_title }}</p>
-            </td>
-          </template>
           <template #operation="{item,index}">
             <td class="py-2">
               <CButton
+                  v-if="item.order_id!=null"
                   color="primary"
                   variant="outline"
                   square
@@ -80,6 +76,7 @@
 
             </td>
           </template>
+
 
         </CDataTableFixed>
       </CCardBody>
@@ -109,9 +106,11 @@ export default {
       end_date: '',
       fields: [
         {key: 'row_id', label: '#', _classes: 'text-center'},
-        {key: 'title', label: 'کالا'},
-        {key: 'product_count', label: 'تعداد', _classes: 'text-center'},
-        {key: 'operation', label: 'عملیات'},
+        {key: 'qty', label: 'تعداد'},
+        {key: 'balance', label: 'مانده', _classes: 'text-center'},
+        {key: 'summary', label: 'توضیحات', _classes: 'text-center'},
+        {key: 'created_at', label: 'تاریخ', _classes: 'text-center'},
+        {key: 'operation', label: 'عملیات', _classes: 'text-center'},
       ],
       items: [],
 
@@ -126,23 +125,17 @@ export default {
   watch: {},
   methods: {
     goOrderInfo(item) {
-      this.$router.push({path: '/dashboard/reports/products/' + item.price_id});
+      this.$router.push({path: '/dashboard/orders/info/' + item.order_id});
     },
     get_data() {
       var self = this;
       var form_data = new FormData();
       form_data.append("start_date", this.start_date);
       form_data.append("end_date", this.end_date);
-      axios.post('/api/admin/report/product_report', form_data, {}).then(function (response) {
-let data = []
-        response.data.forEach(function (val){
-          if(data.filter(x=>x.price_id == val.price_id).length>0){
-            data.filter(x=>x.price_id == val.price_id)[0].bundle_title += " "+val.bundle_title
-          }else{
-            data.push(val)
-          }
-        })
-        self.items = data;
+      form_data.append("price_id", this.$route.params.id);
+      axios.post('/api/admin/report/product_report_cardex', form_data, {}).then(function (response) {
+
+        self.items = response.data;
 
       })
           .catch(function (error) {
