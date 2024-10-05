@@ -24,6 +24,8 @@ import UserStockAlert from "../views/orders/UserStockAlert";
 import ReportDate from "@/views/reports/ReportDate.vue";
 import ReportProducts from "@/views/reports/ReportProducts.vue";
 import ReportProductsCardex from "@/views/reports/ReportProductsCardex.vue";
+import ReportProvince from "@/views/reports/ReportProvince.vue";
+import ReportCity from "@/views/reports/ReportCity.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -747,7 +749,16 @@ function configRoutes() {
                             path: 'province',
                             name: 'گزارش استان ها',
                             props: true,
-                            component: ReportDate,
+                            component: ReportProvince,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "add_page"
+                            }
+                        }, {
+                            path: 'cities/:province_id',
+                            name: 'گزارش شهر ها',
+                            props: true,
+                            component: ReportCity,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "add_page"
