@@ -39,7 +39,7 @@
             hover
             striped
             sorter
-            sorter-value="province_count"
+            :sorter-value="{column:'province_count',asc:false}"
             column-filter
             :pagination="true"
             :items-per-page="100"

@@ -39,7 +39,7 @@
             striped
             sorter
 
-            sorter-value="province_count"
+            :sorter-value="{column:'province_count',asc:false}"
             column-filter
             :pagination="true"
             :items-per-page="100"
@@ -91,13 +91,11 @@ import axios from "axios";
 import {bus} from "../../main";
 import {CChartLineSimple} from "@/views/charts";
 
-
 export default {
   name: 'Login',
   components: {
-    CChartLineSimple
-    // Use the <ckeditor> component in this view.
-    // ckeditor: CKEditor.component
+    CChartLineSimple,
+
   },
   data() {
     return {
