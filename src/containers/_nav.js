@@ -194,6 +194,10 @@ export default [
                         name: "گزارش فروش کالاها",
                         to: '/dashboard/reports/products',
                         role: 'add_product'
+                    },{
+                        name: "گزارش پرداختی ها",
+                        to: '/dashboard/reports/payments',
+                        role: 'add_product'
                     },
                 ]
             },
