@@ -4,7 +4,7 @@
       <CCol col="12 col-sm-10">
         <CCard>
           <CCardHeader>
-            <strong>لیست قیمت خصوصیتی {{product_title}}</strong>
+            <strong>افزودن قیمت خصوصیتی {{product_title}}</strong>
           </CCardHeader>
           <CCardBody>
             <CRow class="m-0 border" >
@@ -62,81 +62,71 @@
           </CCardBody>
           <CCardFooter>
             <CButton
-                v-if="product_bundle_price_obj.id==null"
                 @click="login()"
                 class="mx-1"
 
                 type="submit" ref="submit_form" size="sm" color="primary">
               افزودن
             </CButton>
-            <CButton
-                v-if="product_bundle_price_obj.id!=null"
-                @click="login()"
-                class="mx-1"
 
-                type="submit" ref="submit_form" size="sm" color="warning">
-              ویرایش
-            </CButton>
-            <CButton
-                v-if="product_bundle_price_obj.id!=null"
-                @click="product_bundle_price_obj= {bundles:{}}"
-                class="mx-1"
-
-                type="submit" ref="submit_form" size="sm" color="danger">
-              انصراف
-            </CButton>
           </CCardFooter>
         </CCard>
+
         <CCard>
+          <CCardHeader>
+            <strong>لیست قیمت خصوصیتی {{product_title}}</strong>
+
+          </CCardHeader>
           <CCardBody>
             <CRow class="m-0 border" v-for="(bundle_price,index) in product_bundle_prices">
               <CCol col="6 col-sm-3" style="padding: 1px;" v-for="type in product_bundles">
-                {{ bundles.filter(x => x.id == type)[0].title }}
-
-                {{bundles.filter(x=>x.id==type)[0].items.filter(x=>x.value==bundle_price.bundles[type])[0].label}}
-
+                <CSelect
+                    :options="bundles.filter(x=>x.id==type)[0].items"
+                    placeholder="انتخاب کنید"
+                    :label="bundles.filter(x=>x.id==type)[0].title"
+                    :value.sync="bundle_price.bundles[type]"
+                />
               </CCol>
               <CCol col="6 col-sm-2" style="padding: 1px;" >
-                <div>
-                  قیمت
-                  {{bundle_price.price}}
-                </div>
-
+                <CInputCurrency
+                    label="قیمت"
+                    v-model="bundle_price.price"
+                />
               </CCol>
               <CCol col="6 col-sm-2" style="padding: 1px;" >
-                <div>
-                  کد
-                  {{bundle_price.code}}
-                </div>
-
+                <CInput
+                    label="کد"
+                    v-model="bundle_price.code"
+                />
               </CCol>
               <CCol col="6 col-sm-2" style="padding: 1px;" >
-                <div>
-                  قیمت ویژه
-                  {{bundle_price.off_price}}
-                </div>
-
+                <CInputCurrency
+                    label="قیمت ویژه"
+                    v-model="bundle_price.off_price"
+                />
               </CCol>
               <CCol col="6 col-sm-3" style="padding: 1px;" >
                 <div class="form-group">
                   <label>تاریخ قیمت</label>
-                  {{get_date(bundle_price.off_date)}}
+                  <date-picker
+                      style="margin-top: 30px;"
 
+                      v-model="bundle_price.off_date"
+                  />
                 </div>
               </CCol>
               <CCol col="3 col-sm-1" style="padding: 1px;" >
-                <div>
-                  موجودی
-                  {{bundle_price.stock}}
-                </div>
-
+                <CInputCurrency
+                    label="موجودی"
+                    v-model="bundle_price.stock"
+                />
               </CCol>
               <CCol col="3 col-sm-3" style="padding: 1px;" >
                 <div style="display: flex;flex-flow: wrap;">
-                    <img
-                        v-if="gallery.filter(x=>bundle_price.image_id == x.image_id).length>0"
-                        :src="gallery.filter(x=>bundle_price.image_id == x.image_id)[0].image" width="45px" height="45px"
-                         :style="`margin:1px; ${bundle_price.image_id == image.image_id ? ' border:1px solid blue; ':''}`"/>
+                  <div  v-for="image in gallery" :key="image.image_id"  @click="select_image(bundle_price,image)">
+                    <img :src="image.image" width="45px" height="45px"
+                         :style="`margin:1px; ${bundle_price.image_id == image.image_id ? ' border:3px solid blue; ':''}`"/>
+                  </div>
                 </div>
               </CCol>
               <CCol  col="3 col-sm-2" style="padding: 1px;" >
@@ -145,7 +135,7 @@
                     size="sm"
                     class="mx-1"
                     style="margin-top: 30px;"
-                    @click="editDetails(bundle_price)"
+                    @click="edit(bundle_price)"
                     outlined>
                   <CIcon name="cil-pencil" size="sm"/>
                 </CButton>
@@ -280,9 +270,35 @@ export default {
       formData.append('id', this.$route.params.product_id);
       formData.append('bundles', JSON.stringify(this.product_bundles));
       formData.append('product_bundle_prices', JSON.stringify(this.product_bundle_price_obj));
-      if(this.product_bundle_price_obj.id!=null){
-        url = "/api/admin/product/edit_product_price_bundle";
-      }
+
+      axios.post(url, formData, {}).then((res) => {
+
+        self.$root.modal_component.show_api_response_modals(res);
+
+        if (res.data.error == 0) {
+          self.product_bundle_price_obj= {bundles:{}}
+          self.get_categories();
+        }
+
+      }).catch(function (error) {
+
+        console.log(error);
+      });
+
+    },
+    edit(item) {
+
+
+      let self = this;
+      const formData = new FormData()
+      let url;
+      url = "/api/admin/product/edit_product_price_bundle";
+
+
+      formData.append('id', this.$route.params.product_id);
+      formData.append('bundles', JSON.stringify(this.product_bundles));
+      formData.append('product_bundle_prices', JSON.stringify(item));
+
       axios.post(url, formData, {}).then((res) => {
 
         self.$root.modal_component.show_api_response_modals(res);

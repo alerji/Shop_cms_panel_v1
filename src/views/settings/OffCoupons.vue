@@ -71,13 +71,14 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="عنوان"
                 />
               </CCol>
               <CCol col="12">
                 <CInput
                     v-model="code"
+                    class="required"
 
                     label="کد تخفیف"
                 />
@@ -85,6 +86,7 @@
               <CCol col="12">
                 <CInputCurrency
                     v-model="amount"
+                    class="required"
 
                     label="مقدار تخفیف"
                 >
@@ -114,13 +116,13 @@ description="0 به معنی عدم محدودیت است"
               <CCol col="12">
                 <CInput
                     v-model="description"
-
                     label="توضیحات"
                 />
               </CCol>
               <CCol col="12">
                 <date-picker
                     v-model="expire_date"
+                    class="required"
 
                     label="زمان انقضا"
                 />
@@ -160,9 +162,7 @@ description="0 به معنی عدم محدودیت است"
                 />
 
               </CCol>
-
             </CRow>
-
 
           </CCardBody>
           <CCardFooter>

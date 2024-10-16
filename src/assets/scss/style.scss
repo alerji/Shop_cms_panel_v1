@@ -87,3 +87,7 @@ text-align: center
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
+.required label:after {
+  content:" *";
+  color: red;
+}
