@@ -110,9 +110,17 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="نام دسته"
                     placeholder="نام دسته"
+                />
+              </CCol>
+              <CCol col="12">
+                <CInput
+                    v-model="seo_title"
+class="required"
+                    label="عنوان سئو"
+                    placeholder="عنوان سئو"
                 />
               </CCol>
               <CCol col="12">
@@ -128,6 +136,8 @@
               </CCol>
               <CCol col="12">
                 <ImageSelector label="تصویر"
+                               class="required"
+
                                :media_id.sync="file"
                                default_archive="product_category"
                                :preview-image="previewImage"
@@ -188,6 +198,7 @@ export default {
       name: '',
       file: [],
       color: '',
+      seo_title: '',
       previewImage: null,
       description: '',
       items: [],
@@ -231,6 +242,7 @@ export default {
     editDetails(item) {
       this.name = item.name;
       this.description = item.description;
+      this.seo_title = item.seo_title;
       this.previewImage = item.image;
       this.file = [item.image_id];
 
@@ -278,6 +290,7 @@ export default {
       formData.append('image', this.file[0]);
 
       formData.append('name', this.name);
+      formData.append('seo_title', this.seo_title);
       formData.append('cat', this.$route.params.cat_id);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {

@@ -95,9 +95,17 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="نام دسته"
                     placeholder="نام دسته"
+                />
+              </CCol>
+              <CCol col="12">
+                <CInput
+                    v-model="seo_title"
+class="required"
+                    label="عنوان سئو"
+                    placeholder="عنوان سئو"
                 />
               </CCol>
               <CCol col="12">
@@ -113,6 +121,7 @@
               </CCol>
               <CCol col="12">
                 <ImageSelector label="تصویر"
+                               class="required"
                                :media_id.sync="file"
                                default_archive="blog_category"
                                :preview-image="previewImage"
@@ -165,6 +174,7 @@ export default {
     return {
       confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
       name: '',
+      seo_title: '',
       file: [],
       color: '',
       previewImage: null,
@@ -203,6 +213,7 @@ export default {
     editDetails(item) {
       this.name = item.name;
       this.description = item.description;
+      this.seo_title = item.seo_title;
       this.previewImage = item.image;
 this.file = [item.image_id]
       this.status_form = item.id;
@@ -258,6 +269,7 @@ formData.append('cat_id', this.$route.params.cat_id)
 
       formData.append('name', this.name);
       formData.append('cat', this.$route.params.cat_id);
+      formData.append('seo_title', this.seo_title);
       formData.append('description', this.description);
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);
@@ -275,19 +287,8 @@ formData.append('cat_id', this.$route.params.cat_id)
         }
 
       })
-
-          // axios.post(  '/admin/category', {
-          //     name: self.name,
-          //     description: self.description,
-          //     image: self.image,
-          //     cat: 0,
-          // }).then(function (response) {
-          //     self.name = '';
-          //     self.description = '';
-          //     // localStorage.setItem("api_token", response.data.access_token);
-          //     // self.$router.push({ path: 'notes' });
-          // })
           .catch(function (error) {
+            self.$root.modal_component.show_danger_toast('لطفا همه موارد را تکمیل کنید');
 
             console.log(error);
           });

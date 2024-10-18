@@ -87,7 +87,7 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="عنوان"
                 />
               </CCol>

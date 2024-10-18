@@ -92,13 +92,14 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="نام خصوصیت"
                 />
               </CCol>
               <CCol col="12">
                 <CInput
                     v-model="code"
+                    class="required"
 
                     label="کد خصوصیت"
                 />
@@ -112,6 +113,9 @@
               </CCol>
               <CCol col="12">
                 <div class="control_wrapper">
+                  <div class="required">
+                    <label>دسته بندی</label>
+                  </div>
                   <treeselect
                       v-model="value_category"
                       :multiple="true"

@@ -34,6 +34,7 @@
               <CCol col="6 col-sm-4">
                 <CInput
                     v-model="title"
+                    class="required"
 
                     label="عنوان محصول"
                     placeholder="عنوان"
@@ -43,12 +44,16 @@
               <CCol col="6 col-sm-4">
                 <CInput
                     v-model="code"
+                    class="required"
+
                     label="کد محصول"
                     placeholder="کد"
                 />
               </CCol>
               <CCol col="6 col-sm-4">
                 <CInput
+                    class="required"
+
                     v-model="seo_title"
                     label="متا عنوان"
                 />
@@ -120,6 +125,8 @@
               <CTextarea
                   v-model="seo_summary"
                   rows="8"
+                  class="required"
+
                   label="سئو توضیحات"
 
               />
@@ -138,6 +145,7 @@
               <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_price"
+                    class="required"
 
                     description="برای گزینه تماس بگیرید قیمت را صفر وارد کنید"
                     label="قیمت محصول"
@@ -148,6 +156,7 @@
               <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_stock"
+                    class="required"
 
                     label="موجودی محصول"
 
@@ -202,7 +211,9 @@
           <CCardBody>
             <CRow>
               <CCol col="6 col-sm-4">
-
+<div >
+  <label>برچسب محصول</label>
+</div>
                 <treeselect
                     v-model="value_tags"
                     :multiple="true"
@@ -217,6 +228,9 @@
 
               <CCol col="6 col-sm-4">
                 <div class="control_wrapper">
+                  <div class="required">
+                    <label>دسته بندی محصول</label>
+                  </div>
                   <treeselect
                       v-model="value_category"
                       :multiple="true"
@@ -231,6 +245,9 @@
               </CCol>
               <CCol col="6 col-sm-4">
                 <div class="control_wrapper">
+                  <div class="required">
+                    <label>برند محصول</label>
+                  </div>
                   <treeselect
                       v-model="value_brand"
                       :multiple="false"
@@ -510,7 +527,7 @@ export default {
       summary: '',
       seo_summary: '',
       product_price: '',
-      order_point: 0,
+      order_point: '0',
       product_stock: '',
       product_off_price: '',
       product_off_price_date: '',

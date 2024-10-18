@@ -82,13 +82,14 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-
+class="required"
                     label="نام ایتم"
                 />
               </CCol>
               <CCol col="12">
                 <CInput
                     v-model="code"
+                    class="required"
 
                     label="کد ایتم"
                 />

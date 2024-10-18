@@ -91,6 +91,7 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
+                    class="required"
 
                     label="عنوان"
                 />
@@ -99,6 +100,8 @@
                 <CTextarea
                     v-model="description"
                     label="توضیحات"
+                    class="required"
+
                     rows="2"
                 />
               </CCol>
@@ -106,6 +109,7 @@
                 <CInputCurrency
                     v-model="price"
                     label="قیمت"
+                    description="قیمت 0 رایگان می باشد"
                 />
               </CCol>
               <CCol>
@@ -119,6 +123,8 @@
               <CCol col="12">
 
                 <ImageSelector label="تصویر"
+                               class="required"
+
                                :media_id.sync="file"
                                default_archive="order_shipping"
                                :preview-image="previewImage"

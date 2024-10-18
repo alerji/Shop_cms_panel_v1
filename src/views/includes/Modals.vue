@@ -168,6 +168,16 @@
 
               }
             },
+        show_danger_toast(msg){
+
+                Vue.$toast.open({
+                  message: msg,
+                  type: 'error',
+                  // all of other options may go here
+                });
+
+
+            },
             show_confirm_modal(title, text, buttons,bus_tag) {
                 this.title = title;
                 this.message_confirm = text;

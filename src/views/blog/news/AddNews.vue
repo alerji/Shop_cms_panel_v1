@@ -12,7 +12,7 @@
               <CCol col="4">
                 <CInput
                     v-model="title"
-
+class="required"
                     label="عنوان نوشته"
                     placeholder="عنوان"
                     vertical
@@ -21,6 +21,8 @@
               <CCol col="4">
                 <CInput
                     v-model="seo_title"
+                    class="required"
+
                     label="سئو عنوان"
                 />
                 <SeoProgress :min_perfect="50" :max_perfect="60" :string="seo_title"/>
@@ -77,6 +79,7 @@
               <CCol col="12">
                 <CTextarea
                     v-model="seo_summary"
+                    class="required"
 
                     label="سئو توضیحات"
 
@@ -87,7 +90,9 @@
             </CRow>
             <CRow>
               <CCol col="4">
-
+                <div >
+                  <label>برچسب ها</label>
+                </div>
                 <treeselect
                     v-model="value_tags"
                     :multiple="true"
@@ -101,9 +106,14 @@
               </CCol>
 
               <CCol col="4">
+                <div class="required">
+                  <label>دسته بندی</label>
+                </div>
                 <treeselect
                     v-model="value_category"
                     :multiple="true"
+
+
                     :normalizer="normalizer_category"
                     :append-to-body="true"
                     :options="options_category"
@@ -118,6 +128,7 @@
             <CRow>
               <CCol col="6">
                 <ImageSelector label="تصویر"
+                               class="required"
                                :media_id.sync="file"
                                default_archive="blog_post"
                                :preview-image="previewImage"

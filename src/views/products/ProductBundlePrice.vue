@@ -50,7 +50,7 @@
                     v-model="product_bundle_price_obj.stock"
                 />
               </CCol>
-              <CCol col="3 col-sm-3" style="padding: 1px;" >
+              <CCol col="12 col-sm-3" style="padding: 1px;" >
                 <div style="display: flex;flex-flow: wrap;">
                   <div  v-for="image in gallery" :key="image.image_id"  @click="select_image(product_bundle_price_obj,image)">
                     <img :src="image.image" width="45px" height="45px"
@@ -121,9 +121,9 @@
                     v-model="bundle_price.stock"
                 />
               </CCol>
-              <CCol col="3 col-sm-3" style="padding: 1px;" >
+              <CCol col="12 col-sm-3" style="padding: 1px;" >
                 <div style="display: flex;flex-flow: wrap;">
-                  <div  v-for="image in gallery" :key="image.image_id"  @click="select_image(bundle_price,image)">
+                  <div  v-for="image in gallery" :key="image.image_id"  @click="bundle_price.image_id = image.image_id">
                     <img :src="image.image" width="45px" height="45px"
                          :style="`margin:1px; ${bundle_price.image_id == image.image_id ? ' border:3px solid blue; ':''}`"/>
                   </div>
