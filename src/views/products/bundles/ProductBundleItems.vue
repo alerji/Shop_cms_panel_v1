@@ -51,7 +51,8 @@
                       square
                       size="sm"
                       @click="editDetails(item)"
-                  ><CIcon name="cil-pencil" size="sm"/>
+                  >
+                    <CIcon name="cil-pencil" size="sm"/>
                   </CButton>
                   <CButton
                       color="danger"
@@ -59,7 +60,8 @@
                       square
                       size="sm"
                       @click="delete_dialog(item)"
-                  ><CIcon name="cil-trash" size="sm"/>
+                  >
+                    <CIcon name="cil-trash" size="sm"/>
                   </CButton>
                 </td>
               </template>
@@ -82,7 +84,7 @@
               <CCol col="12">
                 <CInput
                     v-model="name"
-class="required"
+                    class="required"
                     label="نام ایتم"
                 />
               </CCol>
@@ -107,10 +109,10 @@ class="required"
                 <CInput
                     type="color"
                     label="رنگ"
-v-model="color"
+                    v-model="color"
                 />
               </CCol>
-              <CCol col="12"  v-if="view_type==2">
+              <CCol col="12" v-if="view_type==2">
 
                 <ImageSelector label="تصویر"
                                :media_id.sync="file"
@@ -134,6 +136,38 @@ v-model="color"
         </CCard>
       </CCol>
     </CRow>
+    <CModal
+        :show.sync="delete_modal"
+        :no-close-on-backdrop="true"
+        :centered="true"
+        title="حذف"
+        size="md"
+        color="dark"
+    >
+      <template #header>
+        <h6 class="modal-title">حذف</h6>
+        <CButtonClose @click="delete_modal = false" class="text-white"/>
+      </template>
+      <div>آیا مایل به حذف این مقدار هستید؟</div>
+      <div>مقدار حذف شده در قیمت ها به مقدار زیر منتقل شوند</div>
+
+
+      <CSelect
+          :options="[{label:'انتخاب کنید',value:0},...items.filter(x=>x.value!=status_form)]"
+          :value.sync="selected_delete_item"
+      />
+      <template #footer>
+        <CButton @click="delete_item()"
+                 color="danger"
+        >حذف
+        </CButton>
+        <CButton
+            @click="delete_modal = false"
+            color="success"
+        >انصراف
+        </CButton>
+      </template>
+    </CModal>
 
 
   </div>
@@ -149,20 +183,22 @@ export default {
   name: 'Login',
   data() {
     return {
-      confirm_delete_name:new Date().getTime()+"_"+this.$vnode.tag,
+      confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
 
       name: '',
       file: [],
       color: '',
       code: '',
-      view_type:0 ,
-      view_types:[{label:'بدون نمایش',value:0},{label:'نمایش رنگ',value:1},{label:'نمایش تصویر',value:2}] ,
+      view_type: 0,
+      view_types: [{label: 'بدون نمایش', value: 0}, {label: 'نمایش رنگ', value: 1}, {label: 'نمایش تصویر', value: 2}],
       previewImage: null,
       description: '',
+      delete_modal: false,
+      selected_delete_item: 0,
       items: [],
       fields: [
-        {key: 'row',label: '#', _style: 'width:10%'},
-        {key: 'image',label: 'تصویر', _style: 'width:10%'},
+        {key: 'row', label: '#', _style: 'width:10%'},
+        {key: 'image', label: 'تصویر', _style: 'width:10%'},
         {key: 'نام', _style: 'width:10%'},
 
         {key: 'عملیات', _style: 'width:40%;'},
@@ -202,7 +238,11 @@ export default {
       axios.post('/api/admin/product/get_bundle_items', formData, {}).then(function (response) {
 
         var content_cats = response.data;
+        content_cats.tags.forEach(function (val) {
+          val.label = val.title.title;
+          val.value = val.id;
 
+        })
         self.items = content_cats.tags.map((item, row_id) => {
           return {...item, row_id}
         });
@@ -256,14 +296,17 @@ export default {
 
     },
     delete_dialog(item) {
-      this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], this.confirm_delete_name);
-
+      // this.$root.modal_component.show_confirm_modal('اخطار', "آیا مایل به حذف این ردیف هستید؟", ['تایید'], this.confirm_delete_name);
+      this.delete_modal = true
 
       this.status_form = item.id;
 
     },
     delete_item() {
-
+if(this.selected_delete_item==0){
+  this.$root.modal_component.show_danger_toast( "لطفا یک مقدار جایگزین انتخاب کنید");
+return false
+}
 
       let self = this;
       const formData = new FormData()
@@ -272,6 +315,7 @@ export default {
 
 
       formData.append('id', this.status_form);
+      formData.append('selected_delete_item', this.selected_delete_item);
 
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);

@@ -4,10 +4,10 @@
       <CCol col="12 col-sm-10">
         <CCard>
           <CCardHeader>
-            <strong>افزودن قیمت خصوصیتی {{product_title}}</strong>
+            <strong>افزودن قیمت خصوصیتی {{ product_title }}</strong>
           </CCardHeader>
           <CCardBody>
-            <CRow class="m-0 border" >
+            <CRow class="m-0 border">
               <CCol col="6 col-sm-3" style="padding: 1px;" v-for="type in product_bundles">
                 <CSelect
                     :options="bundles.filter(x=>x.id==type)[0].items"
@@ -16,25 +16,28 @@
                     :value.sync="product_bundle_price_obj.bundles[type]"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInputCurrency
                     label="قیمت"
+                    class="required"
                     v-model="product_bundle_price_obj.price"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInput
                     label="کد"
+                    class="required"
+
                     v-model="product_bundle_price_obj.code"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInputCurrency
                     label="قیمت ویژه"
                     v-model="product_bundle_price_obj.off_price"
                 />
               </CCol>
-              <CCol col="6 col-sm-3" style="padding: 1px;" >
+              <CCol col="6 col-sm-3" style="padding: 1px;">
                 <div class="form-group">
                   <label>تاریخ قیمت</label>
                   <date-picker
@@ -44,15 +47,18 @@
                   />
                 </div>
               </CCol>
-              <CCol col="3 col-sm-1" style="padding: 1px;" >
+              <CCol col="3 col-sm-1" style="padding: 1px;">
                 <CInputCurrency
                     label="موجودی"
+                    class="required"
+
                     v-model="product_bundle_price_obj.stock"
                 />
               </CCol>
-              <CCol col="12 col-sm-3" style="padding: 1px;" >
+              <CCol col="12 col-sm-3" style="padding: 1px;">
                 <div style="display: flex;flex-flow: wrap;">
-                  <div  v-for="image in gallery" :key="image.image_id"  @click="select_image(product_bundle_price_obj,image)">
+                  <div v-for="image in gallery" :key="image.image_id"
+                       @click="select_image(product_bundle_price_obj,image)">
                     <img :src="image.image" width="45px" height="45px"
                          :style="`margin:1px; ${product_bundle_price_obj.image_id == image.image_id ? ' border:3px solid blue; ':''}`"/>
                   </div>
@@ -74,7 +80,7 @@
 
         <CCard>
           <CCardHeader>
-            <strong>لیست قیمت خصوصیتی {{product_title}}</strong>
+            <strong>لیست قیمت خصوصیتی {{ product_title }}</strong>
 
           </CCardHeader>
           <CCardBody>
@@ -87,25 +93,25 @@
                     :value.sync="bundle_price.bundles[type]"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInputCurrency
                     label="قیمت"
                     v-model="bundle_price.price"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInput
                     label="کد"
                     v-model="bundle_price.code"
                 />
               </CCol>
-              <CCol col="6 col-sm-2" style="padding: 1px;" >
+              <CCol col="6 col-sm-2" style="padding: 1px;">
                 <CInputCurrency
                     label="قیمت ویژه"
                     v-model="bundle_price.off_price"
                 />
               </CCol>
-              <CCol col="6 col-sm-3" style="padding: 1px;" >
+              <CCol col="6 col-sm-3" style="padding: 1px;">
                 <div class="form-group">
                   <label>تاریخ قیمت</label>
                   <date-picker
@@ -115,21 +121,21 @@
                   />
                 </div>
               </CCol>
-              <CCol col="3 col-sm-1" style="padding: 1px;" >
+              <CCol col="3 col-sm-1" style="padding: 1px;">
                 <CInputCurrency
                     label="موجودی"
                     v-model="bundle_price.stock"
                 />
               </CCol>
-              <CCol col="12 col-sm-3" style="padding: 1px;" >
+              <CCol col="12 col-sm-3" style="padding: 1px;">
                 <div style="display: flex;flex-flow: wrap;">
-                  <div  v-for="image in gallery" :key="image.image_id"  @click="bundle_price.image_id = image.image_id">
+                  <div v-for="image in gallery" :key="image.image_id" @click="bundle_price.image_id = image.image_id">
                     <img :src="image.image" width="45px" height="45px"
                          :style="`margin:1px; ${bundle_price.image_id == image.image_id ? ' border:3px solid blue; ':''}`"/>
                   </div>
                 </div>
               </CCol>
-              <CCol  col="3 col-sm-2" style="padding: 1px;" >
+              <CCol col="3 col-sm-2" style="padding: 1px;">
                 <CButton
                     color="warning"
                     size="sm"
@@ -201,7 +207,7 @@ export default {
       gallery: [],
       bundles: [],
       product_bundle_prices: [],
-      product_bundle_price_obj: {bundles:{}},
+      product_bundle_price_obj: {bundles: {}},
       product_bundles: [],
       product_title: '',
 
@@ -219,8 +225,8 @@ export default {
     });
   }, watch: {},
   methods: {
-    select_image(bundle_price,image){
-      Vue.set(this.product_bundle_price_obj,"image_id",image.image_id)
+    select_image(bundle_price, image) {
+      Vue.set(this.product_bundle_price_obj, "image_id", image.image_id)
       // bundle_price.image_id = image.image_id
     },
     editDetails(item) {
@@ -240,15 +246,15 @@ export default {
         self.gallery = content_cats.gallery
         self.product_bundle_prices = []
         self.product_bundles = content_cats.product_bundles
-        content_cats.product_bundle_prices.forEach(function (val){
+        content_cats.product_bundle_prices.forEach(function (val) {
           val.bundles = {}
-          val.bundles_temp.forEach(function (bun){
+          val.bundles_temp.forEach(function (bun) {
             // console.log("bun[0]",Object.keys(bun)[0],bun[Object.keys(bun)[0]])
             val.bundles[Object.keys(bun)[0]] = bun[Object.keys(bun)[0]]
           })
         })
         self.product_bundle_prices = content_cats.product_bundle_prices
-        console.log("self.product_bundle_prices",self.product_bundle_prices)
+        console.log("self.product_bundle_prices", self.product_bundle_prices)
       })
           .catch(function (error) {
 
@@ -276,7 +282,7 @@ export default {
         self.$root.modal_component.show_api_response_modals(res);
 
         if (res.data.error == 0) {
-          self.product_bundle_price_obj= {bundles:{}}
+          self.product_bundle_price_obj = {bundles: {}}
           self.get_categories();
         }
 
@@ -304,7 +310,7 @@ export default {
         self.$root.modal_component.show_api_response_modals(res);
 
         if (res.data.error == 0) {
-          self.product_bundle_price_obj= {bundles:{}}
+          self.product_bundle_price_obj = {bundles: {}}
           self.get_categories();
         }
 
@@ -335,9 +341,12 @@ export default {
       axios.post(url, formData, {}).then((res) => {
 
         self.$root.modal_component.show_api_response_modals(res);
-        self.status_form = 0;
+        if (res.data.error == 0) {
+          self.status_form = 0;
 
-        self.get_categories();
+          self.get_categories();
+          self.delete_modal = false;
+        }
 
 
       })
