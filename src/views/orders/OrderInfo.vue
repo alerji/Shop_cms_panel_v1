@@ -210,10 +210,6 @@
           <p class="text-muted">{{ item.gateway.title }}</p>
         </td>
       </template>
-
-
-
-
       <template #updated_at="{item}">
         <td>
           <p class="text-muted">{{ get_date_time(item.updated_at) }}</p>
@@ -230,6 +226,19 @@
         <td>
           <p class="text-muted">{{ get_currency(item.pay_price) }}</p>
         </td>
+      </template>
+      <template #caption>
+        <tr style="background: #0d6efd;color: white" class="total-price">
+          <td>جمع کل</td>
+          <td></td>
+
+          <td></td>
+          <td>{{get_currency(calculate_items(order_info.payment_info,'pay_price'))}}</td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+
       </template>
     </CDataTableFixed>
 
@@ -506,6 +515,36 @@ export default {
            updated_at:self.order_info.credit.updated_at
          }
         obj.gateway.title = 'کیف پول'
+         if(obj.pay_price!=0){
+           self.order_info.payment_info.push(obj)
+
+         }
+       }
+       if(self.order_info.off_coupon!=null){
+        let payed_price=0;
+        if(self.order_info.payment_info.filter(x=>x.status==1).length>0){
+          payed_price = self.order_info.payment_info.filter(x=>x.status==1)[0].pay_price
+        }
+         let obj = {
+           pay_code:self.order_info.off_coupon.title,
+           gateway:{},
+           status:1,
+           pay_price:(self.order_info.credit.price *-1) - payed_price,
+           reference_number:'',
+           card_number:'',
+           updated_at:self.order_info.credit.updated_at
+         }
+        let product_price = 0;
+        self.order_info.products.forEach(function (val){
+          product_price +=val.total_price
+        })
+        if(self.order_info.off_coupon.is_percent==1){
+          obj.pay_price = ((self.order_info.off_coupon.amount ) * (product_price))/100;
+        }else{
+          obj.pay_price = self.order_info.off_coupon.amount
+
+        }
+        obj.gateway.title = 'کد تخفیف'
          if(obj.pay_price!=0){
            self.order_info.payment_info.push(obj)
 
