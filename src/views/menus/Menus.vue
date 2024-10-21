@@ -8,79 +8,7 @@
               <sl-vue-tree v-model="menus" @click="contextMenuIsVisible=false"
                            @drop="node_droped"
                            @nodecontextmenu="contextmenu"/>
-<!--              <CDataTableFixed-->
-<!--                  :items="items"-->
-<!--                  :fields="fields"-->
-<!--                  striped-->
-<!--                  :items-per-page="20"-->
-<!--                  hover-->
-<!--                  sorter-->
-<!--                  pagination-->
-<!--              >-->
-<!--                <template #row="{item}">-->
 
-<!--                  <td>-->
-<!--                    <p class="text-muted">{{ item.id }}</p>-->
-
-<!--                  </td>-->
-
-<!--                </template>-->
-<!--                <template #نام="{item}">-->
-
-<!--                  <td>-->
-<!--                    <p class="text-muted">{{ item.title.title }}</p>-->
-
-<!--                  </td>-->
-
-<!--                </template>-->
-
-<!--                <template #لینک="{item}">-->
-<!--                  <td>-->
-<!--                    <p class="text-muted">{{ item.url }}</p>-->
-<!--                  </td>-->
-<!--                </template>-->
-
-<!--                <template #نوع="{item}">-->
-<!--                  <td>-->
-<!--                    <p class="text-muted">{{ types.filter(x => x.value == item.type)[0].label }}</p>-->
-<!--                  </td>-->
-<!--                </template>-->
-
-
-<!--                <template #عملیات="{item,index}">-->
-<!--                  <td class="py-2">-->
-
-<!--                    <CButton-->
-<!--                        color="primary"-->
-<!--                        variant="outline"-->
-<!--                        square-->
-<!--                        size="sm"-->
-<!--                        @click="goSubMenus(item,index)"-->
-<!--                    >زیر منو ها-->
-<!--                    </CButton>-->
-<!--                    <CButton-->
-<!--                        color="warning"-->
-<!--                        variant="outline"-->
-<!--                        square-->
-<!--                        size="sm"-->
-<!--                        @click="editDetails(item)"-->
-<!--                    >-->
-<!--                      <CIcon name="cil-pencil" size="sm"/>-->
-<!--                    </CButton>-->
-<!--                    <CButton-->
-<!--                        color="danger"-->
-<!--                        variant="outline"-->
-<!--                        square-->
-<!--                        size="sm"-->
-<!--                        @click="delete_item_dialog(item)"-->
-<!--                    >-->
-<!--                      <CIcon name="cil-trash" size="sm"/>-->
-<!--                    </CButton>-->
-<!--                  </td>-->
-<!--                </template>-->
-
-
-<!--              </CDataTableFixed>-->
             </CCardBody>
 
           </CCardHeader>
@@ -112,20 +40,34 @@
                 />
               </CCol>
               <CCol col="12">
+                <CSelect
+                    :value.sync="parent_id"
+                    :options="all_menus"
+                    label="منو مادر"
+                />
+              </CCol>
+              <CCol col="12">
+                <CInput
+                    :value.sync="order_no"
+                    label="ترتیب"
+                />
+              </CCol>
+              <CCol col="12">
                 <CLinkSelector
                     v-model="link"
                     label="لینک"
                     placeholder="لینک"
 
                 />
-                <CIconSelector
-                    label="ایکون"
-                    v-model="selected_icon"
-                />
+
                 <CInput
                     v-model="link"
                     label="لینک"
                     placeholder="لینک"
+                />
+                <CIconSelector
+                    label="ایکون"
+                    v-model="selected_icon"
                 />
               </CCol>
             </CRow>
@@ -188,7 +130,10 @@ export default {
   data() {
     return {
       contextMenuIsVisible: false,
-      menus: [ ],
+      menus: [],
+      all_menus: [],
+      parent_id: 0,
+      order_no: '0',
       confirm_delete_name: new Date().getTime() + "_" + this.$vnode.tag,
 
       name: '',
@@ -212,7 +157,7 @@ export default {
         {key: 'عملیات', _style: 'width:40%;'},
       ],
       details: [],
-      selected_node:{},
+      selected_node: {},
       collapseDuration: 0,
       status_form: 0
     }
@@ -235,6 +180,7 @@ export default {
   methods: {
 
     contextmenu(node, event) {
+      console.log("node context",node)
       this.selected_node = node
       event.preventDefault();
       this.contextMenuIsVisible = true;
@@ -286,9 +232,12 @@ export default {
     editDetails(item) {
       this.contextMenuIsVisible = false;
 
-      console.log("edit called",item)
+      console.log("edit called", item)
       this.name = item.title;
       this.selected_type = item.type;
+      this.parent_id =this.all_menus.filter(x=>x.value==item.id)[0].parent_id
+      this.order_no =this.all_menus.filter(x=>x.value==item.id)[0].order_no
+      // this.parent_id = item.parent_id;
       this.link = item.url;
       this.icon = item.icon;
 
@@ -300,7 +249,7 @@ export default {
       this.link = '';
       this.status_form = 0;
     },
-    node_droped(data1,dat2){
+    node_droped(data1, dat2) {
       // console.log("droped",data1);
       // console.log("droped",dat2);
       let self = this;
@@ -311,7 +260,6 @@ export default {
       formData.append("placement", dat2.placement)
       formData.append("parent_node", dat2.node.id)
       formData.append("node", data1[0].id)
-
 
 
       axios.post(url, formData, {}).then((res) => {
@@ -375,7 +323,15 @@ export default {
         var content_cats = response.data;
 
         self.menus = content_cats.menus
-
+        self.all_menus = [{label:'منو اصلی',value:0,parent_id:0,order_no:0}]
+        content_cats.all_menus.forEach(function (val) {
+          self.all_menus.push({
+            label:val.title,
+            value:val.id,
+            parent_id:val.parent_id,
+            order_no:val.order_no
+          })
+        })
       })
           .catch(function (error) {
 
@@ -410,6 +366,8 @@ export default {
       formData.append('title', this.name);
       formData.append('url', this.link);
       formData.append('icon', this.selected_icon);
+      formData.append('order_no', this.order_no);
+      formData.append('parent_id', this.parent_id);
       formData.append('type', this.selected_type);
       formData.append('is_mobile', this.$route.params.menu_id)
       // formData.append('description', this.description)
