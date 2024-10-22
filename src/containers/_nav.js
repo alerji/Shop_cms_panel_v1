@@ -231,6 +231,11 @@ export default [
                         to: "/dashboard/display/menus/1",
                         role: 'ui_menu'
                     },
+                    {
+                        name: 'بنر آفر',
+                        to: "/dashboard/display/offer-banner",
+                        role: 'ui_menu'
+                    },
 
 
 

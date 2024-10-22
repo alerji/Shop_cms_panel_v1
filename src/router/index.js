@@ -27,6 +27,7 @@ import ReportProductsCardex from "@/views/reports/ReportProductsCardex.vue";
 import ReportProvince from "@/views/reports/ReportProvince.vue";
 import ReportCity from "@/views/reports/ReportCity.vue";
 import ReportPayments from "@/views/reports/ReportPayments.vue";
+import OfferBanner from "@/views/offerBanner/OfferBanner.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -514,6 +515,16 @@ function configRoutes() {
                             name: 'منو',
                             props: true,
                             component: Menus,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "ui_menu"
+                            }
+                        },
+                         {
+                            path: 'offer-banner',
+                            name: 'بنر',
+                            props: true,
+                            component: OfferBanner,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "ui_menu"
