@@ -27,21 +27,4 @@ jobs:
           local-dir: dist/
           server-dir: /
 
-      - name: 📂 Sync pariyas
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: 185.164.72.90
-          username: panel-pariyas-ftp
-          password: 2632225Alerji@
-          local-dir: dist/
-          server-dir: /
-
-      - name: 📂 Sync yoona
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: 185.164.72.90
-          username: panel-yoona-ftp
-          password: 2632225Alerji@
-          local-dir: dist/
-          server-dir: /
 
