@@ -342,7 +342,18 @@ export default {
       this.product_items[0].product_id = node.id;
       this.product_items[0].product_name = node.name;
       this.product_items[0].product_price = node.price;
-      if (node.off_price == 0) {
+      let has_off = false;
+
+      if (node.off_price != 0 && node.off_price != null) {
+        has_off = true
+
+        if (node.off_expire != null) {
+          if (new Date() > new Date(node.off_expire)) {
+            has_off = false
+          }
+        }
+      }
+      if (!has_off) {
         this.product_items[0].product_off_price = node.price;
       } else {
         this.product_items[0].product_off_price = node.off_price;
