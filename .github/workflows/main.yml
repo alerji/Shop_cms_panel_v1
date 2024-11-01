@@ -17,7 +17,7 @@ jobs:
         run: |
           npm install
           npm run build
-          cp dist/index.html localdeploy/index.html
+          mkdir -p localdeploy && cp dist/index.html localdeploy/index.html
 
       - name: 📂 Sync charlotte
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
