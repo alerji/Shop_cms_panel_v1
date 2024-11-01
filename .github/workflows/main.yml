@@ -17,6 +17,7 @@ jobs:
         run: |
           npm install
           npm run build
+          cp dist/index.html localdeploy/index.html
 
       - name: 📂 Sync charlotte
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -29,19 +30,20 @@ jobs:
 
 
       - name: 📂 Sync pariyas
-        uses: peaceiris/actions-ftp@v3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: 185.164.72.90
-          user: panel-pariyas-ftp
-          pass: 2632225Alerji@
-          localpath: dist/index.html
-          remotepath: /index.html
+          server: 185.164.72.90
+          username: panel-pariyas-ftp
+          password: 2632225Alerji@
+          local-dir: localdeploy/
+          server-dir: /
 
       - name: 📂 Sync yoona
-        uses: peaceiris/actions-ftp@v3
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          host: 185.164.72.90
-          user: panel-yoona-ftp
-          pass: 2632225Alerji@
-          localpath: dist/index.html
-          remotepath: /index.html
+          server: 185.164.72.90
+          username: panel-yoona-ftp
+          password: 2632225Alerji@
+          local-dir: localdeploy/
+          server-dir: /
+
