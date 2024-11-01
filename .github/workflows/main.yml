@@ -20,11 +20,11 @@ jobs:
           zip -r dist.zip dist
 
       - name: Create Release
-     uses: actions/create-release@v1
-     with:
-       tag_name: v${{ github.run_number }}
-       release_name: Release ${{ github.run_number }}
-       draft: false
-       prerelease: false
-     env:
-       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: actions/create-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
