@@ -26,7 +26,19 @@
         <NewChartJs
             v-if="dashboard_data.dashboard_daily_report"
             type="bar"
+            label="فروش"
             :info="dashboard_data.dashboard_daily_report"
+            style="height:300px;margin-top:40px;"/>
+
+
+        <h4 id="traffic" class="card-title mb-0">نمایش کالا ها</h4>
+
+        <NewChartJs
+            v-if="dashboard_data.dashboard_daily_view_report"
+            type="bar"
+            label="بازدید"
+
+            :info="dashboard_data.dashboard_daily_view_report"
             style="height:300px;margin-top:40px;"/>
       </CCardBody>
       <CCardFooter>
@@ -356,7 +368,6 @@ export default {
   },
   mounted() {
     this.get_dashboard_data();
-    this.get_digikala_product();
   },
   methods: {
     goCustomerOrders(item) {

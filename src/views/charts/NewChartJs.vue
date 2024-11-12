@@ -1,6 +1,6 @@
 <template>
   <div style="height: 300px">
-    <canvas  width="400" height="100"  :id="random_id"></canvas>
+    <canvas   width="400" height="100"  :id="random_id"></canvas>
 
   </div>
 
@@ -25,8 +25,9 @@ export default {
   },
   data(){
     return{
-      random_id:new Date().getTime()+"_"+this.$vnode.tag,
+      random_id:new Date().getTime()+"_"+this.$vnode.tag+"_"+random(0,1000),
       labels:[],
+      label:'',
     }
   },
   mounted() {
@@ -49,6 +50,26 @@ var self = this
         responsive: true,
         barRoundness:0.8,
         maintainAspectRatio: false,
+        tooltips: {
+          callbacks: {
+            // title: function(t, d) {
+            //   return "sadasdsd";
+            // },
+            label: function(t, d) {
+              if(parseInt(d.datasets[t.datasetIndex].data[t.index]) >= 1000){
+                return  d.datasets[t.datasetIndex].data[t.index].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              } else {
+                return  d.datasets[t.datasetIndex].data[t.index];
+              }
+              // const label = d.datasets[t.datasetIndex].label;
+              // const value = d.datasets[t.datasetIndex].data[t.index];
+              // const sign = value >= 0 ? '+' : '';
+              // return `${label}: ${sign}${value.toFixed(2)}%`;
+            }
+          }
+        },
+
+
         legend: {
           display: false
         },
@@ -63,6 +84,13 @@ var self = this
           yAxes: [{
             ticks: {
               beginAtZero: false,
+              callback: function(value, index, values) {
+                if(parseInt(value) >= 1000){
+                  return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                } else {
+                  return  value;
+                }
+              }
             },
             gridLines: {
               borderDash: [2, 4],
@@ -95,14 +123,14 @@ var self = this
     defaultDatasets () {
       const brandInfo = '#3399ff'
       const data1 = []
-
+var self = this
       this.info.forEach(function (val){
         data1.push(val.daily)
       })
 
       return [
         {
-          label: 'فروش ',
+          label: self.label,
           backgroundColor: brandInfo,
           borderColor: brandInfo,
           pointHoverBackgroundColor: brandInfo,
