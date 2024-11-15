@@ -30,6 +30,13 @@ export const editorjs_config = {
                 endpointUrl: localStorage.getItem("api_address")+'api/admin/product/editor-url-product', // Your backend endpoint for url data fetching,
             }
         },
+        productGrid: {
+            class: ProductGrid,
+            config: {
+                apiCatEndpoint: localStorage.getItem("api_address")+'api/admin/product/editor_product_grid', // Your backend endpoint for url data fetching,
+                apiTagEndpoint: localStorage.getItem("api_address")+'api/admin/product/editor_product_grid', // Your backend endpoint for url data fetching,
+            }
+        },
         table: Table,
         raw: RawTool,
         style: EditorJSStyle.StyleInlineTool,
