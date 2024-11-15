@@ -3,7 +3,7 @@ const version = process.env.VUE_APP_VERSION // set this however you want to.
 module.exports = {
   lintOnSave: false,
   runtimeCompiler: true,
-  // publicPath:'https://panel.charlotte-perfume.ir/',
+  publicPath:'https://panel.charlotte-perfume.ir/',
   configureWebpack: {
     //Necessary to run npm link https://webpack.js.org/configuration/resolve/#resolve-symlinks
     resolve: {
