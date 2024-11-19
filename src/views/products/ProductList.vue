@@ -220,15 +220,15 @@ color="primary"
                   >
                     <CIcon name="cil-comment-bubble" size="sm"/>
                   </CButton>
-                  <!--                  <CButton-->
-                  <!--                      color="primary"-->
-                  <!--                      variant="outline"-->
-                  <!--                      square-->
-                  <!--                      class="m-1"-->
-                  <!--                      size="sm"-->
-                  <!--                      @click="go_show_product(item)"-->
-                  <!--                  ><CIcon name="eye" size="sm"/>-->
-                  <!--                  </CButton>-->
+                                    <CButton
+                                        color="primary"
+                                        variant="outline"
+                                        square
+                                        class="m-1"
+                                        size="sm"
+                                        @click="go_show_product(item)"
+                                    >نمایش
+                                    </CButton>
 
                 </td>
               </template>
@@ -351,7 +351,7 @@ export default {
       this.$router.push({path: "/dashboard/products/comments/" + item.id});
     },
     go_show_product(item) {
-      window.open(localStorage.getItem("web_address") + "products/" + item.slug, "_blank");
+      window.open(localStorage.getItem("web_address") + "product/" + item.title.slug, "_blank");
     },
     upload_excel() {
       var url = '/api/admin/product/update_product_excel';

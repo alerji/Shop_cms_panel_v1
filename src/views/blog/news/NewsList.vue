@@ -70,6 +70,15 @@ column-filter
                   @click="delete_dialog(item)"
               ><CIcon name="cil-trash" size="sm"/>
               </CButton>
+              <CButton
+                  color="primary"
+                  variant="outline"
+                  square
+                  class="m-1"
+                  size="sm"
+                  @click="go_show_blog(item)"
+              ><CIcon name="eye" size="sm"/>
+              </CButton>
             </td>
           </template>
 
@@ -167,6 +176,7 @@ column-filter
                   @click="delete_dialog(item)"
               ><CIcon name="cil-trash" size="sm"/>
               </CButton>
+
             </td>
           </template>
 
@@ -328,7 +338,9 @@ column-filter
 
         },
         methods: {
-
+          go_show_blog(item) {
+            window.open(localStorage.getItem("web_address") + "blog/" + item.slug, "_blank");
+          },
             editDetails(item) {
               console.log("item edit is",item)
               this.$router.push({path:"/dashboard/news/edit-news/"+item.id});
