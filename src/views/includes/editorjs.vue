@@ -44,6 +44,7 @@ export default {
       self.editor_changed();
 
     }
+
     config.onReady = () => {
       new DragDrop(self.editorjs);
     }
@@ -66,7 +67,12 @@ export default {
 
     setTimeout(function () {
       self.editor_changed()
+      const selectElement = document.getElementById(self.editor_id).querySelectorAll('select');
+      for(var i=0;i<selectElement.length;i++)
+      selectElement[i].addEventListener('change', (event) => {
+        self.editor_changed();
 
+      });
     }, 500)
 
 
