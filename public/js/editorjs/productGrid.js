@@ -13,8 +13,8 @@ class ProductGrid {
     constructor({ data, api, config }) {
         this.api = api;
         this.data = {
-            selectedCat: data.selectedCat || '',
-            selectedTag: data.selectedTag || '',
+            selectedCat: data.selectedCat || '0',
+            selectedTag: data.selectedTag || '0',
             inputValue: data.inputValue || '',
             options: []
         };
@@ -202,7 +202,6 @@ const self = this
     }
 
     validate(data) {
-        console.log("validate is ",data.selectedCat.trim() !== '' && data.selectedTag.trim() !== '' && data.inputValue.trim() !== '')
         return data.selectedCat.trim() !== '' && data.selectedTag.trim() !== '' && data.inputValue.trim() !== '';
     }
 }
