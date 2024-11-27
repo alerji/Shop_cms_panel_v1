@@ -116,15 +116,16 @@ color="primary"
               <template #price="{item}">
 
                 <td>
-                  <div style="display: inline-flex;min-width: 130px" v-if="item.prices.length>0">
+                  <div style="display: inline-flex;min-width: 130px" v-if="item.prices.length==1">
                     <CInputCurrency class="pb-0" v-model="item.prices[0].price"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_price(item)">
                       <CIcon name="cil-check"/>
                     </CButton>
                   </div>
-                  قیمت بعد از تخفیف
 
-                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length>0">
+                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length==1">
+                    قیمت بعد از تخفیف
+
                     <CInputCurrency class="pb-0" v-model="item.prices[0].off_price"/>
 
                   </div>
@@ -136,7 +137,7 @@ color="primary"
               <template #stock="{item}">
 
                 <td>
-                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length>0">
+                  <div style="display: inline-flex;min-width: 100px" v-if="item.prices.length==1">
                     <CInputCurrency class="pb-0" v-model="item.prices[0].stock"/>
                     <CButton size="sm" ourlined color="success" @click="update_product_stock(item)">
                       <CIcon name="cil-check"/>
