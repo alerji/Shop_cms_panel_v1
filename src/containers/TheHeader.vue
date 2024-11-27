@@ -25,9 +25,16 @@
         </CHeaderNavLink>
       </CHeaderNavItem>
       <CHeaderNavItem class="px-3">
-        <CHeaderNavLink to="/dashboard/settings">
+        <CHeaderNavLink to="/dashboard/settings/main-setting">
           تنظیمات
         </CHeaderNavLink>
+      </CHeaderNavItem>
+      <CHeaderNavItem class="px-3">
+        <CButton @click="clear_cache()"
+        color="primary">
+          خالی کردن کش
+
+        </CButton>
       </CHeaderNavItem>
     </CHeaderNav>
     <CHeaderNav class="mr-4 " style="position: absolute;left: 0">
@@ -129,6 +136,21 @@ export default {
     }
   },
   methods: {
+    clear_cache() {
+      var self = this;
+      // console.log("route id "+this.$route.params.cat_id);
+      var formData = new FormData();
+
+      axios.post('/api/admin/site/clear_cache', formData, {}).then(function (response) {
+
+        self.$root.modal_component.show_api_response_modals(response);
+
+      })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+    },
     unread_notifications() {
       var self = this;
       // console.log("route id "+this.$route.params.cat_id);

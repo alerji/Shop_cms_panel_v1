@@ -348,8 +348,8 @@ column-filter
           get_news() {
                 var self = this;
                 // console.log("route id "+this.$route.params.cat_id);
-
-                axios.get('/api/admin/blog/get_posts', {}).then(function (response) {
+var formData = new FormData();
+                axios.post('/api/admin/blog/get_posts',formData, {}).then(function (response) {
 
                     var contents = response.data;
 

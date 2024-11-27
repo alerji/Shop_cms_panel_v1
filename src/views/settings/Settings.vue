@@ -68,6 +68,20 @@
     />
 
   </CCol>
+  <CCol col="3">
+    <CSelect
+        label="زمان کش سایت"
+        :options="[{label:'1 ساعت',value:'1'},
+        {label:'2 ساعت',value:'2'},
+        {label:'4 ساعت',value:'4'},
+        {label:'8 ساعت',value:'8'},
+        {label:'12 ساعت',value:'12'},
+        {label:'24 ساعت',value:'24'},
+        {label:'48 ساعت',value:'48'}]"
+        :value.sync="cache_time"
+    />
+
+  </CCol>
 </CRow>
 
                 <CButton @click="login()" size="sm"
@@ -127,6 +141,7 @@ export default {
       languages: [],
       vat: "0",
       google_analytics: "",
+      cache_time: "",
       currencies: [],
       sms_templates: [],
       logo_file: null,
@@ -165,6 +180,7 @@ export default {
         self.sms_templates = content_cats.sms_templates
         self.vat = content_cats.vat
         self.google_analytics = content_cats.google_analytics
+        self.cache_time = content_cats.cache_time
       })
           .catch(function (error) {
 
@@ -187,6 +203,7 @@ export default {
       formData.append('favicon_file', this.favicon_file);
       formData.append('vat', this.vat);
       formData.append('google_analytics', this.google_analytics);
+      formData.append('cache_time', this.cache_time);
 
       axios.post(url, formData, {}).then((res) => {
         self.$root.modal_component.show_api_response_modals(res);
