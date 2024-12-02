@@ -23,7 +23,7 @@
               <!--              </keep-alive>-->
               <keep-alive max="10">
 
-                <router-view v-slot="{ Component }" ref="root_view">
+                <router-view :key='$route.fullPath' v-slot="{ Component }" ref="root_view">
                   <component :is="Component"/>
                 </router-view>
               </keep-alive>

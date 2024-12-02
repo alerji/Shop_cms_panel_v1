@@ -94,9 +94,13 @@
       <!--      </CHeaderNavItem>-->
       <TheHeaderDropdownAccnt/>
     </CHeaderNav>
-    <!--    <CSubheader class="px-3">-->
-    <!--      <CBreadcrumbRouter class="border-0 mb-0"/>-->
-    <!--    </CSubheader>-->
+        <CSubheader class="px-3">
+          <CHeaderNavItem class="px-3">
+            <CHeaderNavLink @click.native="$router.go(-1)">
+              بازگشت
+            </CHeaderNavLink>
+          </CHeaderNavItem>
+        </CSubheader>
   </CHeader>
 </template>
 

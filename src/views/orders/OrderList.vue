@@ -1,4 +1,5 @@
 <template>
+  <keep-alive>
 
   <div class="product-list">
     <CCard>
@@ -34,8 +35,22 @@
                      @click="decrease_credit()">کاهش اعتبار</CButton>
           </CCol>
         </CRow>
+        <CRow>
+          <CCol>
+            <date-picker v-model="start_date" label="از تاریخ"/>
+          </CCol>
+          <CCol>
+            <date-picker v-model="end_date" label="تا تاریخ"/>
+          </CCol>
+          <CCol>
+            <CButton color="primary" @click="get_news()">
+              <CIcon size="sm" name="cil-zoom"/>
+            </CButton>
+          </CCol>
+        </CRow>
         <br>
         <CTabs>
+
           <CTab :title="status.title.title+ ' ('+items.filter(x=>x.statuses[0].id==status.id).length+')'"
                 v-for="(status,index) in items_status" :key="'title-'+index">
             <CDataTableFixed
@@ -102,7 +117,7 @@
 
 
   </div>
-
+  </keep-alive>
 </template>
 
 <script>
@@ -118,6 +133,8 @@ export default {
   },
   data() {
     return {
+      start_date: '',
+      end_date: '',
       credit_price: 0,
 
       delete_tag: new Date() + "_delete_confirm",
@@ -159,6 +176,8 @@ export default {
     }
   },
   mounted() {
+    this.start_date = this.get_day_before_today_in_day(7)
+    this.end_date = this.get_today()
     this.get_statuses();
 
   },
@@ -221,6 +240,9 @@ export default {
         formData.append("user_id", this.$route.params.customer_id);
 
       }
+      formData.append("start_date", this.start_date);
+      formData.append("end_date", this.end_date);
+
       axios.post('/api/admin/order/get_all_orders', formData, {}).then(function (response) {
 
         var contents = response.data;

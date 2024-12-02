@@ -43,7 +43,14 @@
       </div>
     </div>
 
-
+    <CPagination
+        v-if="pagination"
+        v-show="totalPages > 1"
+        :limit="10"
+        :activePage.sync="page"
+        :pages="totalPages"
+        v-bind="typeof pagination === 'object' ? pagination : null"
+    />
     <slot name="over-table"/>
     <div :style="tableHeight" :class="`position-relative ${responsive ? 'table-responsive' : '' }`">
       <table :class="tableClasses" style="border-collapse: separate;border-spacing: 0 0em;">
@@ -243,6 +250,8 @@
 
     <CPagination
         v-if="pagination"
+        :limit="10"
+
         v-show="totalPages > 1"
         :activePage.sync="page"
         :pages="totalPages"
