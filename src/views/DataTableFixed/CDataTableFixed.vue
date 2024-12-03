@@ -250,7 +250,6 @@
 
     <CPagination
         v-if="pagination"
-        :limit="10"
 
         v-show="totalPages > 1"
         :activePage.sync="page"
