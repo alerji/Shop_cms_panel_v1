@@ -28,7 +28,7 @@
               <template #نام="{item}">
 
                 <td>
-                  <p class="text-muted">{{ item.title.title }}</p>
+                  <p class="text-muted" v-if="item.title!=null">{{ item.title.title }}</p>
 
                 </td>
 

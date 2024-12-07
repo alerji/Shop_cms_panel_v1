@@ -53,36 +53,36 @@
                   </CCol>
                 </CRow>
                 <hr>
-<CRow>
-  <CCol col="3">
-    <CInput label="درصد ارزش افزوده"
-            v-model="vat"
-    />
+                <CRow>
+                  <CCol col="3">
+                    <CInput label="درصد ارزش افزوده"
+                            v-model="vat"
+                    />
 
-  </CCol>
-  <CCol col="3">
-    <CInput
-        style="direction: ltr"
-        label="کد گوگل انالیتیکس"
-        v-model="google_analytics"
-    />
+                  </CCol>
+                  <CCol col="3">
+                    <CInput
+                        style="direction: ltr"
+                        label="کد گوگل انالیتیکس"
+                        v-model="google_analytics"
+                    />
 
-  </CCol>
-  <CCol col="3">
-    <CSelect
-        label="زمان کش سایت"
-        :options="[{label:'1 ساعت',value:'1'},
+                  </CCol>
+                  <CCol col="3">
+                    <CSelect
+                        label="زمان کش سایت"
+                        :options="[{label:'1 ساعت',value:'1'},
         {label:'2 ساعت',value:'2'},
         {label:'4 ساعت',value:'4'},
         {label:'8 ساعت',value:'8'},
         {label:'12 ساعت',value:'12'},
         {label:'24 ساعت',value:'24'},
         {label:'48 ساعت',value:'48'}]"
-        :value.sync="cache_time"
-    />
+                        :value.sync="cache_time"
+                    />
 
-  </CCol>
-</CRow>
+                  </CCol>
+                </CRow>
 
                 <CButton @click="login()" size="sm"
                          color="primary">
@@ -106,6 +106,19 @@
                   <CIcon name="cil-check-circle"/>
                   بروزرسانی اطلاعات
                 </CButton>
+              </CTab>
+              <CTab title="تنظیمات ترب">
+                <CRow>
+                  <CCol col="12" >
+                    <div>
+                      لینک api ترب
+                    </div>
+                    <div>
+                      {{db_url}}api/market/torob/products
+                    </div>
+                  </CCol>
+
+                </CRow>
               </CTab>
             </CTabs>
 
@@ -136,7 +149,7 @@ export default {
   data() {
 
     return {
-
+      db_url:localStorage.getItem("api_address"),
       site_config: {},
       languages: [],
       vat: "0",
@@ -165,10 +178,10 @@ export default {
         // console.log("cats is "+items);
 
         var content_cats = response.data;
-        content_cats.languages.forEach(function (lang){
-          if(content_cats.configs.titles.filter(x=>x.lng==lang.id).length==0){
+        content_cats.languages.forEach(function (lang) {
+          if (content_cats.configs.titles.filter(x => x.lng == lang.id).length == 0) {
             var obj = {}
-             Object.assign(obj,content_cats.configs.title)
+            Object.assign(obj, content_cats.configs.title)
             obj.lng = lang.id;
             content_cats.configs.titles.push(obj)
           }
