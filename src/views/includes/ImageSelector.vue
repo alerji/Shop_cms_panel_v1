@@ -144,8 +144,8 @@
 
       </CRow>
       <template #footer>
-        <CButton @click="open_file_selector()" color="dark">انتخاب فایل</CButton>
-        <CButton @click="file_manager_modal = false" color="dark">تایید</CButton>
+        <CButton @click="open_file_selector()" color="dark">آپلود تصویر</CButton>
+        <CButton @click="file_manager_modal = false" color="success">انتخاب</CButton>
       </template>
     </CModal>
 
@@ -212,7 +212,12 @@ setTimeout(function (){
   mounted() {
 
     if (this.previewImage != null) {
-      this.preview = this.baseUrl + this.previewImage
+      if(this.previewImage.startsWith("http")){
+        this.preview = this.previewImage
+
+      }else{
+        this.preview = this.baseUrl + this.previewImage
+      }
     }
     if(this.media_id!=null){
       this.selected_media = this.media_id
@@ -258,7 +263,9 @@ setTimeout(function (){
       }
 
       img.src = this.preview;
+      console.log("selected image",this.preview)
         this.$emit('update:media_id', this.selected_media)
+        this.$emit('update:previewImage', this.preview)
 
     },
     handleFileUpload(files, e) {

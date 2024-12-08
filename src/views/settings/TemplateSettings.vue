@@ -1,7 +1,7 @@
 <template>
   <div>
     <CRow>
-      <CCol col="8">
+      <CCol col="12">
         <CCard>
           <CCardHeader>
             <strong>تنظیمات قالب</strong>
@@ -18,22 +18,38 @@ color="primary" size="sm" @click="login()">
                     <ImageSelector
                         v-if="item.type=='image'"
                         :label="item.title"
+                        :style="get_style(item)"
+                        default_archive="sliders"
                         :base-url="settings.filter(x => x.setting_key == 'db_url')[0].setting_value"
                         :base64.sync="item.file"
-                        :preview-image="item.value"
+                        :preview-image.sync="item.value"
                     />
+
+<!--                    <div v-if="item.type=='none'"-->
+<!--                         :style="get_style(item)"-->
+<!--                    >-->
+<!--                      <CImg  src="/img/placeholder.png"-->
+<!--                      />-->
+<!--                      {{item.title}}-->
+<!--                    </div>-->
+
                     <CInput
                         v-if="item.type=='image'"
                         label="لینک"
+                        :style="get_style(item)"
+
                         v-model="item.url"
                     />
                     <CTextarea
                         v-if="item.type=='html'"
                         :label="item.title"
+                        :style="get_style(item)"
+
                         v-model="item.value"
                     />
                     <CInput
                         type="color"
+                        :style="get_style(item)"
                         v-if="item.type=='color'"
                         :label="item.title"
                         v-model="item.value"
@@ -74,7 +90,22 @@ export default {
 
   }, watch: {},
   methods: {
+    get_style(item){
+      if(item.view!=null){
+        return  {
+            // position: 'absolute',
+            // top:item.view.x+"px",
+            // right:item.view.y+"px",
+            // width:item.view.width+"px",
+            // height:item.view.height+"px",
+          }
 
+      }else{
+        return {
+
+        }
+      }
+    },
     get_settings() {
       var self = this;
       var formData = new FormData();
