@@ -38,7 +38,7 @@
           <div  style="">
             <CRow>
               <CCol col="6"><label style="font-size:14px">گیرنده : {{ order_info.user.name }}</label></CCol>
-              <CCol col="6"><label style="font-size:14px">ت. فاکتور : {{ get_date_time(order_info.created_at) }}</label></CCol>
+              <CCol col="6"><label style="font-size:14px">ت. فاکتور : {{ get_date_time(order_info.date) }}</label></CCol>
               <CCol col="6"><label style="font-size:14px">تلفن خریدار : {{ order_info.user.phone }}</label></CCol>
               <CCol col="6"><label style="font-size:14px">ش فاکتور : {{ order_info.id }}</label></CCol>
               <CCol col="12"  style="font-size:14px">
@@ -84,7 +84,7 @@
           <CCol col="6 col-sm-3"><label>شماره سفارش : {{ order_info.id }}</label></CCol>
           <CCol col="6 col-sm-3"><label>مشتری : {{ order_info.user.name }}</label></CCol>
           <CCol col="6 col-sm-3"><label>موبایل : {{ order_info.user.phone }}</label></CCol>
-          <CCol col="6 col-sm-3"><label>تاریخ ثبت : {{ get_date_time(order_info.created_at) }}</label></CCol>
+          <CCol col="6 col-sm-3"><label>تاریخ ثبت : {{ get_date_time(order_info.date) }}</label></CCol>
         </CRow>
       </CCardBody>
       <hr>

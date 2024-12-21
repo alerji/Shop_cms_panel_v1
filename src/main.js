@@ -192,7 +192,7 @@ Vue.mixin({
 
         },
         get_date_time(date) {
-          var date_format = "YYYY-MM-DD";
+          var date_format = "YYYY/MM/DD";
           var final_date = "";
           if (i18n.locale == "fa") {
             date_format = date_format.replace("YYYY", 'jYYYY')
