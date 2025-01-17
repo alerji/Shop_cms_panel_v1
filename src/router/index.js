@@ -28,6 +28,7 @@ import ReportProvince from "@/views/reports/ReportProvince.vue";
 import ReportCity from "@/views/reports/ReportCity.vue";
 import ReportPayments from "@/views/reports/ReportPayments.vue";
 import OfferBanner from "@/views/offerBanner/OfferBanner.vue";
+import Help from "@/views/settings/Help.vue";
 // axios.defaults.headers.post['Authorization'] = localStorage.getItem('token');
 axios.defaults.headers.post['Authorization'] = 'Bearer ' + localStorage.getItem('token');
 
@@ -600,6 +601,16 @@ function configRoutes() {
                             name: 'تنظیمات کلی',
                             props: true,
                             component: Settings,
+                            meta: {
+                                requiresAuth: true,
+                                requiresRole: "basic_settings"
+                            }
+                        },
+                        {
+                            path: 'help',
+                            name: 'آموزش',
+                            props: true,
+                            component: Help,
                             meta: {
                                 requiresAuth: true,
                                 requiresRole: "basic_settings"

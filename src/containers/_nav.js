@@ -303,6 +303,11 @@ export default [
                         to: '/dashboard/settings/main-setting',
                         role: 'basic_settings'
                     },
+                    {
+                        name: "راهنما و آموزش",
+                        to: '/dashboard/settings/help',
+                        role: 'basic_settings'
+                    },
 
                 ]
             },
