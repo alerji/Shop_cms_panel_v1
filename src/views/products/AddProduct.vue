@@ -156,12 +156,11 @@
               <CCol col="6 col-sm-4">
                 <CInputCurrency
                     v-model="product_stock"
-                    class="required"
-
+                    class="required mb-0"
                     label="موجودی محصول"
 
                 />
-
+<label class="text-danger">اگر این محصول متغیر دارد موجودی باید 0 باشد</label>
               </CCol>
               <CCol col="6 col-sm-4">
                 <CSelect
