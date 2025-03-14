@@ -55,7 +55,7 @@
                     class="required"
 
                     v-model="seo_title"
-                    label="متا عنوان"
+                    label="متا عنوان (فقط برای سئو)"
                 />
                 <SeoProgress :min_perfect="50" :max_perfect="60" :string="seo_title"/>
 

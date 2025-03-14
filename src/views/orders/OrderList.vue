@@ -36,13 +36,13 @@
           </CCol>
         </CRow>
         <CRow>
-          <CCol>
+          <CCol col="6 col-sm-3">
             <date-picker v-model="start_date" label="از تاریخ"/>
           </CCol>
-          <CCol>
+          <CCol col="6 col-sm-3">
             <date-picker v-model="end_date" label="تا تاریخ"/>
           </CCol>
-          <CCol>
+          <CCol col="1 col-sm-1">
             <CButton color="primary" @click="get_news()">
               <CIcon size="sm" name="cil-zoom"/>
             </CButton>
